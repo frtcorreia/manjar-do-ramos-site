@@ -154,7 +154,84 @@ const initialState: AdminState = {
       visible: true,
     },
   ],
-  gallery: [],
+  content: [
+    {
+      key: "hero",
+      label: "Hero",
+      fields: [
+        { id: uid(), label: "Etiqueta", value: "Taberna Moderna Portuguesa" },
+        { id: uid(), label: "Título", value: "Manjar do Ramos", multiline: true },
+        { id: uid(), label: "Subtítulo", value: "Comida de alma, mesa cheia e o calor de uma taberna portuguesa contemporânea.", multiline: true },
+        { id: uid(), label: "Botão principal", value: "Reservar Mesa" },
+        { id: uid(), label: "Botão secundário", value: "Ver Ementa" },
+      ],
+      images: [{ id: uid(), label: "Imagem de fundo", url: heroImg }],
+    },
+    {
+      key: "about",
+      label: "Conceito",
+      fields: [
+        { id: uid(), label: "Etiqueta", value: "O Nosso Conceito" },
+        { id: uid(), label: "Título", value: "Uma taberna com alma portuguesa", multiline: true },
+        { id: uid(), label: "Parágrafo 1", value: "Nascemos do desejo de juntar pessoas à volta de boa comida.", multiline: true },
+        { id: uid(), label: "Parágrafo 2", value: "Sabores tradicionais reinterpretados, num ambiente rústico e acolhedor.", multiline: true },
+      ],
+      images: [
+        { id: uid(), label: "Imagem 1", url: about1 },
+        { id: uid(), label: "Imagem 2", url: about2 },
+      ],
+    },
+    {
+      key: "specialties",
+      label: "Especialidades",
+      fields: [
+        { id: uid(), label: "Etiqueta", value: "Especialidades da Casa" },
+        { id: uid(), label: "Título", value: "Cada prato, uma razão para voltar", multiline: true },
+      ],
+      images: [
+        { id: uid(), label: "Carnes Maturadas", url: dishCarne },
+        { id: uid(), label: "Bacalhau à Lagareiro", url: dishBacalhau },
+        { id: uid(), label: "Petiscos Portugueses", url: dishPetiscos },
+        { id: uid(), label: "Tábuas de Partilha", url: dishTabua },
+        { id: uid(), label: "Sobremesas de Sempre", url: dishSobremesa },
+        { id: uid(), label: "Cocktails & Sangrias", url: dishCocktails },
+      ],
+    },
+    {
+      key: "gallery",
+      label: "Espaço",
+      fields: [
+        { id: uid(), label: "Etiqueta", value: "A Experiência do Espaço" },
+        { id: uid(), label: "Título", value: "Madeira, luz quente e mesas cheias", multiline: true },
+        { id: uid(), label: "Subtítulo", value: "Um ambiente rústico e contemporâneo, onde cada detalhe convida a ficar.", multiline: true },
+      ],
+      images: [
+        { id: uid(), label: "Imagem 1", url: g1 },
+        { id: uid(), label: "Imagem 2", url: g2 },
+        { id: uid(), label: "Imagem 3", url: g3 },
+        { id: uid(), label: "Imagem 4", url: g4 },
+      ],
+    },
+    {
+      key: "testimonials",
+      label: "Testemunhos",
+      fields: [
+        { id: uid(), label: "Etiqueta", value: "Quem Já Se Sentou À Mesa" },
+        { id: uid(), label: "Título", value: "Histórias que se contam ao jantar", multiline: true },
+      ],
+      images: [],
+    },
+    {
+      key: "reservation",
+      label: "Reservas",
+      fields: [
+        { id: uid(), label: "Etiqueta", value: "Reserve a Sua Mesa" },
+        { id: uid(), label: "Título", value: "Venha sentar-se à nossa mesa", multiline: true },
+        { id: uid(), label: "Subtítulo", value: "Reserve já e garanta o seu lugar numa noite memorável.", multiline: true },
+      ],
+      images: [],
+    },
+  ],
 };
 
 /* ------------------------------------------------------------------ */
