@@ -41,12 +41,13 @@ export type Block = {
   visible: boolean;
 };
 
-export type Page = {
-  id: string;
-  title: string;
-  slug: string;
-  published: boolean;
-  inNav: boolean;
+export type PageKey = "index" | "ementa" | "catering";
+
+export type PageContent = {
+  key: PageKey;
+  label: string;
+  fields: ContentField[];
+  images: ContentImage[];
 };
 
 export type MenuItem = {
@@ -71,7 +72,7 @@ export type Testimonial = {
   visible: boolean;
 };
 
-/* Conteúdo editável por bloco: textos + imagens */
+/* Conteúdo editável: textos + imagens */
 export type ContentField = {
   id: string;
   label: string;
@@ -94,7 +95,7 @@ export type BlockContent = {
 
 export type AdminState = {
   blocks: Block[];
-  pages: Page[];
+  pages: PageContent[];
   menu: MenuCategory[];
   testimonials: Testimonial[];
   content: BlockContent[];
