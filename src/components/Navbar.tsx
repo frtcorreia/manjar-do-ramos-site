@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import logo from "@/assets/logo-cream.png";
 
 const links = [
   { label: "Conceito", href: "#conceito" },
@@ -32,13 +33,13 @@ export function Navbar() {
       }`}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-10 md:py-5">
-        <a href="#top" className="flex flex-col leading-none text-cream">
-          <span className="font-serif text-2xl font-semibold tracking-wide md:text-3xl">
-            Manjar do Ramos
-          </span>
-          <span className="eyebrow mt-1 text-[0.6rem] text-gold">
-            Taberna · Portuguesa
-          </span>
+        <a href="#top" className="flex items-center gap-3 leading-none text-cream">
+          <img
+            src={logo}
+            alt="Manjar do Ramos"
+            className="h-14 w-auto md:h-16"
+          />
+          <span className="sr-only">Manjar do Ramos · Taberna Portuguesa</span>
         </a>
 
         <div className="hidden items-center gap-8 md:flex">
