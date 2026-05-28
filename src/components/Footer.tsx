@@ -1,4 +1,5 @@
 import { MapPin, Clock, Phone, Instagram, Facebook } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo-cream.png";
 
 export function Footer() {
@@ -24,6 +25,23 @@ export function Footer() {
                 <Facebook className="h-4 w-4" />
               </a>
             </div>
+            <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+              <li>
+                <Link to="/ementa" className="transition-colors hover:text-gold">
+                  Ementa
+                </Link>
+              </li>
+              <li>
+                <Link to="/catering" className="transition-colors hover:text-gold">
+                  Catering
+                </Link>
+              </li>
+              <li>
+                <a href="/#reservar" className="transition-colors hover:text-gold">
+                  Reservar
+                </a>
+              </li>
+            </ul>
           </div>
 
           <div>
