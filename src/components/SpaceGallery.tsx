@@ -18,7 +18,7 @@ export function SpaceGallery() {
           </p>
         </Reveal>
 
-        <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-5">
+        <div className="mt-14 grid auto-rows-[170px] grid-cols-2 gap-4 md:auto-rows-[220px] md:grid-cols-4 md:gap-5">
           <Reveal className="col-span-1 row-span-2">
             <img
               src={g1}
