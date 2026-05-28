@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from "react";
 
-/* assets usados como conteúdo inicial dos blocos */
+/* assets usados como conteúdo inicial */
 import heroImg from "@/assets/hero.jpg";
 import about1 from "@/assets/about-1.jpg";
 import about2 from "@/assets/about-2.jpg";
@@ -41,12 +41,13 @@ export type Block = {
   visible: boolean;
 };
 
-export type Page = {
-  id: string;
-  title: string;
-  slug: string;
-  published: boolean;
-  inNav: boolean;
+export type PageKey = "index" | "ementa" | "catering";
+
+export type PageContent = {
+  key: PageKey;
+  label: string;
+  fields: ContentField[];
+  images: ContentImage[];
 };
 
 export type MenuItem = {
@@ -71,7 +72,6 @@ export type Testimonial = {
   visible: boolean;
 };
 
-/* Conteúdo editável por bloco: textos + imagens */
 export type ContentField = {
   id: string;
   label: string;
@@ -94,17 +94,29 @@ export type BlockContent = {
 
 export type AdminState = {
   blocks: Block[];
-  pages: Page[];
+  pages: PageContent[];
   menu: MenuCategory[];
   testimonials: Testimonial[];
   content: BlockContent[];
 };
 
 /* ------------------------------------------------------------------ */
-/*  Dados iniciais (mock)                                              */
+/*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
 const uid = () => Math.random().toString(36).slice(2, 10);
+
+const f = (label: string, value: string, multiline?: boolean): ContentField => ({
+  id: uid(), label, value, multiline,
+});
+
+const img = (label: string, url: string): ContentImage => ({
+  id: uid(), label, url,
+});
+
+/* ------------------------------------------------------------------ */
+/*  Dados iniciais                                                     */
+/* ------------------------------------------------------------------ */
 
 const initialState: AdminState = {
   blocks: [
@@ -116,9 +128,66 @@ const initialState: AdminState = {
     { key: "reservation", label: "Reservas", description: "Formulário de reserva de mesa.", visible: true },
   ],
   pages: [
-    { id: uid(), title: "Início", slug: "/", published: true, inNav: true },
-    { id: uid(), title: "Ementa", slug: "/ementa", published: true, inNav: true },
-    { id: uid(), title: "Catering", slug: "/catering", published: true, inNav: true },
+    {
+      key: "index",
+      label: "Início",
+      fields: [
+        f("Título (SEO)", "Manjar do Ramos · Taberna Moderna Portuguesa em Lisboa"),
+        f("Descrição (SEO)", "Sabores portugueses com alma de taberna. Carnes maturadas, petiscos e tábuas de partilha num ambiente acolhedor. Reserve a sua mesa.", true),
+        f("OG Título", "Manjar do Ramos · Taberna Moderna Portuguesa"),
+        f("OG Descrição", "Uma experiência gastronómica feita para partilhar, saborear e voltar. Reserve a sua mesa no Manjar do Ramos.", true),
+      ],
+      images: [],
+    },
+    {
+      key: "ementa",
+      label: "Ementa",
+      fields: [
+        f("Título (SEO)", "Ementa · Manjar do Ramos · Taberna Moderna Portuguesa"),
+        f("Descrição (SEO)", "Descubra a ementa do Manjar do Ramos: petiscos, carnes maturadas, bacalhau, tábuas de partilha, sobremesas e cocktails. Sabores portugueses para partilhar.", true),
+        f("OG Título", "Ementa · Manjar do Ramos"),
+        f("OG Descrição", "Petiscos, carnes maturadas, bacalhau e tábuas de partilha numa taberna portuguesa contemporânea.", true),
+        f("Hero — Etiqueta", "Ementa da Casa"),
+        f("Hero — Título", "A nossa ementa", true),
+        f("Hero — Subtítulo", "Sabores portugueses pensados para partilhar à volta da mesa.", true),
+        f("CTA — Título", "Pronto para uma mesa cheia?", true),
+        f("CTA — Subtítulo", "Reserve a sua mesa e deixe a noite acontecer entre pratos, vinho e boa conversa.", true),
+        f("CTA — Botão", "Reservar Mesa"),
+      ],
+      images: [
+        img("Hero — Imagem de fundo", dishCarne),
+      ],
+    },
+    {
+      key: "catering",
+      label: "Catering",
+      fields: [
+        f("Título (SEO)", "Catering · Manjar do Ramos · Eventos & Celebrações"),
+        f("Descrição (SEO)", "Serviço de catering do Manjar do Ramos para casamentos, eventos de empresa e festas privadas. Sabores portugueses de taberna levados até si.", true),
+        f("OG Título", "Catering · Manjar do Ramos"),
+        f("OG Descrição", "Leve a alma da taberna ao seu evento: petiscos, tábuas, carnes na brasa e doçaria portuguesa.", true),
+        f("Hero — Etiqueta", "Catering & Eventos"),
+        f("Hero — Título", "A taberna vai até si", true),
+        f("Hero — Subtítulo", "Levamos a abundância, o convívio e os sabores do Manjar do Ramos ao seu evento.", true),
+        f("Hero — Botão", "Pedir Orçamento"),
+        f("Intro — Etiqueta", "O Nosso Catering"),
+        f("Intro — Título", "Mesas que reúnem, sabores que ficam", true),
+        f("Intro — Parágrafo 1", "Quer seja um jantar íntimo ou uma grande celebração, levamos a alma da taberna portuguesa onde quiser. Petiscos generosos, carnes na brasa, tábuas de partilha e doçaria de sempre — servidos com o calor e o cuidado que nos definem.", true),
+        f("Intro — Parágrafo 2", "Cada evento é único, por isso desenhamos cada ementa a pensar em si e nos seus convidados.", true),
+        f("Serviços — Etiqueta", "O Que Oferecemos"),
+        f("Serviços — Título", "Um serviço pensado ao detalhe", true),
+        f("Como Funciona — Etiqueta", "Como Funciona"),
+        f("Como Funciona — Título", "Simples, do primeiro contacto ao brinde", true),
+        f("CTA — Título", "Vamos planear o seu evento", true),
+        f("CTA — Subtítulo", "Conte-nos os detalhes e enviamos-lhe uma proposta à medida. Resposta em até 48 horas.", true),
+        f("CTA — Email", "eventos@manjardoramos.pt"),
+        f("CTA — Telefone", "+351 210 000 000"),
+      ],
+      images: [
+        img("Hero — Imagem de fundo", dishTabua),
+        img("Intro — Imagem", about2),
+      ],
+    },
   ],
   menu: [
     {
@@ -238,7 +307,7 @@ const initialState: AdminState = {
 /*  Contexto                                                           */
 /* ------------------------------------------------------------------ */
 
-const STORAGE_KEY = "manjar-admin-state-v2";
+const STORAGE_KEY = "manjar-admin-state-v3";
 
 type AdminContextValue = {
   state: AdminState;
@@ -252,7 +321,6 @@ const AdminContext = createContext<AdminContextValue | null>(null);
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AdminState>(initialState);
 
-  // hidratar do localStorage no cliente
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
