@@ -7,6 +7,21 @@ import {
   type ReactNode,
 } from "react";
 
+/* assets usados como conteúdo inicial dos blocos */
+import heroImg from "@/assets/hero.jpg";
+import about1 from "@/assets/about-1.jpg";
+import about2 from "@/assets/about-2.jpg";
+import dishCarne from "@/assets/dish-carne.jpg";
+import dishBacalhau from "@/assets/dish-bacalhau.jpg";
+import dishPetiscos from "@/assets/dish-petiscos.jpg";
+import dishTabua from "@/assets/dish-tabua.jpg";
+import dishSobremesa from "@/assets/dish-sobremesa.jpg";
+import dishCocktails from "@/assets/dish-cocktails.jpg";
+import g1 from "@/assets/gallery-1.jpg";
+import g2 from "@/assets/gallery-2.jpg";
+import g3 from "@/assets/gallery-3.jpg";
+import g4 from "@/assets/gallery-4.jpg";
+
 /* ------------------------------------------------------------------ */
 /*  Tipos                                                              */
 /* ------------------------------------------------------------------ */
@@ -56,11 +71,25 @@ export type Testimonial = {
   visible: boolean;
 };
 
-export type GalleryImage = {
+/* Conteúdo editável por bloco: textos + imagens */
+export type ContentField = {
   id: string;
+  label: string;
+  value: string;
+  multiline?: boolean;
+};
+
+export type ContentImage = {
+  id: string;
+  label: string;
   url: string;
-  caption: string;
-  visible: boolean;
+};
+
+export type BlockContent = {
+  key: BlockKey;
+  label: string;
+  fields: ContentField[];
+  images: ContentImage[];
 };
 
 export type AdminState = {
@@ -68,7 +97,7 @@ export type AdminState = {
   pages: Page[];
   menu: MenuCategory[];
   testimonials: Testimonial[];
-  gallery: GalleryImage[];
+  content: BlockContent[];
 };
 
 /* ------------------------------------------------------------------ */
