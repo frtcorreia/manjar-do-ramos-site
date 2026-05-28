@@ -1,4 +1,5 @@
 import { MapPin, Clock, Phone, Instagram, Facebook } from "lucide-react";
+import logo from "@/assets/logo-cream.png";
 
 export function Footer() {
   return (
@@ -6,8 +7,11 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <div className="grid gap-12 md:grid-cols-4">
           <div className="md:col-span-1">
-            <p className="font-serif text-3xl text-cream">Manjar do Ramos</p>
-            <p className="eyebrow mt-2 text-gold">Taberna · Portuguesa</p>
+            <img
+              src={logo}
+              alt="Manjar do Ramos"
+              className="h-24 w-auto"
+            />
             <p className="mt-5 text-sm leading-relaxed">
               Sabores portugueses com alma de taberna. Feitos para partilhar,
               saborear e voltar.
