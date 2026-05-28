@@ -238,7 +238,7 @@ const initialState: AdminState = {
 /*  Contexto                                                           */
 /* ------------------------------------------------------------------ */
 
-const STORAGE_KEY = "manjar-admin-state-v1";
+const STORAGE_KEY = "manjar-admin-state-v2";
 
 type AdminContextValue = {
   state: AdminState;
