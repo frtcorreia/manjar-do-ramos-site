@@ -5,12 +5,13 @@ export function OverviewSection() {
   const { state } = useAdmin();
 
   const dishes = state.menu.reduce((acc, c) => acc + c.items.length, 0);
+  const images = state.content.reduce((acc, b) => acc + b.images.length, 0);
   const stats = [
     { label: "Blocos visíveis", value: `${state.blocks.filter((b) => b.visible).length}/${state.blocks.length}`, icon: LayoutGrid },
     { label: "Páginas publicadas", value: `${state.pages.filter((p) => p.published).length}/${state.pages.length}`, icon: FileText },
     { label: "Pratos na ementa", value: dishes, icon: UtensilsCrossed },
     { label: "Testemunhos ativos", value: state.testimonials.filter((t) => t.visible).length, icon: MessageSquareQuote },
-    { label: "Imagens", value: state.gallery.length, icon: Images },
+    { label: "Imagens", value: images, icon: Images },
   ];
 
   return (
