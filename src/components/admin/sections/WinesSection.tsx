@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { useAdmin, type WineItem } from "@/lib/admin-store";
+import { useAdmin, WINE_REGIONS, type WineItem } from "@/lib/admin-store";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, FolderPlus, ArrowUp, ArrowDown, ExternalLink } from "lucide-react";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import { Plus, Trash2, FolderPlus, ArrowUp, ArrowDown, ExternalLink, ImagePlus } from "lucide-react";
 
 export function WinesSection() {
   const { state, setState, newId } = useAdmin();
@@ -66,10 +69,10 @@ export function WinesSection() {
                     id: newId(),
                     name: "Novo vinho",
                     producer: "",
-                    region: "",
+                    region: WINE_REGIONS[0],
                     year: "",
-                    glassPrice: "",
-                    bottlePrice: "0,00€",
+                    price: "0,00€",
+                    image: "",
                     notes: "",
                     visible: true,
                   },
