@@ -10,6 +10,7 @@ import {
   RotateCcw,
   ExternalLink,
   Menu,
+  Wine,
 } from "lucide-react";
 import logo from "@/assets/logo-cream.png";
 import { AdminProvider, useAdmin } from "@/lib/admin-store";
@@ -20,6 +21,7 @@ import { PagesSection } from "@/components/admin/sections/PagesSection";
 import { MenuSection } from "@/components/admin/sections/MenuSection";
 import { TestimonialsSection } from "@/components/admin/sections/TestimonialsSection";
 import { ContentSection } from "@/components/admin/sections/ContentSection";
+import { WinesSection } from "@/components/admin/sections/WinesSection";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -31,13 +33,14 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-type SectionId = "overview" | "blocks" | "pages" | "menu" | "testimonials" | "content";
+type SectionId = "overview" | "blocks" | "pages" | "menu" | "wines" | "testimonials" | "content";
 
 const nav: { id: SectionId; label: string; icon: typeof LayoutDashboard }[] = [
   { id: "overview", label: "Visão Geral", icon: LayoutDashboard },
   { id: "blocks", label: "Blocos", icon: ToggleLeft },
   { id: "pages", label: "Páginas", icon: FileText },
   { id: "menu", label: "Ementa", icon: UtensilsCrossed },
+  { id: "wines", label: "Carta de Vinhos", icon: Wine },
   { id: "testimonials", label: "Testemunhos", icon: MessageSquareQuote },
   { id: "content", label: "Conteúdo & Imagens", icon: Images },
 ];
@@ -144,6 +147,7 @@ function AdminShell() {
           {active === "blocks" && <BlocksSection />}
           {active === "pages" && <PagesSection />}
           {active === "menu" && <MenuSection />}
+          {active === "wines" && <WinesSection />}
           {active === "testimonials" && <TestimonialsSection />}
           {active === "content" && <ContentSection />}
         </main>
