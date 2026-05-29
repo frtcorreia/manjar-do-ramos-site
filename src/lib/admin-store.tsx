@@ -64,6 +64,24 @@ export type MenuCategory = {
   items: MenuItem[];
 };
 
+export type WineItem = {
+  id: string;
+  name: string;
+  producer: string;
+  region: string;
+  year: string;
+  glassPrice: string;
+  bottlePrice: string;
+  notes: string;
+  visible: boolean;
+};
+
+export type WineCategory = {
+  id: string;
+  name: string;
+  items: WineItem[];
+};
+
 export type Testimonial = {
   id: string;
   quote: string;
@@ -98,6 +116,12 @@ export type AdminState = {
   blocks: Block[];
   pages: PageContent[];
   menu: MenuCategory[];
+  wines: {
+    title: string;
+    eyebrow: string;
+    subtitle: string;
+    categories: WineCategory[];
+  };
   testimonials: Testimonial[];
   content: BlockContent[];
 };
