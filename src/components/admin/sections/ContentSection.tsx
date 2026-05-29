@@ -21,11 +21,18 @@ export function ContentSection() {
     }));
 
   const updateImage = (blockKey: string, imageId: string, url: string) =>
+    patchImage(blockKey, imageId, { url });
+
+  const patchImage = (
+    blockKey: string,
+    imageId: string,
+    patch: Partial<ContentImage>,
+  ) =>
     setState((s) => ({
       ...s,
       content: s.content.map((b) =>
         b.key === blockKey
-          ? { ...b, images: b.images.map((i) => (i.id === imageId ? { ...i, url } : i)) }
+          ? { ...b, images: b.images.map((i) => (i.id === imageId ? { ...i, ...patch } : i)) }
           : b,
       ),
     }));
@@ -56,7 +63,14 @@ export function ContentSection() {
         ))}
       </div>
 
-      {active && <BlockEditor block={active} onField={updateField} onImage={updateImage} />}
+      {active && (
+        <BlockEditor
+          block={active}
+          onField={updateField}
+          onImage={updateImage}
+          onImageMeta={patchImage}
+        />
+      )}
     </div>
   );
 }
@@ -65,10 +79,12 @@ function BlockEditor({
   block,
   onField,
   onImage,
+  onImageMeta,
 }: {
   block: BlockContent;
   onField: (blockKey: string, fieldId: string, value: string) => void;
   onImage: (blockKey: string, imageId: string, url: string) => void;
+  onImageMeta: (blockKey: string, imageId: string, patch: Partial<ContentImage>) => void;
 }) {
   return (
     <div className="grid gap-6 lg:grid-cols-2">
@@ -88,7 +104,13 @@ function BlockEditor({
           <h2 className="font-serif text-lg text-charcoal">Imagens</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {block.images.map((img) => (
-              <ImageEditor key={img.id} image={img} blockKey={block.key} onImage={onImage} />
+              <ImageEditor
+                key={img.id}
+                image={img}
+                blockKey={block.key}
+                onImage={onImage}
+                onImageMeta={onImageMeta}
+              />
             ))}
           </div>
         </section>
@@ -126,10 +148,12 @@ function ImageEditor({
   image,
   blockKey,
   onImage,
+  onImageMeta,
 }: {
   image: ContentImage;
   blockKey: string;
   onImage: (blockKey: string, imageId: string, url: string) => void;
+  onImageMeta: (blockKey: string, imageId: string, patch: Partial<ContentImage>) => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -137,6 +161,8 @@ function ImageEditor({
     if (!file) return;
     onImage(blockKey, image.id, URL.createObjectURL(file));
   };
+
+  const hasMeta = image.title !== undefined || image.description !== undefined;
 
   return (
     <div className="space-y-2">
@@ -171,6 +197,25 @@ function ImageEditor({
         className="hidden"
         onChange={(e) => onFile(e.target.files?.[0])}
       />
+      {hasMeta && (
+        <div className="space-y-2 pt-1">
+          <label className="block space-y-1">
+            <span className="text-xs font-medium text-muted-foreground">Título</span>
+            <Input
+              value={image.title ?? ""}
+              onChange={(e) => onImageMeta(blockKey, image.id, { title: e.target.value })}
+            />
+          </label>
+          <label className="block space-y-1">
+            <span className="text-xs font-medium text-muted-foreground">Descrição</span>
+            <Textarea
+              rows={2}
+              value={image.description ?? ""}
+              onChange={(e) => onImageMeta(blockKey, image.id, { description: e.target.value })}
+            />
+          </label>
+        </div>
+      )}
     </div>
   );
 }
