@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as EmentaRouteImport } from './routes/ementa'
 import { Route as CateringRouteImport } from './routes/catering'
+import { Route as CartaDeVinhosRouteImport } from './routes/carta-de-vinhos'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -30,6 +31,11 @@ const CateringRoute = CateringRouteImport.update({
   path: '/catering',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CartaDeVinhosRoute = CartaDeVinhosRouteImport.update({
+  id: '/carta-de-vinhos',
+  path: '/carta-de-vinhos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -44,6 +50,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/carta-de-vinhos': typeof CartaDeVinhosRoute
   '/catering': typeof CateringRoute
   '/ementa': typeof EmentaRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/carta-de-vinhos': typeof CartaDeVinhosRoute
   '/catering': typeof CateringRoute
   '/ementa': typeof EmentaRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -59,21 +67,42 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/carta-de-vinhos': typeof CartaDeVinhosRoute
   '/catering': typeof CateringRoute
   '/ementa': typeof EmentaRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/catering' | '/ementa' | '/sitemap.xml'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/carta-de-vinhos'
+    | '/catering'
+    | '/ementa'
+    | '/sitemap.xml'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/catering' | '/ementa' | '/sitemap.xml'
-  id: '__root__' | '/' | '/admin' | '/catering' | '/ementa' | '/sitemap.xml'
+  to:
+    | '/'
+    | '/admin'
+    | '/carta-de-vinhos'
+    | '/catering'
+    | '/ementa'
+    | '/sitemap.xml'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/carta-de-vinhos'
+    | '/catering'
+    | '/ementa'
+    | '/sitemap.xml'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
+  CartaDeVinhosRoute: typeof CartaDeVinhosRoute
   CateringRoute: typeof CateringRoute
   EmentaRoute: typeof EmentaRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -102,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CateringRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/carta-de-vinhos': {
+      id: '/carta-de-vinhos'
+      path: '/carta-de-vinhos'
+      fullPath: '/carta-de-vinhos'
+      preLoaderRoute: typeof CartaDeVinhosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -122,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
+  CartaDeVinhosRoute: CartaDeVinhosRoute,
   CateringRoute: CateringRoute,
   EmentaRoute: EmentaRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
@@ -129,3 +166,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
