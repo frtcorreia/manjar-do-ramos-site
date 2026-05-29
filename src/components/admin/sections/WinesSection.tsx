@@ -297,3 +297,55 @@ export function WinesSection() {
     </div>
   );
 }
+
+function WineImageUpload({
+  url,
+  alt,
+  onChange,
+}: {
+  url: string;
+  alt: string;
+  onChange: (url: string) => void;
+}) {
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const onFile = (file: File | undefined) => {
+    if (!file) return;
+    onChange(URL.createObjectURL(file));
+  };
+
+  return (
+    <div className="mt-1 space-y-2">
+      <button
+        type="button"
+        onClick={() => fileRef.current?.click()}
+        className="group relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-md border border-dashed border-border bg-secondary/40"
+      >
+        {url ? (
+          <img src={url} alt={alt} className="h-full w-full object-cover" />
+        ) : (
+          <ImagePlus className="h-6 w-6 text-muted-foreground" />
+        )}
+        <span className="absolute inset-0 flex items-center justify-center gap-2 bg-charcoal/0 text-xs font-medium text-cream opacity-0 transition-all group-hover:bg-charcoal/55 group-hover:opacity-100">
+          <ImagePlus className="h-4 w-4" /> Substituir
+        </span>
+      </button>
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        className="w-full"
+        onClick={() => fileRef.current?.click()}
+      >
+        Carregar imagem
+      </Button>
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => onFile(e.target.files?.[0])}
+      />
+    </div>
+  );
+}
