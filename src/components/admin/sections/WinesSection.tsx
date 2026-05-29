@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAdmin, WINE_REGIONS, type WineItem } from "@/lib/admin-store";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
@@ -206,18 +206,10 @@ export function WinesSection() {
                   <div className="flex flex-col gap-3 md:flex-row">
                     <div className="md:w-40">
                       <label className="text-xs font-medium text-muted-foreground">Imagem</label>
-                      <div className="mt-1 flex aspect-square w-full items-center justify-center overflow-hidden rounded-md border border-dashed border-border bg-secondary/40">
-                        {wine.image ? (
-                          <img src={wine.image} alt={wine.name} className="h-full w-full object-cover" />
-                        ) : (
-                          <ImagePlus className="h-6 w-6 text-muted-foreground" />
-                        )}
-                      </div>
-                      <Input
-                        className="mt-2"
-                        placeholder="URL da imagem"
-                        value={wine.image}
-                        onChange={(e) => updateItem(cat.id, wine.id, { image: e.target.value })}
+                      <WineImageUpload
+                        url={wine.image}
+                        alt={wine.name}
+                        onChange={(url) => updateItem(cat.id, wine.id, { image: url })}
                       />
                     </div>
                     <div className="flex-1 space-y-3">
