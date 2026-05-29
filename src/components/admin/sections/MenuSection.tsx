@@ -3,7 +3,7 @@ import { useAdmin, type MenuItem } from "@/lib/admin-store";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, FolderPlus } from "lucide-react";
+import { Plus, Trash2, FolderPlus, ArrowUp, ArrowDown } from "lucide-react";
 
 export function MenuSection() {
   const { state, setState, newId } = useAdmin();
