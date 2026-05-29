@@ -21,6 +21,18 @@ export function MenuSection() {
   const removeCategory = (id: string) =>
     setState((s) => ({ ...s, menu: s.menu.filter((c) => c.id !== id) }));
 
+  const moveCategory = (id: string, dir: -1 | 1) => {
+    setState((s) => {
+      const idx = s.menu.findIndex((c) => c.id === id);
+      if (idx === -1) return s;
+      const newIdx = idx + dir;
+      if (newIdx < 0 || newIdx >= s.menu.length) return s;
+      const next = [...s.menu];
+      [next[idx], next[newIdx]] = [next[newIdx], next[idx]];
+      return { ...s, menu: next };
+    });
+  };
+
   const renameCategory = (id: string, name: string) =>
     setState((s) => ({ ...s, menu: s.menu.map((c) => (c.id === id ? { ...c, name } : c)) }));
 
