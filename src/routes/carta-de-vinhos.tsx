@@ -56,12 +56,6 @@ function WinesPageInner() {
 
         <section className="bg-background py-24 md:py-32">
           <div className="mx-auto max-w-4xl px-5 md:px-10">
-            <div className="mb-12 hidden grid-cols-[1fr_auto_auto] gap-6 border-b border-border pb-3 text-xs uppercase tracking-[0.2em] text-muted-foreground md:grid">
-              <span>Vinho</span>
-              <span className="w-20 text-right">Copo</span>
-              <span className="w-24 text-right">Garrafa</span>
-            </div>
-
             <div className="space-y-16">
               {wines.categories.map((cat) => {
                 const visible = cat.items.filter((i) => i.visible);
@@ -78,9 +72,16 @@ function WinesPageInner() {
                       {visible.map((wine) => (
                         <li
                           key={wine.id}
-                          className="grid grid-cols-1 gap-2 py-5 md:grid-cols-[1fr_auto_auto] md:items-baseline md:gap-6"
+                          className="flex flex-col gap-4 py-5 md:flex-row md:items-start md:gap-6"
                         >
-                          <div>
+                          {wine.image && (
+                            <img
+                              src={wine.image}
+                              alt={wine.name}
+                              className="h-24 w-24 flex-shrink-0 rounded-md object-cover"
+                            />
+                          )}
+                          <div className="flex-1">
                             <h3 className="font-serif text-xl text-espresso">
                               {wine.name}
                               {wine.year && wine.year !== "NV" && (
@@ -98,11 +99,8 @@ function WinesPageInner() {
                               </p>
                             )}
                           </div>
-                          <span className="w-20 text-left font-serif text-base text-wine md:text-right">
-                            {wine.glassPrice || "—"}
-                          </span>
                           <span className="w-24 text-left font-serif text-lg font-medium text-wine md:text-right">
-                            {wine.bottlePrice || "—"}
+                            {wine.price || "—"}
                           </span>
                         </li>
                       ))}
