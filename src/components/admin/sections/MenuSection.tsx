@@ -84,14 +84,36 @@ export function MenuSection() {
       </div>
 
       <div className="space-y-5">
-        {state.menu.map((cat) => (
+        {state.menu.map((cat, catIdx) => (
           <div key={cat.id} className="rounded-xl border border-border bg-card">
             <div className="flex items-center gap-3 border-b border-border p-4">
-              <Input
-                value={cat.name}
-                onChange={(e) => renameCategory(cat.id, e.target.value)}
-                className="max-w-xs border-transparent bg-transparent px-1 font-serif text-lg text-charcoal focus-visible:border-input"
-              />
+              <div className="flex items-center gap-2">
+                <div className="flex flex-col gap-0.5">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6"
+                    disabled={catIdx === 0}
+                    onClick={() => moveCategory(cat.id, -1)}
+                  >
+                    <ArrowUp className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6"
+                    disabled={catIdx === state.menu.length - 1}
+                    onClick={() => moveCategory(cat.id, 1)}
+                  >
+                    <ArrowDown className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+                <Input
+                  value={cat.name}
+                  onChange={(e) => renameCategory(cat.id, e.target.value)}
+                  className="max-w-xs border-transparent bg-transparent px-1 font-serif text-lg text-charcoal focus-visible:border-input"
+                />
+              </div>
               <div className="ml-auto flex gap-2">
                 <Button variant="outline" size="sm" onClick={() => addItem(cat.id)} className="gap-2">
                   <Plus className="h-4 w-4" /> Prato
