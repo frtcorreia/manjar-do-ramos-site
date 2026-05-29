@@ -70,8 +70,8 @@ export type WineItem = {
   producer: string;
   region: string;
   year: string;
-  glassPrice: string;
-  bottlePrice: string;
+  price: string;
+  image: string;
   notes: string;
   visible: boolean;
 };
@@ -81,6 +81,22 @@ export type WineCategory = {
   name: string;
   items: WineItem[];
 };
+
+export const WINE_REGIONS = [
+  "Douro",
+  "Alentejo",
+  "Dão",
+  "Vinho Verde",
+  "Bairrada",
+  "Lisboa",
+  "Tejo",
+  "Setúbal",
+  "Açores",
+  "Madeira",
+  "Távora-Varosa",
+  "Beira Interior",
+  "Algarve",
+] as const;
 
 export type Testimonial = {
   id: string;
@@ -246,23 +262,23 @@ const initialState: AdminState = {
         id: uid(),
         name: "Tintos",
         items: [
-          { id: uid(), name: "Quinta do Crasto Reserva", producer: "Quinta do Crasto", region: "Douro", year: "2019", glassPrice: "7,50€", bottlePrice: "38,00€", notes: "Encorpado, taninos firmes, notas de frutos pretos e especiarias.", visible: true },
-          { id: uid(), name: "Mouchão", producer: "Herdade do Mouchão", region: "Alentejo", year: "2017", glassPrice: "—", bottlePrice: "62,00€", notes: "Clássico alentejano, complexo, com madeira bem integrada.", visible: true },
+          { id: uid(), name: "Quinta do Crasto Reserva", producer: "Quinta do Crasto", region: "Douro", year: "2019", price: "38,00€", image: dishCocktails, notes: "Encorpado, taninos firmes, notas de frutos pretos e especiarias.", visible: true },
+          { id: uid(), name: "Mouchão", producer: "Herdade do Mouchão", region: "Alentejo", year: "2017", price: "62,00€", image: dishCocktails, notes: "Clássico alentejano, complexo, com madeira bem integrada.", visible: true },
         ],
       },
       {
         id: uid(),
         name: "Brancos",
         items: [
-          { id: uid(), name: "Soalheiro Alvarinho", producer: "Soalheiro", region: "Vinho Verde", year: "2022", glassPrice: "6,00€", bottlePrice: "32,00€", notes: "Fresco, mineral, com notas cítricas e final persistente.", visible: true },
-          { id: uid(), name: "Quinta dos Roques Encruzado", producer: "Quinta dos Roques", region: "Dão", year: "2021", glassPrice: "—", bottlePrice: "34,00€", notes: "Elegante, com volume de boca e ligeira madeira.", visible: true },
+          { id: uid(), name: "Soalheiro Alvarinho", producer: "Soalheiro", region: "Vinho Verde", year: "2022", price: "32,00€", image: dishCocktails, notes: "Fresco, mineral, com notas cítricas e final persistente.", visible: true },
+          { id: uid(), name: "Quinta dos Roques Encruzado", producer: "Quinta dos Roques", region: "Dão", year: "2021", price: "34,00€", image: dishCocktails, notes: "Elegante, com volume de boca e ligeira madeira.", visible: true },
         ],
       },
       {
         id: uid(),
         name: "Espumantes & Champanhes",
         items: [
-          { id: uid(), name: "Murganheira Bruto", producer: "Caves da Murganheira", region: "Távora-Varosa", year: "NV", glassPrice: "5,50€", bottlePrice: "28,00€", notes: "Bolha fina, fresco, ideal para começar a refeição.", visible: true },
+          { id: uid(), name: "Murganheira Bruto", producer: "Caves da Murganheira", region: "Távora-Varosa", year: "NV", price: "28,00€", image: dishCocktails, notes: "Bolha fina, fresco, ideal para começar a refeição.", visible: true },
         ],
       },
     ],
@@ -368,7 +384,7 @@ const initialState: AdminState = {
 /*  Contexto                                                           */
 /* ------------------------------------------------------------------ */
 
-const STORAGE_KEY = "manjar-admin-state-v5";
+const STORAGE_KEY = "manjar-admin-state-v6";
 
 type AdminContextValue = {
   state: AdminState;
