@@ -203,6 +203,24 @@ export function WinesSection() {
               )}
               {cat.items.map((wine) => (
                 <div key={wine.id} className="space-y-3 p-4">
+                  <div className="flex flex-col gap-3 md:flex-row">
+                    <div className="md:w-40">
+                      <label className="text-xs font-medium text-muted-foreground">Imagem</label>
+                      <div className="mt-1 flex aspect-square w-full items-center justify-center overflow-hidden rounded-md border border-dashed border-border bg-secondary/40">
+                        {wine.image ? (
+                          <img src={wine.image} alt={wine.name} className="h-full w-full object-cover" />
+                        ) : (
+                          <ImagePlus className="h-6 w-6 text-muted-foreground" />
+                        )}
+                      </div>
+                      <Input
+                        className="mt-2"
+                        placeholder="URL da imagem"
+                        value={wine.image}
+                        onChange={(e) => updateItem(cat.id, wine.id, { image: e.target.value })}
+                      />
+                    </div>
+                    <div className="flex-1 space-y-3">
                   <div className="grid grid-cols-1 gap-3 md:grid-cols-[2fr_2fr_1fr_auto_auto]">
                     <div>
                       <label className="text-xs font-medium text-muted-foreground">Nome</label>
@@ -243,27 +261,28 @@ export function WinesSection() {
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
-                  <div className="grid grid-cols-1 gap-3 md:grid-cols-[2fr_1fr_1fr]">
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-[2fr_1fr]">
                     <div>
                       <label className="text-xs font-medium text-muted-foreground">Região</label>
-                      <Input
+                      <Select
                         value={wine.region}
-                        onChange={(e) => updateItem(cat.id, wine.id, { region: e.target.value })}
-                      />
+                        onValueChange={(v) => updateItem(cat.id, wine.id, { region: v })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecionar região" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {WINE_REGIONS.map((r) => (
+                            <SelectItem key={r} value={r}>{r}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div>
-                      <label className="text-xs font-medium text-muted-foreground">Preço copo</label>
+                      <label className="text-xs font-medium text-muted-foreground">Preço</label>
                       <Input
-                        value={wine.glassPrice}
-                        onChange={(e) => updateItem(cat.id, wine.id, { glassPrice: e.target.value })}
-                        placeholder="—"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground">Preço garrafa</label>
-                      <Input
-                        value={wine.bottlePrice}
-                        onChange={(e) => updateItem(cat.id, wine.id, { bottlePrice: e.target.value })}
+                        value={wine.price}
+                        onChange={(e) => updateItem(cat.id, wine.id, { price: e.target.value })}
                       />
                     </div>
                   </div>
@@ -274,6 +293,8 @@ export function WinesSection() {
                       rows={2}
                       onChange={(e) => updateItem(cat.id, wine.id, { notes: e.target.value })}
                     />
+                  </div>
+                    </div>
                   </div>
                 </div>
               ))}
