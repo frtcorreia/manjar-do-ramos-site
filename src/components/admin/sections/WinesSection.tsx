@@ -7,11 +7,15 @@ import { Button } from "@/components/ui/button";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { Plus, Trash2, FolderPlus, ArrowUp, ArrowDown, ExternalLink, ImagePlus } from "lucide-react";
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
+} from "@/components/ui/dialog";
+import { Plus, Trash2, FolderPlus, ArrowUp, ArrowDown, ExternalLink, ImagePlus, Pencil } from "lucide-react";
 
 export function WinesSection() {
   const { state, setState, newId } = useAdmin();
   const [newCat, setNewCat] = useState("");
+  const [editing, setEditing] = useState<{ catId: string; item: WineItem; isNew: boolean } | null>(null);
 
   const updateHero = (patch: Partial<typeof state.wines>) =>
     setState((s) => ({ ...s, wines: { ...s.wines, ...patch } }));
@@ -54,7 +58,32 @@ export function WinesSection() {
       },
     }));
 
-  const addItem = (catId: string) =>
+  const openNew = (catId: string) =>
+    setEditing({
+      catId,
+      isNew: true,
+      item: {
+        id: newId(),
+        name: "",
+        producer: "",
+        region: WINE_REGIONS[0],
+        year: "",
+        price: "0,00€",
+        image: "",
+        notes: "",
+        visible: true,
+      },
+    });
+
+  const openEdit = (catId: string, item: WineItem) =>
+    setEditing({ catId, isNew: false, item: { ...item } });
+
+  const patchEditing = (patch: Partial<WineItem>) =>
+    setEditing((e) => (e ? { ...e, item: { ...e.item, ...patch } } : e));
+
+  const saveEditing = () => {
+    if (!editing) return;
+    const { catId, item, isNew } = editing;
     setState((s) => ({
       ...s,
       wines: {
@@ -63,38 +92,16 @@ export function WinesSection() {
           c.id === catId
             ? {
                 ...c,
-                items: [
-                  ...c.items,
-                  {
-                    id: newId(),
-                    name: "Novo vinho",
-                    producer: "",
-                    region: WINE_REGIONS[0],
-                    year: "",
-                    price: "0,00€",
-                    image: "",
-                    notes: "",
-                    visible: true,
-                  },
-                ],
+                items: isNew
+                  ? [...c.items, item]
+                  : c.items.map((i) => (i.id === item.id ? item : i)),
               }
             : c,
         ),
       },
     }));
-
-  const updateItem = (catId: string, itemId: string, patch: Partial<WineItem>) =>
-    setState((s) => ({
-      ...s,
-      wines: {
-        ...s.wines,
-        categories: s.wines.categories.map((c) =>
-          c.id === catId
-            ? { ...c, items: c.items.map((i) => (i.id === itemId ? { ...i, ...patch } : i)) }
-            : c,
-        ),
-      },
-    }));
+    setEditing(null);
+  };
 
   const removeItem = (catId: string, itemId: string) =>
     setState((s) => ({
@@ -188,7 +195,7 @@ export function WinesSection() {
                 className="max-w-xs border-transparent bg-transparent px-1 font-serif text-lg text-charcoal focus-visible:border-input"
               />
               <div className="ml-auto flex gap-2">
-                <Button variant="outline" size="sm" onClick={() => addItem(cat.id)} className="gap-2">
+                <Button variant="outline" size="sm" onClick={() => openNew(cat.id)} className="gap-2">
                   <Plus className="h-4 w-4" /> Vinho
                 </Button>
                 <Button variant="ghost" size="icon" onClick={() => removeCategory(cat.id)}>
@@ -202,98 +209,137 @@ export function WinesSection() {
                 <p className="p-4 text-sm text-muted-foreground">Sem vinhos nesta categoria.</p>
               )}
               {cat.items.map((wine) => (
-                <div key={wine.id} className="space-y-3 p-4">
-                  <div className="flex flex-col gap-3 md:flex-row">
-                    <div className="md:w-40">
-                      <label className="text-xs font-medium text-muted-foreground">Imagem</label>
-                      <WineImageUpload
-                        url={wine.image}
-                        alt={wine.name}
-                        onChange={(url) => updateItem(cat.id, wine.id, { image: url })}
-                      />
-                    </div>
-                    <div className="flex-1 space-y-3">
-                  <div className="grid grid-cols-1 gap-3 md:grid-cols-[2fr_2fr_1fr_auto_auto]">
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground">Nome</label>
-                      <Input
-                        value={wine.name}
-                        onChange={(e) => updateItem(cat.id, wine.id, { name: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground">Produtor</label>
-                      <Input
-                        value={wine.producer}
-                        onChange={(e) => updateItem(cat.id, wine.id, { producer: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground">Ano</label>
-                      <Input
-                        value={wine.year}
-                        onChange={(e) => updateItem(cat.id, wine.id, { year: e.target.value })}
-                      />
-                    </div>
-                    <div className="flex items-end gap-2 pb-1">
-                      <div className="flex flex-col items-center">
-                        <label className="text-xs font-medium text-muted-foreground">Visível</label>
-                        <Switch
-                          checked={wine.visible}
-                          onCheckedChange={(v) => updateItem(cat.id, wine.id, { visible: v })}
-                        />
+                <div key={wine.id} className="flex items-center gap-3 p-4">
+                  <div className="h-14 w-14 shrink-0 overflow-hidden rounded-md border border-border bg-secondary/40">
+                    {wine.image ? (
+                      <img src={wine.image} alt={wine.name} className="h-full w-full object-cover" />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                        <ImagePlus className="h-4 w-4" />
                       </div>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => removeItem(cat.id, wine.id)}
-                      className="self-end"
-                    >
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
+                    )}
                   </div>
-                  <div className="grid grid-cols-1 gap-3 md:grid-cols-[2fr_1fr]">
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground">Região</label>
-                      <Select
-                        value={wine.region}
-                        onValueChange={(v) => updateItem(cat.id, wine.id, { region: v })}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecionar região" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {WINE_REGIONS.map((r) => (
-                            <SelectItem key={r} value={r}>{r}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-baseline gap-2">
+                      <p className="truncate font-serif text-base text-charcoal">
+                        {wine.name || <span className="italic text-muted-foreground">Sem nome</span>}
+                      </p>
+                      {wine.year && <span className="text-xs text-muted-foreground">{wine.year}</span>}
+                      <span className="ml-auto shrink-0 text-sm text-muted-foreground">{wine.price}</span>
                     </div>
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground">Preço</label>
-                      <Input
-                        value={wine.price}
-                        onChange={(e) => updateItem(cat.id, wine.id, { price: e.target.value })}
-                      />
-                    </div>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {[wine.producer, wine.region].filter(Boolean).join(" · ")}
+                    </p>
                   </div>
-                  <div>
-                    <label className="text-xs font-medium text-muted-foreground">Notas de prova</label>
-                    <Textarea
-                      value={wine.notes}
-                      rows={2}
-                      onChange={(e) => updateItem(cat.id, wine.id, { notes: e.target.value })}
-                    />
-                  </div>
-                    </div>
-                  </div>
+                  {!wine.visible && (
+                    <span className="rounded bg-secondary px-2 py-0.5 text-xs text-muted-foreground">
+                      Oculto
+                    </span>
+                  )}
+                  <Button variant="ghost" size="icon" onClick={() => openEdit(cat.id, wine)}>
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="icon" onClick={() => removeItem(cat.id, wine.id)}>
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                  </Button>
                 </div>
               ))}
             </div>
           </div>
         ))}
       </div>
+
+      <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{editing?.isNew ? "Adicionar vinho" : "Editar vinho"}</DialogTitle>
+            <DialogDescription>
+              Preencha os dados do vinho e guarde para aplicar.
+            </DialogDescription>
+          </DialogHeader>
+          {editing && (
+            <div className="space-y-4">
+              <div className="flex flex-col gap-4 sm:flex-row">
+                <div className="sm:w-40">
+                  <label className="text-xs font-medium text-muted-foreground">Imagem</label>
+                  <WineImageUpload
+                    url={editing.item.image}
+                    alt={editing.item.name}
+                    onChange={(url) => patchEditing({ image: url })}
+                  />
+                </div>
+                <div className="flex-1 space-y-3">
+                  <div>
+                    <label className="text-xs font-medium text-muted-foreground">Nome</label>
+                    <Input
+                      value={editing.item.name}
+                      onChange={(e) => patchEditing({ name: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-muted-foreground">Produtor</label>
+                    <Input
+                      value={editing.item.producer}
+                      onChange={(e) => patchEditing({ producer: e.target.value })}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs font-medium text-muted-foreground">Ano</label>
+                      <Input
+                        value={editing.item.year}
+                        onChange={(e) => patchEditing({ year: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-medium text-muted-foreground">Preço</label>
+                      <Input
+                        value={editing.item.price}
+                        onChange={(e) => patchEditing({ price: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-muted-foreground">Região</label>
+                <Select
+                  value={editing.item.region}
+                  onValueChange={(v) => patchEditing({ region: v })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecionar região" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {WINE_REGIONS.map((r) => (
+                      <SelectItem key={r} value={r}>{r}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-muted-foreground">Notas de prova</label>
+                <Textarea
+                  value={editing.item.notes}
+                  rows={3}
+                  onChange={(e) => patchEditing({ notes: e.target.value })}
+                />
+              </div>
+              <div className="flex items-center gap-3">
+                <Switch
+                  checked={editing.item.visible}
+                  onCheckedChange={(v) => patchEditing({ visible: v })}
+                />
+                <label className="text-sm text-charcoal">Visível na carta</label>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditing(null)}>Cancelar</Button>
+            <Button onClick={saveEditing}>Guardar</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
