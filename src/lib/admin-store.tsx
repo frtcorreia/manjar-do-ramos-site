@@ -64,6 +64,24 @@ export type MenuCategory = {
   items: MenuItem[];
 };
 
+export type WineItem = {
+  id: string;
+  name: string;
+  producer: string;
+  region: string;
+  year: string;
+  glassPrice: string;
+  bottlePrice: string;
+  notes: string;
+  visible: boolean;
+};
+
+export type WineCategory = {
+  id: string;
+  name: string;
+  items: WineItem[];
+};
+
 export type Testimonial = {
   id: string;
   quote: string;
@@ -98,6 +116,12 @@ export type AdminState = {
   blocks: Block[];
   pages: PageContent[];
   menu: MenuCategory[];
+  wines: {
+    title: string;
+    eyebrow: string;
+    subtitle: string;
+    categories: WineCategory[];
+  };
   testimonials: Testimonial[];
   content: BlockContent[];
 };
@@ -213,7 +237,38 @@ const initialState: AdminState = {
       ],
     },
   ],
+  wines: {
+    eyebrow: "Garrafeira da Casa",
+    title: "Carta de Vinhos",
+    subtitle: "Uma seleção rotativa de produtores portugueses, escolhidos a dedo para acompanhar a mesa.",
+    categories: [
+      {
+        id: uid(),
+        name: "Tintos",
+        items: [
+          { id: uid(), name: "Quinta do Crasto Reserva", producer: "Quinta do Crasto", region: "Douro", year: "2019", glassPrice: "7,50€", bottlePrice: "38,00€", notes: "Encorpado, taninos firmes, notas de frutos pretos e especiarias.", visible: true },
+          { id: uid(), name: "Mouchão", producer: "Herdade do Mouchão", region: "Alentejo", year: "2017", glassPrice: "—", bottlePrice: "62,00€", notes: "Clássico alentejano, complexo, com madeira bem integrada.", visible: true },
+        ],
+      },
+      {
+        id: uid(),
+        name: "Brancos",
+        items: [
+          { id: uid(), name: "Soalheiro Alvarinho", producer: "Soalheiro", region: "Vinho Verde", year: "2022", glassPrice: "6,00€", bottlePrice: "32,00€", notes: "Fresco, mineral, com notas cítricas e final persistente.", visible: true },
+          { id: uid(), name: "Quinta dos Roques Encruzado", producer: "Quinta dos Roques", region: "Dão", year: "2021", glassPrice: "—", bottlePrice: "34,00€", notes: "Elegante, com volume de boca e ligeira madeira.", visible: true },
+        ],
+      },
+      {
+        id: uid(),
+        name: "Espumantes & Champanhes",
+        items: [
+          { id: uid(), name: "Murganheira Bruto", producer: "Caves da Murganheira", region: "Távora-Varosa", year: "NV", glassPrice: "5,50€", bottlePrice: "28,00€", notes: "Bolha fina, fresco, ideal para começar a refeição.", visible: true },
+        ],
+      },
+    ],
+  },
   testimonials: [
+
     {
       id: uid(),
       quote: "Fomos jantar a dois e saímos a planear a próxima visita. A carne na brasa é das melhores que provei em Lisboa.",
@@ -313,7 +368,7 @@ const initialState: AdminState = {
 /*  Contexto                                                           */
 /* ------------------------------------------------------------------ */
 
-const STORAGE_KEY = "manjar-admin-state-v4";
+const STORAGE_KEY = "manjar-admin-state-v5";
 
 type AdminContextValue = {
   state: AdminState;
