@@ -83,6 +83,8 @@ export type ContentImage = {
   id: string;
   label: string;
   url: string;
+  title?: string;
+  description?: string;
 };
 
 export type BlockContent = {
@@ -110,8 +112,12 @@ const f = (label: string, value: string, multiline?: boolean): ContentField => (
   id: uid(), label, value, multiline,
 });
 
-const img = (label: string, url: string): ContentImage => ({
-  id: uid(), label, url,
+const img = (
+  label: string,
+  url: string,
+  extra?: { title?: string; description?: string },
+): ContentImage => ({
+  id: uid(), label, url, ...extra,
 });
 
 /* ------------------------------------------------------------------ */
@@ -258,12 +264,12 @@ const initialState: AdminState = {
         { id: uid(), label: "Título", value: "Cada prato, uma razão para voltar", multiline: true },
       ],
       images: [
-        { id: uid(), label: "Carnes Maturadas", url: dishCarne },
-        { id: uid(), label: "Bacalhau à Lagareiro", url: dishBacalhau },
-        { id: uid(), label: "Petiscos Portugueses", url: dishPetiscos },
-        { id: uid(), label: "Tábuas de Partilha", url: dishTabua },
-        { id: uid(), label: "Sobremesas de Sempre", url: dishSobremesa },
-        { id: uid(), label: "Cocktails & Sangrias", url: dishCocktails },
+        { id: uid(), label: "Prato 1", url: dishCarne, title: "Carnes Maturadas", description: "Cortes nobres na brasa, crosta estaladiça e o ponto certo de sal grosso." },
+        { id: uid(), label: "Prato 2", url: dishBacalhau, title: "Bacalhau à Lagareiro", description: "Lombo alourado, batata a murro e o azeite a perfumar a mesa." },
+        { id: uid(), label: "Prato 3", url: dishPetiscos, title: "Petiscos Portugueses", description: "Gambas, chouriço e croquetes — para começar e nunca mais parar." },
+        { id: uid(), label: "Prato 4", url: dishTabua, title: "Tábuas de Partilha", description: "Enchidos, queijos regionais e mel, servidos para toda a mesa." },
+        { id: uid(), label: "Prato 5", url: dishSobremesa, title: "Sobremesas de Sempre", description: "Doçaria tradicional reinterpretada, com canela e açúcar caramelizado." },
+        { id: uid(), label: "Prato 6", url: dishCocktails, title: "Cocktails & Sangrias", description: "Sangrias de fruta e criações de autor para acompanhar a noite." },
       ],
     },
     {
@@ -307,7 +313,7 @@ const initialState: AdminState = {
 /*  Contexto                                                           */
 /* ------------------------------------------------------------------ */
 
-const STORAGE_KEY = "manjar-admin-state-v3";
+const STORAGE_KEY = "manjar-admin-state-v4";
 
 type AdminContextValue = {
   state: AdminState;
