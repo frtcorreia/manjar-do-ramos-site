@@ -55,6 +55,10 @@ export type MenuItem = {
   name: string;
   description: string;
   price: string;
+  image: string;
+  delivery: boolean;
+  takeaway: boolean;
+  restaurant: boolean;
   visible: boolean;
 };
 
@@ -240,16 +244,16 @@ const initialState: AdminState = {
       id: uid(),
       name: "Petiscos",
       items: [
-        { id: uid(), name: "Gambas à Guilho", description: "Alho, malagueta e coentros.", price: "12,50€", visible: true },
-        { id: uid(), name: "Croquetes de Vitela", description: "Estaladiços, com mostarda da casa.", price: "8,00€", visible: true },
+        { id: uid(), name: "Gambas à Guilho", description: "Alho, malagueta e coentros.", price: "12,50€", image: dishPetiscos, delivery: true, takeaway: true, restaurant: true, visible: true },
+        { id: uid(), name: "Croquetes de Vitela", description: "Estaladiços, com mostarda da casa.", price: "8,00€", image: dishPetiscos, delivery: true, takeaway: true, restaurant: true, visible: true },
       ],
     },
     {
       id: uid(),
       name: "Carnes Maturadas",
       items: [
-        { id: uid(), name: "Bife do Lombo (300g)", description: "Maturado 30 dias, na brasa.", price: "24,00€", visible: true },
-        { id: uid(), name: "Picanha à Taberna", description: "Sal grosso e legumes assados.", price: "21,00€", visible: true },
+        { id: uid(), name: "Bife do Lombo (300g)", description: "Maturado 30 dias, na brasa.", price: "24,00€", image: dishCarne, delivery: false, takeaway: true, restaurant: true, visible: true },
+        { id: uid(), name: "Picanha à Taberna", description: "Sal grosso e legumes assados.", price: "21,00€", image: dishCarne, delivery: true, takeaway: true, restaurant: true, visible: true },
       ],
     },
   ],
@@ -384,7 +388,7 @@ const initialState: AdminState = {
 /*  Contexto                                                           */
 /* ------------------------------------------------------------------ */
 
-const STORAGE_KEY = "manjar-admin-state-v6";
+const STORAGE_KEY = "manjar-admin-state-v7";
 
 type AdminContextValue = {
   state: AdminState;

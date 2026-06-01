@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAdmin, type MenuItem } from "@/lib/admin-store";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
 } from "@/components/ui/dialog";
-import { Plus, Trash2, FolderPlus, ArrowUp, ArrowDown, Pencil } from "lucide-react";
+import { Plus, Trash2, FolderPlus, ArrowUp, ArrowDown, Pencil, ImagePlus } from "lucide-react";
 
 export function MenuSection() {
   const { state, setState, newId } = useAdmin();
@@ -45,7 +46,7 @@ export function MenuSection() {
     setEditing({
       catId,
       isNew: true,
-      item: { id: newId(), name: "", description: "", price: "0,00€", visible: true },
+      item: { id: newId(), name: "", description: "", price: "0,00€", image: "", delivery: true, takeaway: true, restaurant: true, visible: true },
     });
 
   const openEdit = (catId: string, item: MenuItem) =>
@@ -150,6 +151,15 @@ export function MenuSection() {
                   key={item.id}
                   className="flex items-center gap-3 p-4"
                 >
+                  <div className="h-14 w-14 shrink-0 overflow-hidden rounded-md border border-border bg-secondary/40">
+                    {item.image ? (
+                      <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                        <ImagePlus className="h-4 w-4" />
+                      </div>
+                    )}
+                  </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-baseline gap-2">
                       <p className="truncate font-serif text-base text-charcoal">
@@ -160,6 +170,23 @@ export function MenuSection() {
                     {item.description && (
                       <p className="truncate text-sm text-muted-foreground">{item.description}</p>
                     )}
+                    <div className="mt-1 flex flex-wrap gap-1.5">
+                      {item.restaurant && (
+                        <span className="rounded bg-secondary px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
+                          Restaurante
+                        </span>
+                      )}
+                      {item.takeaway && (
+                        <span className="rounded bg-secondary px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
+                          Take-away
+                        </span>
+                      )}
+                      {item.delivery && (
+                        <span className="rounded bg-secondary px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
+                          Delivery
+                        </span>
+                      )}
+                    </div>
                   </div>
                   {!item.visible && (
                     <span className="rounded bg-secondary px-2 py-0.5 text-xs text-muted-foreground">
@@ -180,7 +207,7 @@ export function MenuSection() {
       </div>
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
-        <DialogContent>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
             <DialogTitle>{editing?.isNew ? "Adicionar prato" : "Editar prato"}</DialogTitle>
             <DialogDescription>
@@ -189,22 +216,34 @@ export function MenuSection() {
           </DialogHeader>
           {editing && (
             <div className="space-y-4">
-              <div>
-                <label className="text-xs font-medium text-muted-foreground">Nome</label>
-                <Input
-                  value={editing.item.name}
-                  onChange={(e) => patchEditing({ name: e.target.value })}
-                  placeholder="Nome do prato"
-                />
-              </div>
-              <div>
-                <label className="text-xs font-medium text-muted-foreground">Descrição</label>
-                <Textarea
-                  value={editing.item.description}
-                  onChange={(e) => patchEditing({ description: e.target.value })}
-                  rows={3}
-                  placeholder="Descrição"
-                />
+              <div className="flex flex-col gap-4 sm:flex-row">
+                <div className="sm:w-40">
+                  <label className="text-xs font-medium text-muted-foreground">Imagem</label>
+                  <DishImageUpload
+                    url={editing.item.image}
+                    alt={editing.item.name}
+                    onChange={(url) => patchEditing({ image: url })}
+                  />
+                </div>
+                <div className="flex-1 space-y-3">
+                  <div>
+                    <label className="text-xs font-medium text-muted-foreground">Nome</label>
+                    <Input
+                      value={editing.item.name}
+                      onChange={(e) => patchEditing({ name: e.target.value })}
+                      placeholder="Nome do prato"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-muted-foreground">Descrição</label>
+                    <Textarea
+                      value={editing.item.description}
+                      onChange={(e) => patchEditing({ description: e.target.value })}
+                      rows={3}
+                      placeholder="Descrição"
+                    />
+                  </div>
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -225,6 +264,32 @@ export function MenuSection() {
                   </div>
                 </div>
               </div>
+              <div>
+                <label className="text-xs font-medium text-muted-foreground">Disponível em</label>
+                <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                  <label className="flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-charcoal">
+                    <Checkbox
+                      checked={editing.item.restaurant}
+                      onCheckedChange={(v) => patchEditing({ restaurant: v === true })}
+                    />
+                    Restaurante
+                  </label>
+                  <label className="flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-charcoal">
+                    <Checkbox
+                      checked={editing.item.takeaway}
+                      onCheckedChange={(v) => patchEditing({ takeaway: v === true })}
+                    />
+                    Take-away
+                  </label>
+                  <label className="flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-charcoal">
+                    <Checkbox
+                      checked={editing.item.delivery}
+                      onCheckedChange={(v) => patchEditing({ delivery: v === true })}
+                    />
+                    Delivery
+                  </label>
+                </div>
+              </div>
             </div>
           )}
           <DialogFooter>
@@ -235,6 +300,58 @@ export function MenuSection() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+function DishImageUpload({
+  url,
+  alt,
+  onChange,
+}: {
+  url: string;
+  alt: string;
+  onChange: (url: string) => void;
+}) {
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const onFile = (file: File | undefined) => {
+    if (!file) return;
+    onChange(URL.createObjectURL(file));
+  };
+
+  return (
+    <div className="mt-1 space-y-2">
+      <button
+        type="button"
+        onClick={() => fileRef.current?.click()}
+        className="group relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-md border border-dashed border-border bg-secondary/40"
+      >
+        {url ? (
+          <img src={url} alt={alt} className="h-full w-full object-cover" />
+        ) : (
+          <ImagePlus className="h-6 w-6 text-muted-foreground" />
+        )}
+        <span className="absolute inset-0 flex items-center justify-center gap-2 bg-charcoal/0 text-xs font-medium text-cream opacity-0 transition-all group-hover:bg-charcoal/55 group-hover:opacity-100">
+          <ImagePlus className="h-4 w-4" /> Substituir
+        </span>
+      </button>
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        className="w-full"
+        onClick={() => fileRef.current?.click()}
+      >
+        Carregar imagem
+      </Button>
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => onFile(e.target.files?.[0])}
+      />
     </div>
   );
 }
