@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Reveal } from "@/components/Reveal";
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { AdminProvider, useAdmin, type MenuItem } from "@/lib/admin-store";
 import { Minus, Plus, ShoppingBag, Truck } from "lucide-react";
 import heroImg from "@/assets/dish-petiscos.jpg";
+import { cartStorage, formatEUR, parsePrice } from "@/lib/cart";
 
 export const Route = createFileRoute("/encomendas")({
   head: () => ({
@@ -36,17 +37,13 @@ function EncomendasPage() {
   );
 }
 
-const parsePrice = (p: string) => {
-  const n = parseFloat(p.replace(/[^\d,.-]/g, "").replace(",", "."));
-  return Number.isFinite(n) ? n : 0;
-};
-
-const formatEUR = (n: number) =>
-  new Intl.NumberFormat("pt-PT", { style: "currency", currency: "EUR" }).format(n);
-
 function EncomendasInner() {
   const { state } = useAdmin();
-  const [cart, setCart] = useState<Record<string, number>>({});
+  const navigate = useNavigate();
+  const [cart, setCart] = useState<Record<string, number>>(() => {
+    const lines = cartStorage.read();
+    return Object.fromEntries(lines.map((l) => [l.id, l.quantity]));
+  });
 
   const categories = useMemo(
     () =>
@@ -84,6 +81,16 @@ function EncomendasInner() {
     (acc, { item, qty }) => acc + parsePrice(item.price) * qty,
     0,
   );
+
+  useEffect(() => {
+    const lines = cartEntries.map(({ item, qty }) => ({
+      id: item.id,
+      name: item.name,
+      price: parsePrice(item.price),
+      quantity: qty,
+    }));
+    cartStorage.write(lines);
+  }, [cartEntries]);
 
   return (
     <div className="bg-background">
@@ -226,13 +233,9 @@ function EncomendasInner() {
                 <Button
                   disabled={cartEntries.length === 0}
                   className="mt-5 w-full gap-2 bg-wine text-cream hover:bg-wine/90"
-                  onClick={() =>
-                    alert(
-                      `Encomenda registada — total ${formatEUR(total)}. (Demo: ligar à BD depois.)`,
-                    )
-                  }
+                  onClick={() => navigate({ to: "/checkout" })}
                 >
-                  <Truck className="h-4 w-4" /> Finalizar encomenda
+                  <Truck className="h-4 w-4" /> Ir para checkout
                 </Button>
 
                 <p className="mt-3 text-center text-xs text-muted-foreground">
