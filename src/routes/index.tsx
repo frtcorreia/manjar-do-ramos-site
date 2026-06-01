@@ -24,6 +24,30 @@ export const Route = createFileRoute("/")({
           "Uma experiência gastronómica feita para partilhar, saborear e voltar. Reserve a sua mesa no Manjar do Ramos.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "/" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Restaurant",
+          name: "Manjar do Ramos",
+          servesCuisine: "Portuguese",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Rua da Taberna 12",
+            addressLocality: "Lisboa",
+            addressCountry: "PT",
+          },
+          telephone: "+351 210 000 000",
+          openingHours: [
+            "Tu-Su 12:00-15:00",
+            "Tu-Su 19:00-23:30",
+          ],
+        }),
+      },
     ],
   }),
   component: Index,

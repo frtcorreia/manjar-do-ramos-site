@@ -75,6 +75,7 @@ export function Footer() {
             <h3 className="font-serif text-xl text-cream">Localização</h3>
             <a
               href="#"
+              aria-label="Ver localização no mapa"
               className="mt-4 block overflow-hidden rounded-xl border border-cream/15"
             >
               <div className="relative h-32 w-full bg-[radial-gradient(circle_at_30%_40%,oklch(0.3_0.04_50),oklch(0.19_0.012_60))]">
