@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo-cream.png";
+import { useAuth } from "@/hooks/useAuth";
+import { User as UserIcon, LogOut } from "lucide-react";
 
 type NavLink = { label: string; href: string; route?: boolean };
 
@@ -17,6 +19,7 @@ const links: NavLink[] = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -66,6 +69,30 @@ export function Navbar() {
               </a>
             ),
           )}
+          {user ? (
+            <div className="flex items-center gap-3">
+              <Link
+                to="/minhas-encomendas"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-cream/85 transition-colors hover:text-gold"
+              >
+                <UserIcon className="h-4 w-4" /> A minha conta
+              </Link>
+              <button
+                onClick={() => signOut()}
+                className="text-cream/60 transition-colors hover:text-gold"
+                aria-label="Sair"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/auth"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-cream/85 transition-colors hover:text-gold"
+            >
+              <UserIcon className="h-4 w-4" /> Entrar
+            </Link>
+          )}
           <a
             href="/#reservar"
             className="rounded-full border border-gold/70 px-5 py-2 text-sm font-semibold text-gold transition-all hover:bg-gold hover:text-charcoal"
@@ -112,6 +139,34 @@ export function Navbar() {
                   {l.label}
                 </a>
               ),
+            )}
+            {user ? (
+              <>
+                <Link
+                  to="/minhas-encomendas"
+                  onClick={() => setOpen(false)}
+                  className="text-base font-medium text-cream/90"
+                >
+                  A minha conta
+                </Link>
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    signOut();
+                  }}
+                  className="text-left text-base font-medium text-cream/70"
+                >
+                  Sair
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/auth"
+                onClick={() => setOpen(false)}
+                className="text-base font-medium text-cream/90"
+              >
+                Entrar / Criar conta
+              </Link>
             )}
             <a
               href="/#reservar"

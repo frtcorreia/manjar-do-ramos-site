@@ -10,16 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as MinhasEncomendasRouteImport } from './routes/minhas-encomendas'
 import { Route as EncomendasRouteImport } from './routes/encomendas'
 import { Route as EmentaRouteImport } from './routes/ementa'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CateringRouteImport } from './routes/catering'
 import { Route as CartaDeVinhosRouteImport } from './routes/carta-de-vinhos'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MinhasEncomendasRoute = MinhasEncomendasRouteImport.update({
+  id: '/minhas-encomendas',
+  path: '/minhas-encomendas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EncomendasRoute = EncomendasRouteImport.update({
@@ -32,6 +40,11 @@ const EmentaRoute = EmentaRouteImport.update({
   path: '/ementa',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CateringRoute = CateringRouteImport.update({
   id: '/catering',
   path: '/catering',
@@ -40,6 +53,11 @@ const CateringRoute = CateringRouteImport.update({
 const CartaDeVinhosRoute = CartaDeVinhosRouteImport.update({
   id: '/carta-de-vinhos',
   path: '/carta-de-vinhos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -56,29 +74,38 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/auth': typeof AuthRoute
   '/carta-de-vinhos': typeof CartaDeVinhosRoute
   '/catering': typeof CateringRoute
+  '/checkout': typeof CheckoutRoute
   '/ementa': typeof EmentaRoute
   '/encomendas': typeof EncomendasRoute
+  '/minhas-encomendas': typeof MinhasEncomendasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/auth': typeof AuthRoute
   '/carta-de-vinhos': typeof CartaDeVinhosRoute
   '/catering': typeof CateringRoute
+  '/checkout': typeof CheckoutRoute
   '/ementa': typeof EmentaRoute
   '/encomendas': typeof EncomendasRoute
+  '/minhas-encomendas': typeof MinhasEncomendasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/auth': typeof AuthRoute
   '/carta-de-vinhos': typeof CartaDeVinhosRoute
   '/catering': typeof CateringRoute
+  '/checkout': typeof CheckoutRoute
   '/ementa': typeof EmentaRoute
   '/encomendas': typeof EncomendasRoute
+  '/minhas-encomendas': typeof MinhasEncomendasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRouteTypes {
@@ -86,38 +113,50 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/auth'
     | '/carta-de-vinhos'
     | '/catering'
+    | '/checkout'
     | '/ementa'
     | '/encomendas'
+    | '/minhas-encomendas'
     | '/sitemap.xml'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
+    | '/auth'
     | '/carta-de-vinhos'
     | '/catering'
+    | '/checkout'
     | '/ementa'
     | '/encomendas'
+    | '/minhas-encomendas'
     | '/sitemap.xml'
   id:
     | '__root__'
     | '/'
     | '/admin'
+    | '/auth'
     | '/carta-de-vinhos'
     | '/catering'
+    | '/checkout'
     | '/ementa'
     | '/encomendas'
+    | '/minhas-encomendas'
     | '/sitemap.xml'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
+  AuthRoute: typeof AuthRoute
   CartaDeVinhosRoute: typeof CartaDeVinhosRoute
   CateringRoute: typeof CateringRoute
+  CheckoutRoute: typeof CheckoutRoute
   EmentaRoute: typeof EmentaRoute
   EncomendasRoute: typeof EncomendasRoute
+  MinhasEncomendasRoute: typeof MinhasEncomendasRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
@@ -128,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/minhas-encomendas': {
+      id: '/minhas-encomendas'
+      path: '/minhas-encomendas'
+      fullPath: '/minhas-encomendas'
+      preLoaderRoute: typeof MinhasEncomendasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/encomendas': {
@@ -144,6 +190,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmentaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/catering': {
       id: '/catering'
       path: '/catering'
@@ -156,6 +209,13 @@ declare module '@tanstack/react-router' {
       path: '/carta-de-vinhos'
       fullPath: '/carta-de-vinhos'
       preLoaderRoute: typeof CartaDeVinhosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -178,10 +238,13 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
+  AuthRoute: AuthRoute,
   CartaDeVinhosRoute: CartaDeVinhosRoute,
   CateringRoute: CateringRoute,
+  CheckoutRoute: CheckoutRoute,
   EmentaRoute: EmentaRoute,
   EncomendasRoute: EncomendasRoute,
+  MinhasEncomendasRoute: MinhasEncomendasRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport

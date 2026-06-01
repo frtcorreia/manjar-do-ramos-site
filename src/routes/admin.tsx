@@ -11,6 +11,7 @@ import {
   ExternalLink,
   Menu,
   Wine,
+  ShoppingBag,
 } from "lucide-react";
 import logo from "@/assets/logo-cream.png";
 import { AdminProvider, useAdmin } from "@/lib/admin-store";
@@ -22,6 +23,7 @@ import { MenuSection } from "@/components/admin/sections/MenuSection";
 import { TestimonialsSection } from "@/components/admin/sections/TestimonialsSection";
 import { ContentSection } from "@/components/admin/sections/ContentSection";
 import { WinesSection } from "@/components/admin/sections/WinesSection";
+import { OrdersSection } from "@/components/admin/sections/OrdersSection";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -33,7 +35,15 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-type SectionId = "overview" | "blocks" | "pages" | "menu" | "wines" | "testimonials" | "content";
+type SectionId =
+  | "overview"
+  | "blocks"
+  | "pages"
+  | "menu"
+  | "wines"
+  | "orders"
+  | "testimonials"
+  | "content";
 
 const nav: { id: SectionId; label: string; icon: typeof LayoutDashboard }[] = [
   { id: "overview", label: "Visão Geral", icon: LayoutDashboard },
@@ -41,6 +51,7 @@ const nav: { id: SectionId; label: string; icon: typeof LayoutDashboard }[] = [
   { id: "pages", label: "Páginas", icon: FileText },
   { id: "menu", label: "Ementa", icon: UtensilsCrossed },
   { id: "wines", label: "Carta de Vinhos", icon: Wine },
+  { id: "orders", label: "Encomendas", icon: ShoppingBag },
   { id: "testimonials", label: "Testemunhos", icon: MessageSquareQuote },
   { id: "content", label: "Conteúdo & Imagens", icon: Images },
 ];
@@ -148,6 +159,7 @@ function AdminShell() {
           {active === "pages" && <PagesSection />}
           {active === "menu" && <MenuSection />}
           {active === "wines" && <WinesSection />}
+          {active === "orders" && <OrdersSection />}
           {active === "testimonials" && <TestimonialsSection />}
           {active === "content" && <ContentSection />}
         </main>
