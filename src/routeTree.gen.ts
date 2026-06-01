@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as EncomendasRouteImport } from './routes/encomendas'
 import { Route as EmentaRouteImport } from './routes/ementa'
 import { Route as CateringRouteImport } from './routes/catering'
 import { Route as CartaDeVinhosRouteImport } from './routes/carta-de-vinhos'
@@ -19,6 +20,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EncomendasRoute = EncomendasRouteImport.update({
+  id: '/encomendas',
+  path: '/encomendas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmentaRoute = EmentaRouteImport.update({
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/carta-de-vinhos': typeof CartaDeVinhosRoute
   '/catering': typeof CateringRoute
   '/ementa': typeof EmentaRoute
+  '/encomendas': typeof EncomendasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/carta-de-vinhos': typeof CartaDeVinhosRoute
   '/catering': typeof CateringRoute
   '/ementa': typeof EmentaRoute
+  '/encomendas': typeof EncomendasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/carta-de-vinhos': typeof CartaDeVinhosRoute
   '/catering': typeof CateringRoute
   '/ementa': typeof EmentaRoute
+  '/encomendas': typeof EncomendasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRouteTypes {
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
     | '/carta-de-vinhos'
     | '/catering'
     | '/ementa'
+    | '/encomendas'
     | '/sitemap.xml'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
     | '/carta-de-vinhos'
     | '/catering'
     | '/ementa'
+    | '/encomendas'
     | '/sitemap.xml'
   id:
     | '__root__'
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '/carta-de-vinhos'
     | '/catering'
     | '/ementa'
+    | '/encomendas'
     | '/sitemap.xml'
   fileRoutesById: FileRoutesById
 }
@@ -105,6 +117,7 @@ export interface RootRouteChildren {
   CartaDeVinhosRoute: typeof CartaDeVinhosRoute
   CateringRoute: typeof CateringRoute
   EmentaRoute: typeof EmentaRoute
+  EncomendasRoute: typeof EncomendasRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
@@ -115,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/encomendas': {
+      id: '/encomendas'
+      path: '/encomendas'
+      fullPath: '/encomendas'
+      preLoaderRoute: typeof EncomendasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ementa': {
@@ -161,8 +181,19 @@ const rootRouteChildren: RootRouteChildren = {
   CartaDeVinhosRoute: CartaDeVinhosRoute,
   CateringRoute: CateringRoute,
   EmentaRoute: EmentaRoute,
+  EncomendasRoute: EncomendasRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

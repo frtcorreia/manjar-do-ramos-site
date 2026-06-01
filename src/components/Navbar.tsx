@@ -8,6 +8,7 @@ type NavLink = { label: string; href: string; route?: boolean };
 const links: NavLink[] = [
   { label: "Conceito", href: "/#conceito" },
   { label: "Ementa", href: "/ementa", route: true },
+  { label: "Encomendas", href: "/encomendas", route: true },
   { label: "Catering", href: "/catering", route: true },
   { label: "Espaço", href: "/#espaco" },
   { label: "Testemunhos", href: "/#testemunhos" },
