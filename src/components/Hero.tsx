@@ -9,6 +9,8 @@ export function Hero() {
         alt="Mesa de taberna portuguesa com bife grelhado, queijo derretido e vinho a ser servido"
         width={1920}
         height={1280}
+        fetchPriority="high"
+        decoding="async"
         className="absolute inset-0 h-full w-full object-cover animate-kenburns"
       />
       <div className="absolute inset-0 bg-gradient-hero" />

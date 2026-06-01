@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, useId, type FormEvent } from "react";
 import { Reveal } from "./Reveal";
 
 export function Reservation() {
@@ -42,23 +42,7 @@ export function Reservation() {
                 <Field label="Telefone" name="telefone" type="tel" placeholder="+351 ___ ___ ___" />
                 <Field label="Data" name="data" type="date" />
                 <Field label="Hora" name="hora" type="time" />
-                <div className="sm:col-span-2">
-                  <label className="mb-2 block text-sm font-medium text-cream/80">
-                    Nº de pessoas
-                  </label>
-                  <select
-                    name="pessoas"
-                    className="w-full rounded-lg border border-cream/20 bg-charcoal/40 px-4 py-3 text-cream outline-none transition-colors focus:border-gold"
-                    defaultValue="2"
-                  >
-                    {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
-                      <option key={n} value={n} className="bg-charcoal text-cream">
-                        {n} {n === 1 ? "pessoa" : "pessoas"}
-                      </option>
-                    ))}
-                    <option value="9+" className="bg-charcoal text-cream">9+ pessoas (grupo)</option>
-                  </select>
-                </div>
+                <PeopleSelect />
               </div>
               <button
                 type="submit"
@@ -74,6 +58,30 @@ export function Reservation() {
   );
 }
 
+function PeopleSelect() {
+  const id = useId();
+  return (
+    <div className="sm:col-span-2">
+      <label htmlFor={id} className="mb-2 block text-sm font-medium text-cream/80">
+        Nº de pessoas
+      </label>
+      <select
+        id={id}
+        name="pessoas"
+        className="w-full rounded-lg border border-cream/20 bg-charcoal/40 px-4 py-3 text-cream outline-none transition-colors focus:border-gold"
+        defaultValue="2"
+      >
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
+                      <option key={n} value={n} className="bg-charcoal text-cream">
+                        {n} {n === 1 ? "pessoa" : "pessoas"}
+                      </option>
+                    ))}
+                    <option value="9+" className="bg-charcoal text-cream">9+ pessoas (grupo)</option>
+      </select>
+    </div>
+  );
+}
+
 function Field({
   label,
   name,
@@ -85,10 +93,12 @@ function Field({
   type: string;
   placeholder?: string;
 }) {
+  const id = useId();
   return (
     <div>
-      <label className="mb-2 block text-sm font-medium text-cream/80">{label}</label>
+      <label htmlFor={id} className="mb-2 block text-sm font-medium text-cream/80">{label}</label>
       <input
+        id={id}
         required
         name={name}
         type={type}
