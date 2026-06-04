@@ -3,9 +3,11 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 /* assets usados como conteúdo inicial */
 import heroImg from "@/assets/hero.jpg";
@@ -388,48 +390,59 @@ const initialState: AdminState = {
 /*  Contexto                                                           */
 /* ------------------------------------------------------------------ */
 
-const STORAGE_KEY = "manjar-admin-state-v7";
+const CONFIG_KEY = "admin_state";
 
 type AdminContextValue = {
   state: AdminState;
   setState: React.Dispatch<React.SetStateAction<AdminState>>;
   reset: () => void;
   newId: () => string;
+  saving: boolean;
 };
 
 const AdminContext = createContext<AdminContextValue | null>(null);
 
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AdminState>(initialState);
+  const [saving, setSaving] = useState(false);
+  const isFirstLoad = useRef(true);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setState(JSON.parse(raw));
-    } catch {
-      /* ignore */
-    }
+    supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .from("site_config" as any)
+      .select("value")
+      .eq("key", CONFIG_KEY)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.value) setState(data.value as AdminState);
+      });
   }, []);
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch {
-      /* ignore */
+    if (isFirstLoad.current) {
+      isFirstLoad.current = false;
+      return;
     }
+    setSaving(true);
+    supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .from("site_config" as any)
+      .upsert({ key: CONFIG_KEY, value: state, updated_at: new Date().toISOString() })
+      .then(() => setSaving(false));
   }, [state]);
 
   const reset = useCallback(() => {
     setState(initialState);
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch {
-      /* ignore */
-    }
+    supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .from("site_config" as any)
+      .delete()
+      .eq("key", CONFIG_KEY);
   }, []);
 
   return (
-    <AdminContext.Provider value={{ state, setState, reset, newId: uid }}>
+    <AdminContext.Provider value={{ state, setState, reset, newId: uid, saving }}>
       {children}
     </AdminContext.Provider>
   );
@@ -439,4 +452,8 @@ export function useAdmin() {
   const ctx = useContext(AdminContext);
   if (!ctx) throw new Error("useAdmin deve ser usado dentro de <AdminProvider>");
   return ctx;
+}
+
+export function useAdminSaving() {
+  return useAdmin().saving;
 }
