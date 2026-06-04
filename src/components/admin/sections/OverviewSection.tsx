@@ -40,8 +40,7 @@ export function OverviewSection() {
       </div>
 
       <div className="rounded-xl border border-dashed border-border bg-card/60 p-5 text-sm text-muted-foreground">
-        Protótipo de validação — as alterações ficam guardadas apenas neste navegador
-        (localStorage). Ainda não estão ligadas a um backend.
+        As alterações são guardadas automaticamente na base de dados (Supabase).
       </div>
     </div>
   );
