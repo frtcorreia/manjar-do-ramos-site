@@ -7,7 +7,6 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
@@ -24,7 +23,6 @@ export const Route = createFileRoute("/auth")({
 
 const emailSchema = z.string().trim().email("Email inválido").max(255);
 const passwordSchema = z.string().min(8, "Mínimo 8 caracteres").max(72);
-const nameSchema = z.string().trim().min(1, "Indique o nome").max(120);
 
 function AuthPage() {
   const { user, loading } = useAuth();
@@ -47,21 +45,10 @@ function AuthPage() {
             Bem-vindo
           </h1>
           <p className="mt-2 text-center text-sm text-muted-foreground">
-            Aceda à sua conta ou crie uma para finalizar a encomenda.
+            Aceda à sua conta para continuar.
           </p>
 
-          <Tabs defaultValue="login" className="mt-8">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Entrar</TabsTrigger>
-              <TabsTrigger value="signup">Criar conta</TabsTrigger>
-            </TabsList>
-            <TabsContent value="login">
-              <LoginForm />
-            </TabsContent>
-            <TabsContent value="signup">
-              <SignupForm />
-            </TabsContent>
-          </Tabs>
+          <LoginForm />
 
           <div className="my-6 flex items-center gap-3 text-xs uppercase tracking-widest text-muted-foreground">
             <span className="h-px flex-1 bg-border" /> ou <span className="h-px flex-1 bg-border" />
@@ -129,52 +116,3 @@ function LoginForm() {
   );
 }
 
-function SignupForm() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [busy, setBusy] = useState(false);
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const np = nameSchema.safeParse(name);
-    const ep = emailSchema.safeParse(email);
-    const pp = passwordSchema.safeParse(password);
-    if (!np.success) return toast.error(np.error.issues[0].message);
-    if (!ep.success) return toast.error(ep.error.issues[0].message);
-    if (!pp.success) return toast.error(pp.error.issues[0].message);
-    setBusy(true);
-    const { error } = await supabase.auth.signUp({
-      email: ep.data,
-      password: pp.data,
-      options: {
-        emailRedirectTo: window.location.origin + "/auth",
-        data: { name: np.data },
-      },
-    });
-    setBusy(false);
-    if (error) toast.error(error.message);
-    else toast.success("Conta criada! Sessão iniciada.");
-  };
-
-  return (
-    <form onSubmit={submit} className="mt-6 space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="signup-name">Nome</Label>
-        <Input id="signup-name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="signup-email">Email</Label>
-        <Input id="signup-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="signup-password">Palavra-passe</Label>
-        <Input id="signup-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" required minLength={8} />
-        <p className="text-xs text-muted-foreground">Mínimo 8 caracteres.</p>
-      </div>
-      <Button type="submit" disabled={busy} className="w-full bg-wine text-cream hover:bg-wine/90">
-        {busy ? "A criar…" : "Criar conta"}
-      </Button>
-    </form>
-  );
-}
