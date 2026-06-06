@@ -149,7 +149,7 @@ function SignupForm() {
       password: pp.data,
       options: {
         emailRedirectTo: window.location.origin + "/auth",
-        data: { name: np.data },
+        data: { name: np.data, role: "customer" },
       },
     });
     setBusy(false);

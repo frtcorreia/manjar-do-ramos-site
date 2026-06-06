@@ -125,9 +125,20 @@ function AdminLoginPage() {
 }
 
 function AdminPage() {
-  const { user, loading } = useAuth();
+  const { user, loading, signOut } = useAuth();
   if (loading) return null;
   if (!user) return <AdminLoginPage />;
+  if (user.user_metadata?.role !== "admin") {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-charcoal text-cream">
+        <img src={logo} alt="Manjar do Ramos" className="h-14 w-auto" />
+        <p className="text-sm text-cream/60">Sem permissões de acesso.</p>
+        <button onClick={() => signOut()} className="text-xs text-gold underline">
+          Sair
+        </button>
+      </div>
+    );
+  }
   return (
     <AdminProvider>
       <AdminShell />
