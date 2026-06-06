@@ -1,5 +1,12 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { z } from "zod";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   LayoutDashboard,
   ToggleLeft,
@@ -56,7 +63,71 @@ const nav: { id: SectionId; label: string; icon: typeof LayoutDashboard }[] = [
   { id: "content", label: "Conteúdo & Imagens", icon: Images },
 ];
 
+const emailSchema = z.string().trim().email("Email inválido");
+const passwordSchema = z.string().min(1, "Introduza a palavra-passe");
+
+function AdminLoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const ep = emailSchema.safeParse(email);
+    const pp = passwordSchema.safeParse(password);
+    if (!ep.success) return toast.error(ep.error.issues[0].message);
+    if (!pp.success) return toast.error(pp.error.issues[0].message);
+    setBusy(true);
+    const { error } = await supabase.auth.signInWithPassword({ email: ep.data, password: pp.data });
+    setBusy(false);
+    if (error) toast.error("Credenciais inválidas.");
+  };
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-charcoal px-5">
+      <div className="w-full max-w-sm">
+        <div className="mb-8 text-center">
+          <img src={logo} alt="Manjar do Ramos" className="mx-auto h-16 w-auto" />
+          <p className="mt-3 text-xs uppercase tracking-[0.3em] text-cream/40">Backoffice</p>
+        </div>
+        <form onSubmit={submit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="admin-email" className="text-cream/80">Email</Label>
+            <Input
+              id="admin-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+              required
+              className="border-cream/20 bg-cream/5 text-cream placeholder:text-cream/30 focus-visible:ring-gold"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="admin-password" className="text-cream/80">Palavra-passe</Label>
+            <Input
+              id="admin-password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+              required
+              className="border-cream/20 bg-cream/5 text-cream placeholder:text-cream/30 focus-visible:ring-gold"
+            />
+          </div>
+          <Button type="submit" disabled={busy} className="w-full bg-gold text-charcoal hover:bg-gold/90 font-semibold">
+            {busy ? "A entrar…" : "Entrar"}
+          </Button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 function AdminPage() {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  if (!user) return <AdminLoginPage />;
   return (
     <AdminProvider>
       <AdminShell />
