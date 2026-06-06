@@ -15,13 +15,13 @@ if (existsSync("dist/server")) {
   cpSync("dist/server", `${OUT}/functions/index.func`, { recursive: true });
 }
 
-// Vercel function config — points to the Nitro server entry
+// Vercel function config — points to the Nitro server entry (web handler format)
 writeFileSync(
   `${OUT}/functions/index.func/.vc-config.json`,
   JSON.stringify(
     {
       runtime: "nodejs24.x",
-      handler: "server.js",
+      handler: "index.mjs",
       launcherType: "Nodejs",
       supportsResponseStreaming: true,
     },
