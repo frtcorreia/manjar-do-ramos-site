@@ -1,8 +1,10 @@
 import { useState, useId, type FormEvent } from "react";
 import { Reveal } from "./Reveal";
+import { useBlockContent } from "@/hooks/useSiteConfig";
 
 export function Reservation() {
   const [sent, setSent] = useState(false);
+  const { field } = useBlockContent("reservation");
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -13,13 +15,12 @@ export function Reservation() {
     <section id="reservar" className="relative bg-espresso py-24 md:py-32">
       <div className="mx-auto max-w-3xl px-5 md:px-10">
         <Reveal className="text-center">
-          <span className="eyebrow text-gold">Reservas</span>
+          <span className="eyebrow text-gold">{field("Etiqueta", "Reservas")}</span>
           <h2 className="mt-5 font-serif text-4xl font-medium leading-tight text-cream md:text-5xl">
-            Reserve a sua mesa e viva a experiência
+            {field("Título", "Reserve a sua mesa e viva a experiência")}
           </h2>
           <p className="mt-5 text-lg text-cream/75">
-            Para jantares a dois ou grandes mesas de convívio. Confirmamos a sua
-            reserva com a maior brevidade.
+            {field("Subtítulo", "Para jantares a dois ou grandes mesas de convívio. Confirmamos a sua reserva com a maior brevidade.")}
           </p>
         </Reveal>
 
@@ -71,12 +72,12 @@ function PeopleSelect() {
         className="w-full rounded-lg border border-cream/20 bg-charcoal/40 px-4 py-3 text-cream outline-none transition-colors focus:border-gold"
         defaultValue="2"
       >
-                    {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
-                      <option key={n} value={n} className="bg-charcoal text-cream">
-                        {n} {n === 1 ? "pessoa" : "pessoas"}
-                      </option>
-                    ))}
-                    <option value="9+" className="bg-charcoal text-cream">9+ pessoas (grupo)</option>
+        {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
+          <option key={n} value={n} className="bg-charcoal text-cream">
+            {n} {n === 1 ? "pessoa" : "pessoas"}
+          </option>
+        ))}
+        <option value="9+" className="bg-charcoal text-cream">9+ pessoas (grupo)</option>
       </select>
     </div>
   );

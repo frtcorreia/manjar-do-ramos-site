@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import type { AdminState, Block, MenuCategory, PageKey } from "@/lib/admin-store";
+import type { AdminState, Block, BlockKey, BlockContent, MenuCategory, PageKey, Testimonial } from "@/lib/admin-store";
 
 type Wines = AdminState["wines"];
 
@@ -78,4 +78,37 @@ export function useSiteWines() {
   }, []);
 
   return wines;
+}
+
+export function useSiteTestimonials() {
+  const [testimonials, setTestimonials] = useState<Testimonial[] | null>(null);
+
+  useEffect(() => {
+    fetchAdminState().then((state) => {
+      if (state?.testimonials) setTestimonials(state.testimonials);
+    });
+  }, []);
+
+  return testimonials;
+}
+
+export function useBlockContent(blockKey: BlockKey) {
+  const [content, setContent] = useState<BlockContent | null>(null);
+
+  useEffect(() => {
+    fetchAdminState().then((state) => {
+      const block = state?.content?.find((b) => b.key === blockKey);
+      if (block) setContent(block);
+    });
+  }, [blockKey]);
+
+  const field = (label: string, fallback = "") =>
+    content?.fields.find((f) => f.label === label)?.value ?? fallback;
+
+  const image = (label: string, fallback = "") =>
+    content?.images.find((i) => i.label === label)?.url ?? fallback;
+
+  const images = () => content?.images ?? [];
+
+  return { field, image, images };
 }

@@ -1,7 +1,11 @@
 import { motion } from "framer-motion";
-import heroImg from "@/assets/hero.jpg";
+import heroImgDefault from "@/assets/hero.jpg";
+import { useBlockContent } from "@/hooks/useSiteConfig";
 
 export function Hero() {
+  const { field, image } = useBlockContent("hero");
+  const heroImg = image("Imagem de fundo", heroImgDefault);
+
   return (
     <section id="top" className="relative h-[100svh] min-h-[640px] w-full overflow-hidden bg-charcoal">
       <img
@@ -22,7 +26,7 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="eyebrow text-gold"
         >
-          Taberna Moderna Portuguesa
+          {field("Etiqueta", "Taberna Moderna Portuguesa")}
         </motion.span>
 
         <motion.h1
@@ -31,8 +35,7 @@ export function Hero() {
           transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="mt-6 max-w-4xl font-serif text-5xl font-medium leading-[1.05] text-cream md:text-7xl lg:text-[5.5rem]"
         >
-          Sabores portugueses com{" "}
-          <span className="italic text-gradient-gold">alma de taberna.</span>
+          {field("Título", "Sabores portugueses com alma de taberna.")}
         </motion.h1>
 
         <motion.p
@@ -41,7 +44,7 @@ export function Hero() {
           transition={{ duration: 0.9, delay: 0.8 }}
           className="mt-6 max-w-xl text-base text-cream/85 md:text-lg"
         >
-          Uma experiência gastronómica feita para partilhar, saborear e voltar.
+          {field("Subtítulo", "Uma experiência gastronómica feita para partilhar, saborear e voltar.")}
         </motion.p>
 
         <motion.div
@@ -54,13 +57,13 @@ export function Hero() {
             href="#reservar"
             className="rounded-full bg-wine px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-cream shadow-soft transition-transform hover:scale-[1.03]"
           >
-            Reservar Mesa
+            {field("Botão principal", "Reservar Mesa")}
           </a>
           <a
             href="#especialidades"
             className="rounded-full border border-cream/40 bg-cream/5 px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-cream backdrop-blur-sm transition-colors hover:border-gold hover:text-gold"
           >
-            Ver Menu
+            {field("Botão secundário", "Ver Menu")}
           </a>
         </motion.div>
       </div>
