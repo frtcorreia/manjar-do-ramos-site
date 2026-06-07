@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Reveal } from "@/components/Reveal";
-import { AdminProvider, useAdmin } from "@/lib/admin-store";
+import { useSiteWines } from "@/hooks/useSiteConfig";
 import heroImg from "@/assets/dish-cocktails.jpg";
 
 export const Route = createFileRoute("/carta-de-vinhos")({
@@ -21,16 +21,7 @@ export const Route = createFileRoute("/carta-de-vinhos")({
 });
 
 function WinesPage() {
-  return (
-    <AdminProvider>
-      <WinesPageInner />
-    </AdminProvider>
-  );
-}
-
-function WinesPageInner() {
-  const { state } = useAdmin();
-  const { wines } = state;
+  const wines = useSiteWines();
 
   return (
     <div className="bg-background">
@@ -44,12 +35,12 @@ function WinesPageInner() {
           />
           <div className="absolute inset-0 bg-gradient-hero" />
           <Reveal className="relative z-10 px-5 text-center">
-            <span className="eyebrow text-gold">{wines.eyebrow}</span>
+            <span className="eyebrow text-gold">{wines?.eyebrow ?? "Garrafeira da Casa"}</span>
             <h1 className="mt-5 font-serif text-5xl font-medium leading-tight text-cream md:text-7xl">
-              {wines.title}
+              {wines?.title ?? "Carta de Vinhos"}
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-base text-cream/85 md:text-lg">
-              {wines.subtitle}
+              {wines?.subtitle ?? "Uma seleção rotativa de produtores portugueses."}
             </p>
           </Reveal>
         </section>
@@ -57,7 +48,7 @@ function WinesPageInner() {
         <section className="bg-background py-24 md:py-32">
           <div className="mx-auto max-w-4xl px-5 md:px-10">
             <div className="space-y-16">
-              {wines.categories.map((cat) => {
+              {(wines?.categories ?? []).map((cat) => {
                 const visible = cat.items.filter((i) => i.visible);
                 if (visible.length === 0) return null;
                 return (

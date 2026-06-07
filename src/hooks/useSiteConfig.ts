@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import type { AdminState, Block, PageKey } from "@/lib/admin-store";
+import type { AdminState, Block, MenuCategory, PageKey } from "@/lib/admin-store";
+
+type Wines = AdminState["wines"];
 
 const DEFAULT_BLOCKS: Block[] = [
   { key: "hero", label: "Hero", description: "", visible: true },
@@ -52,4 +54,28 @@ export function usePageContent(pageKey: PageKey) {
     page?.images.find((i) => i.label === label)?.url ?? fallback;
 
   return { field, image };
+}
+
+export function useSiteMenu() {
+  const [menu, setMenu] = useState<MenuCategory[] | null>(null);
+
+  useEffect(() => {
+    fetchAdminState().then((state) => {
+      if (state?.menu) setMenu(state.menu);
+    });
+  }, []);
+
+  return menu;
+}
+
+export function useSiteWines() {
+  const [wines, setWines] = useState<Wines | null>(null);
+
+  useEffect(() => {
+    fetchAdminState().then((state) => {
+      if (state?.wines) setWines(state.wines);
+    });
+  }, []);
+
+  return wines;
 }
