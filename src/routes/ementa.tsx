@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Reveal } from "@/components/Reveal";
-import heroImg from "@/assets/dish-carne.jpg";
+import heroImgDefault from "@/assets/dish-carne.jpg";
+import { usePageContent } from "@/hooks/useSiteConfig";
 
 export const Route = createFileRoute("/ementa")({
   head: () => ({
@@ -89,6 +90,9 @@ const sections: MenuSection[] = [
 ];
 
 function EmentaPage() {
+  const { field, image } = usePageContent("ementa");
+  const heroImg = image("Hero — Imagem de fundo", heroImgDefault);
+
   return (
     <div className="bg-background">
       <Navbar />
@@ -102,12 +106,12 @@ function EmentaPage() {
           />
           <div className="absolute inset-0 bg-gradient-hero" />
           <Reveal className="relative z-10 px-5 text-center">
-            <span className="eyebrow text-gold">Ementa da Casa</span>
+            <span className="eyebrow text-gold">{field("Hero — Etiqueta", "Ementa da Casa")}</span>
             <h1 className="mt-5 font-serif text-5xl font-medium leading-tight text-cream md:text-7xl">
-              A nossa ementa
+              {field("Hero — Título", "A nossa ementa")}
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-base text-cream/85 md:text-lg">
-              Sabores portugueses pensados para partilhar à volta da mesa.
+              {field("Hero — Subtítulo", "Sabores portugueses pensados para partilhar à volta da mesa.")}
             </p>
           </Reveal>
         </section>
@@ -149,16 +153,16 @@ function EmentaPage() {
 
             <Reveal className="mt-20 rounded-2xl bg-secondary p-10 text-center shadow-soft">
               <h2 className="font-serif text-3xl text-espresso md:text-4xl">
-                Pronto para uma mesa cheia?
+                {field("CTA — Título", "Pronto para uma mesa cheia?")}
               </h2>
               <p className="mx-auto mt-4 max-w-md text-muted-foreground">
-                Reserve a sua mesa e deixe a noite acontecer entre pratos, vinho e boa conversa.
+                {field("CTA — Subtítulo", "Reserve a sua mesa e deixe a noite acontecer entre pratos, vinho e boa conversa.")}
               </p>
               <a
                 href="/#reservar"
                 className="mt-8 inline-block rounded-full bg-wine px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-cream shadow-soft transition-transform hover:scale-[1.03]"
               >
-                Reservar Mesa
+                {field("CTA — Botão", "Reservar Mesa")}
               </a>
               <p className="mt-6 text-xs text-muted-foreground">
                 Organiza um evento?{" "}

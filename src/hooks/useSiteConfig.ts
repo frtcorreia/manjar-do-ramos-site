@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import type { AdminState, Block } from "@/lib/admin-store";
+import type { AdminState, Block, PageKey } from "@/lib/admin-store";
 
 const DEFAULT_BLOCKS: Block[] = [
   { key: "hero", label: "Hero", description: "", visible: true },
@@ -11,24 +11,45 @@ const DEFAULT_BLOCKS: Block[] = [
   { key: "reservation", label: "Reservas", description: "", visible: true },
 ];
 
+function fetchAdminState(): Promise<AdminState | null> {
+  return supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .from("site_config" as any)
+    .select("value")
+    .eq("key", "admin_state")
+    .maybeSingle()
+    .then(({ data }) => (data?.value as AdminState) ?? null);
+}
+
 export function useSiteBlocks() {
   const [blocks, setBlocks] = useState<Block[]>(DEFAULT_BLOCKS);
 
   useEffect(() => {
-    supabase
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .from("site_config" as any)
-      .select("value")
-      .eq("key", "admin_state")
-      .maybeSingle()
-      .then(({ data }) => {
-        const state = data?.value as AdminState | undefined;
-        if (state?.blocks?.length) setBlocks(state.blocks);
-      });
+    fetchAdminState().then((state) => {
+      if (state?.blocks?.length) setBlocks(state.blocks);
+    });
   }, []);
 
   const isVisible = (key: Block["key"]) =>
     blocks.find((b) => b.key === key)?.visible ?? true;
 
   return { isVisible };
+}
+
+export function usePageContent(pageKey: PageKey) {
+  const [state, setState] = useState<AdminState | null>(null);
+
+  useEffect(() => {
+    fetchAdminState().then(setState);
+  }, []);
+
+  const page = state?.pages.find((p) => p.key === pageKey);
+
+  const field = (label: string, fallback = "") =>
+    page?.fields.find((f) => f.label === label)?.value ?? fallback;
+
+  const image = (label: string, fallback = "") =>
+    page?.images.find((i) => i.label === label)?.url ?? fallback;
+
+  return { field, image };
 }
