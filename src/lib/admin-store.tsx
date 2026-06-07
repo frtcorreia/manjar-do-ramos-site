@@ -52,6 +52,22 @@ export type PageContent = {
   images: ContentImage[];
 };
 
+export type Allergen =
+  | "gluten"
+  | "crustaceans"
+  | "eggs"
+  | "fish"
+  | "peanuts"
+  | "soy"
+  | "milk"
+  | "nuts"
+  | "celery"
+  | "mustard"
+  | "sesame"
+  | "sulphites"
+  | "lupin"
+  | "molluscs";
+
 export type MenuItem = {
   id: string;
   name: string;
@@ -62,6 +78,7 @@ export type MenuItem = {
   takeaway: boolean;
   restaurant: boolean;
   visible: boolean;
+  allergens: Allergen[];
 };
 
 export type MenuCategory = {
@@ -292,16 +309,16 @@ const initialState: AdminState = {
       id: uid(),
       name: "Petiscos",
       items: [
-        { id: uid(), name: "Gambas à Guilho", description: "Alho, malagueta e coentros.", price: "12,50€", image: dishPetiscos, delivery: true, takeaway: true, restaurant: true, visible: true },
-        { id: uid(), name: "Croquetes de Vitela", description: "Estaladiços, com mostarda da casa.", price: "8,00€", image: dishPetiscos, delivery: true, takeaway: true, restaurant: true, visible: true },
+        { id: uid(), name: "Gambas à Guilho", description: "Alho, malagueta e coentros.", price: "12,50€", image: dishPetiscos, delivery: true, takeaway: true, restaurant: true, visible: true, allergens: ["crustaceans"] },
+        { id: uid(), name: "Croquetes de Vitela", description: "Estaladiços, com mostarda da casa.", price: "8,00€", image: dishPetiscos, delivery: true, takeaway: true, restaurant: true, visible: true, allergens: ["gluten", "eggs", "milk", "mustard"] },
       ],
     },
     {
       id: uid(),
       name: "Carnes Maturadas",
       items: [
-        { id: uid(), name: "Bife do Lombo (300g)", description: "Maturado 30 dias, na brasa.", price: "24,00€", image: dishCarne, delivery: false, takeaway: true, restaurant: true, visible: true },
-        { id: uid(), name: "Picanha à Taberna", description: "Sal grosso e legumes assados.", price: "21,00€", image: dishCarne, delivery: true, takeaway: true, restaurant: true, visible: true },
+        { id: uid(), name: "Bife do Lombo (300g)", description: "Maturado 30 dias, na brasa.", price: "24,00€", image: dishCarne, delivery: false, takeaway: true, restaurant: true, visible: true, allergens: [] },
+        { id: uid(), name: "Picanha à Taberna", description: "Sal grosso e legumes assados.", price: "21,00€", image: dishCarne, delivery: true, takeaway: true, restaurant: true, visible: true, allergens: [] },
       ],
     },
   ],
@@ -490,8 +507,13 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       .maybeSingle()
       .then(({ data }) => {
         if (data?.value) {
-          // Merge with initialState so new fields added later always have defaults
-          setState({ ...initialState, ...(data.value as AdminState) });
+          const loaded = data.value as AdminState;
+          // Ensure new fields on MenuItem (e.g. allergens) have defaults for existing stored items
+          const menu = (loaded.menu ?? initialState.menu).map((cat) => ({
+            ...cat,
+            items: cat.items.map((item) => ({ ...item, allergens: item.allergens ?? [] })),
+          }));
+          setState({ ...initialState, ...loaded, menu });
         }
       });
   }, []);

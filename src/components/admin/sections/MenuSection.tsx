@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useAdmin, type MenuItem } from "@/lib/admin-store";
+import { useAdmin, type MenuItem, type Allergen } from "@/lib/admin-store";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,6 +9,23 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
 } from "@/components/ui/dialog";
 import { Plus, Trash2, FolderPlus, ArrowUp, ArrowDown, Pencil, ImagePlus } from "lucide-react";
+
+const ALLERGENS: { id: Allergen; label: string; emoji: string }[] = [
+  { id: "gluten",      label: "Glúten",                      emoji: "🌾" },
+  { id: "crustaceans", label: "Crustáceos",                   emoji: "🦐" },
+  { id: "eggs",        label: "Ovos",                         emoji: "🥚" },
+  { id: "fish",        label: "Peixes",                       emoji: "🐟" },
+  { id: "peanuts",     label: "Amendoins",                    emoji: "🥜" },
+  { id: "soy",         label: "Soja",                         emoji: "🫘" },
+  { id: "milk",        label: "Leite",                        emoji: "🥛" },
+  { id: "nuts",        label: "Frutos de casca rija",         emoji: "🌰" },
+  { id: "celery",      label: "Aipo",                         emoji: "🌿" },
+  { id: "mustard",     label: "Mostarda",                     emoji: "🟡" },
+  { id: "sesame",      label: "Sementes de sésamo",           emoji: "⚪" },
+  { id: "sulphites",   label: "Dióxido de enxofre e sulfitos", emoji: "🍷" },
+  { id: "lupin",       label: "Tremoço",                      emoji: "🟠" },
+  { id: "molluscs",    label: "Moluscos",                     emoji: "🦑" },
+];
 
 export function MenuSection() {
   const { state, setState, newId } = useAdmin();
@@ -46,7 +63,7 @@ export function MenuSection() {
     setEditing({
       catId,
       isNew: true,
-      item: { id: newId(), name: "", description: "", price: "0,00€", image: "", delivery: true, takeaway: true, restaurant: true, visible: true },
+      item: { id: newId(), name: "", description: "", price: "0,00€", image: "", delivery: true, takeaway: true, restaurant: true, visible: true, allergens: [] },
     });
 
   const openEdit = (catId: string, item: MenuItem) =>
@@ -186,6 +203,18 @@ export function MenuSection() {
                           Delivery
                         </span>
                       )}
+                      {(item.allergens ?? []).map((a) => {
+                        const info = ALLERGENS.find((x) => x.id === a);
+                        return info ? (
+                          <span
+                            key={a}
+                            title={info.label}
+                            className="rounded bg-amber-50 px-1.5 py-0.5 text-sm leading-none"
+                          >
+                            {info.emoji}
+                          </span>
+                        ) : null;
+                      })}
                     </div>
                   </div>
                   {!item.visible && (
@@ -288,6 +317,38 @@ export function MenuSection() {
                     />
                     Delivery
                   </label>
+                </div>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-muted-foreground">Alergénicos</label>
+                <div className="mt-2 grid grid-cols-2 gap-1.5 sm:grid-cols-3">
+                  {ALLERGENS.map((a) => {
+                    const checked = (editing.item.allergens ?? []).includes(a.id);
+                    return (
+                      <label
+                        key={a.id}
+                        className={`flex cursor-pointer items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors ${
+                          checked
+                            ? "border-primary/40 bg-primary/5 text-charcoal"
+                            : "border-border text-muted-foreground"
+                        }`}
+                      >
+                        <Checkbox
+                          checked={checked}
+                          onCheckedChange={(v) => {
+                            const current = editing.item.allergens ?? [];
+                            patchEditing({
+                              allergens: v === true
+                                ? [...current, a.id]
+                                : current.filter((x) => x !== a.id),
+                            });
+                          }}
+                        />
+                        <span className="text-base leading-none">{a.emoji}</span>
+                        <span className="truncate">{a.label}</span>
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
             </div>
