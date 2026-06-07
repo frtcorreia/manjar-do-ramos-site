@@ -3,8 +3,9 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Reveal } from "@/components/Reveal";
 import { UtensilsCrossed, Users, PartyPopper, Truck, ChefHat, Wine } from "lucide-react";
-import heroImg from "@/assets/dish-tabua.jpg";
-import about1 from "@/assets/about-2.jpg";
+import heroImgDefault from "@/assets/dish-tabua.jpg";
+import about1Default from "@/assets/about-2.jpg";
+import { usePageContent } from "@/hooks/useSiteConfig";
 
 export const Route = createFileRoute("/catering")({
   head: () => ({
@@ -68,6 +69,10 @@ const steps = [
 ];
 
 function CateringPage() {
+  const { field, image } = usePageContent("catering");
+  const heroImg = image("Hero — Imagem de fundo", heroImgDefault);
+  const introImg = image("Intro — Imagem", about1Default);
+
   return (
     <div className="bg-background">
       <Navbar />
@@ -81,18 +86,18 @@ function CateringPage() {
           />
           <div className="absolute inset-0 bg-gradient-hero" />
           <Reveal className="relative z-10 px-5 text-center">
-            <span className="eyebrow text-gold">Catering & Eventos</span>
+            <span className="eyebrow text-gold">{field("Hero — Etiqueta", "Catering & Eventos")}</span>
             <h1 className="mt-5 font-serif text-5xl font-medium leading-tight text-cream md:text-7xl">
-              A taberna vai até si
+              {field("Hero — Título", "A taberna vai até si")}
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-base text-cream/85 md:text-lg">
-              Levamos a abundância, o convívio e os sabores do Manjar do Ramos ao seu evento.
+              {field("Hero — Subtítulo", "Levamos a abundância, o convívio e os sabores do Manjar do Ramos ao seu evento.")}
             </p>
             <a
               href="#pedido"
               className="mt-9 inline-block rounded-full bg-wine px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-cream shadow-soft transition-transform hover:scale-[1.03]"
             >
-              Pedir Orçamento
+              {field("Hero — Botão", "Pedir Orçamento")}
             </a>
           </Reveal>
         </section>
@@ -103,7 +108,7 @@ function CateringPage() {
             <Reveal>
               <div className="overflow-hidden rounded-2xl shadow-card">
                 <img
-                  src={about1}
+                  src={introImg}
                   alt="Mesa farta de petiscos portugueses para partilhar"
                   loading="lazy"
                   className="h-full w-full object-cover"
@@ -111,19 +116,15 @@ function CateringPage() {
               </div>
             </Reveal>
             <Reveal delay={0.15}>
-              <span className="eyebrow text-wine">O Nosso Catering</span>
+              <span className="eyebrow text-wine">{field("Intro — Etiqueta", "O Nosso Catering")}</span>
               <h2 className="mt-4 font-serif text-3xl text-espresso md:text-4xl">
-                Mesas que reúnem, sabores que ficam
+                {field("Intro — Título", "Mesas que reúnem, sabores que ficam")}
               </h2>
               <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
-                Quer seja um jantar íntimo ou uma grande celebração, levamos a alma da
-                taberna portuguesa onde quiser. Petiscos generosos, carnes na brasa,
-                tábuas de partilha e doçaria de sempre — servidos com o calor e o cuidado
-                que nos definem.
+                {field("Intro — Parágrafo 1", "Quer seja um jantar íntimo ou uma grande celebração, levamos a alma da taberna portuguesa onde quiser. Petiscos generosos, carnes na brasa, tábuas de partilha e doçaria de sempre — servidos com o calor e o cuidado que nos definem.")}
               </p>
               <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-                Cada evento é único, por isso desenhamos cada ementa a pensar em si e nos
-                seus convidados.
+                {field("Intro — Parágrafo 2", "Cada evento é único, por isso desenhamos cada ementa a pensar em si e nos seus convidados.")}
               </p>
             </Reveal>
           </div>
@@ -133,9 +134,9 @@ function CateringPage() {
         <section className="bg-charcoal py-24 md:py-32">
           <div className="mx-auto max-w-7xl px-5 md:px-10">
             <Reveal className="mx-auto max-w-2xl text-center">
-              <span className="eyebrow text-gold">O Que Oferecemos</span>
+              <span className="eyebrow text-gold">{field("Serviços — Etiqueta", "O Que Oferecemos")}</span>
               <h2 className="mt-5 font-serif text-4xl font-medium leading-tight text-cream md:text-5xl">
-                Um serviço pensado ao detalhe
+                {field("Serviços — Título", "Um serviço pensado ao detalhe")}
               </h2>
             </Reveal>
             <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -156,9 +157,9 @@ function CateringPage() {
         <section className="bg-background py-24 md:py-32">
           <div className="mx-auto max-w-7xl px-5 md:px-10">
             <Reveal className="mx-auto max-w-2xl text-center">
-              <span className="eyebrow text-wine">Como Funciona</span>
+              <span className="eyebrow text-wine">{field("Como Funciona — Etiqueta", "Como Funciona")}</span>
               <h2 className="mt-5 font-serif text-4xl font-medium leading-tight text-espresso md:text-5xl">
-                Simples, do primeiro contacto ao brinde
+                {field("Como Funciona — Título", "Simples, do primeiro contacto ao brinde")}
               </h2>
             </Reveal>
             <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -183,24 +184,23 @@ function CateringPage() {
             <Reveal>
               <span className="eyebrow text-wine">Pedir Orçamento</span>
               <h2 className="mt-5 font-serif text-4xl font-medium leading-tight text-espresso md:text-5xl">
-                Vamos planear o seu evento
+                {field("CTA — Título", "Vamos planear o seu evento")}
               </h2>
               <p className="mx-auto mt-5 max-w-md text-muted-foreground">
-                Conte-nos os detalhes e enviamos-lhe uma proposta à medida. Resposta em
-                até 48 horas.
+                {field("CTA — Subtítulo", "Conte-nos os detalhes e enviamos-lhe uma proposta à medida. Resposta em até 48 horas.")}
               </p>
               <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <a
-                  href="mailto:eventos@manjardoramos.pt"
+                  href={`mailto:${field("CTA — Email", "eventos@manjardoramos.pt")}`}
                   className="rounded-full bg-wine px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-cream shadow-soft transition-transform hover:scale-[1.03]"
                 >
-                  eventos@manjardoramos.pt
+                  {field("CTA — Email", "eventos@manjardoramos.pt")}
                 </a>
                 <a
-                  href="tel:+351210000000"
+                  href={`tel:${field("CTA — Telefone", "+351210000000").replace(/\s/g, "")}`}
                   className="rounded-full border border-wine/40 px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-wine transition-colors hover:bg-wine hover:text-cream"
                 >
-                  +351 210 000 000
+                  {field("CTA — Telefone", "+351 210 000 000")}
                 </a>
               </div>
             </Reveal>
