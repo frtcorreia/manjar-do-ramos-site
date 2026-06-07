@@ -7,6 +7,7 @@ import { SpaceGallery } from "@/components/SpaceGallery";
 import { Testimonials } from "@/components/Testimonials";
 import { Reservation } from "@/components/Reservation";
 import { Footer } from "@/components/Footer";
+import { useSiteBlocks } from "@/hooks/useSiteConfig";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -54,16 +55,18 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { isVisible } = useSiteBlocks();
+
   return (
     <div className="bg-background">
       <Navbar />
       <main>
-        <Hero />
-        <About />
-        <Specialties />
-        <SpaceGallery />
-        <Testimonials />
-        <Reservation />
+        {isVisible("hero") && <Hero />}
+        {isVisible("about") && <About />}
+        {isVisible("specialties") && <Specialties />}
+        {isVisible("gallery") && <SpaceGallery />}
+        {isVisible("testimonials") && <Testimonials />}
+        {isVisible("reservation") && <Reservation />}
       </main>
       <Footer />
     </div>
