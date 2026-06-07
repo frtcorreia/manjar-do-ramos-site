@@ -9,8 +9,10 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
-import { AuthProvider } from "@/hooks/useAuth";
+import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/sonner";
+import { useMaintenance } from "@/hooks/useSiteConfig";
+import { MaintenancePage } from "@/components/MaintenancePage";
 
 function NotFoundComponent() {
   return (
@@ -127,15 +129,31 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+function MaintenanceGate() {
+  const maintenance = useMaintenance();
+  const { isAdmin, loading } = useAuth();
+  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
+  const isAdminRoute = pathname.startsWith("/admin");
+
+  if (!loading && maintenance.enabled && !isAdmin && !isAdminRoute) {
+    return <MaintenancePage config={maintenance} />;
+  }
+
+  return (
+    <>
+      <Outlet />
+      <Toaster richColors position="top-center" />
+    </>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-        <Toaster richColors position="top-center" />
+        <MaintenanceGate />
       </AuthProvider>
     </QueryClientProvider>
   );

@@ -3,23 +3,17 @@ import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo-cream.png";
 import { useAuth } from "@/hooks/useAuth";
+import { useNavPages, useRestaurante } from "@/hooks/useSiteConfig";
 import { User as UserIcon, LogOut } from "lucide-react";
-
-type NavLink = { label: string; href: string; route?: boolean };
-
-const links: NavLink[] = [
-  { label: "Conceito", href: "/#conceito" },
-  { label: "Ementa", href: "/ementa", route: true },
-  { label: "Encomendas", href: "/encomendas", route: true },
-  { label: "Catering", href: "/catering", route: true },
-  { label: "Espaço", href: "/#espaco" },
-  { label: "Testemunhos", href: "/#testemunhos" },
-];
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { user, signOut } = useAuth();
+  const navPages = useNavPages();
+  const restaurante = useRestaurante();
+  const visibleLinks = navPages.filter((p) => p.visible);
+  const logoSrc = restaurante.logo || logo;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -41,16 +35,12 @@ export function Navbar() {
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-10 md:py-5">
         <Link to="/" className="flex items-center gap-3 leading-none text-cream">
-          <img
-            src={logo}
-            alt="Manjar do Ramos"
-            className="h-14 w-auto md:h-16"
-          />
+          <img src={logoSrc} alt="Manjar do Ramos" className="h-14 w-auto md:h-16" />
           <span className="sr-only">Manjar do Ramos · Taberna Portuguesa</span>
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">
-          {links.map((l) =>
+          {visibleLinks.map((l) =>
             l.route ? (
               <Link
                 key={l.href}
@@ -119,7 +109,7 @@ export function Navbar() {
           className="overflow-hidden bg-charcoal/98 px-5 pb-6 md:hidden"
         >
           <div className="flex flex-col gap-4 pt-2">
-            {links.map((l) =>
+            {visibleLinks.map((l) =>
               l.route ? (
                 <Link
                   key={l.href}
@@ -150,10 +140,7 @@ export function Navbar() {
                   A minha conta
                 </Link>
                 <button
-                  onClick={() => {
-                    setOpen(false);
-                    signOut();
-                  }}
+                  onClick={() => { setOpen(false); signOut(); }}
                   className="text-left text-base font-medium text-cream/70"
                 >
                   Sair

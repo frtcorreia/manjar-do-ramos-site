@@ -134,6 +134,49 @@ export type BlockContent = {
   images: ContentImage[];
 };
 
+export type SocialNetwork = {
+  url: string;
+  visible: boolean;
+};
+
+export type RestauranteConfig = {
+  logo: string;
+  morada: string;
+  telefone: string;
+  email: string;
+  horario: string;
+  googleMapsUrl: string;
+  googleMapsEmbed: string;
+  social: {
+    instagram: SocialNetwork;
+    facebook: SocialNetwork;
+    tripadvisor: SocialNetwork;
+  };
+};
+
+export type NavPageKey =
+  | "conceito"
+  | "ementa"
+  | "encomendas"
+  | "catering"
+  | "espaco"
+  | "testemunhos"
+  | "carta-de-vinhos";
+
+export type NavPage = {
+  key: NavPageKey;
+  label: string;
+  href: string;
+  route: boolean;
+  visible: boolean;
+};
+
+export type MaintenanceConfig = {
+  enabled: boolean;
+  titulo: string;
+  mensagem: string;
+};
+
 export type AdminState = {
   blocks: Block[];
   pages: PageContent[];
@@ -146,6 +189,9 @@ export type AdminState = {
   };
   testimonials: Testimonial[];
   content: BlockContent[];
+  restaurante: RestauranteConfig;
+  navPages: NavPage[];
+  maintenance: MaintenanceConfig;
 };
 
 /* ------------------------------------------------------------------ */
@@ -384,6 +430,34 @@ const initialState: AdminState = {
       images: [],
     },
   ],
+  restaurante: {
+    logo: "",
+    morada: "Rua da Taberna 12, Lisboa",
+    telefone: "+351 210 000 000",
+    email: "geral@manjardoramos.pt",
+    horario: "Terça a Domingo · 12h00–15h00 · 19h00–23h30",
+    googleMapsUrl: "#",
+    googleMapsEmbed: "",
+    social: {
+      instagram: { url: "https://instagram.com/manjardoramos", visible: true },
+      facebook: { url: "https://facebook.com/manjardoramos", visible: true },
+      tripadvisor: { url: "", visible: false },
+    },
+  },
+  navPages: [
+    { key: "conceito", label: "Conceito", href: "/#conceito", route: false, visible: true },
+    { key: "ementa", label: "Ementa", href: "/ementa", route: true, visible: true },
+    { key: "encomendas", label: "Encomendas", href: "/encomendas", route: true, visible: true },
+    { key: "catering", label: "Catering", href: "/catering", route: true, visible: true },
+    { key: "espaco", label: "Espaço", href: "/#espaco", route: false, visible: true },
+    { key: "testemunhos", label: "Testemunhos", href: "/#testemunhos", route: false, visible: true },
+    { key: "carta-de-vinhos", label: "Carta de Vinhos", href: "/carta-de-vinhos", route: true, visible: false },
+  ],
+  maintenance: {
+    enabled: false,
+    titulo: "Em manutenção",
+    mensagem: "Estamos a preparar algo especial. Voltamos em breve.",
+  },
 };
 
 /* ------------------------------------------------------------------ */
