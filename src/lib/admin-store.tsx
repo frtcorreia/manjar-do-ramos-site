@@ -489,7 +489,10 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       .eq("key", CONFIG_KEY)
       .maybeSingle()
       .then(({ data }) => {
-        if (data?.value) setState(data.value as AdminState);
+        if (data?.value) {
+          // Merge with initialState so new fields added later always have defaults
+          setState({ ...initialState, ...(data.value as AdminState) });
+        }
       });
   }, []);
 
