@@ -19,6 +19,8 @@ import {
   Menu,
   Wine,
   ShoppingBag,
+  Store,
+  Navigation,
 } from "lucide-react";
 import logo from "@/assets/logo-cream.png";
 import { AdminProvider, useAdmin } from "@/lib/admin-store";
@@ -31,6 +33,8 @@ import { TestimonialsSection } from "@/components/admin/sections/TestimonialsSec
 import { ContentSection } from "@/components/admin/sections/ContentSection";
 import { WinesSection } from "@/components/admin/sections/WinesSection";
 import { OrdersSection } from "@/components/admin/sections/OrdersSection";
+import { RestauranteSection } from "@/components/admin/sections/RestauranteSection";
+import { NavegacaoSection } from "@/components/admin/sections/NavegacaoSection";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -50,10 +54,14 @@ type SectionId =
   | "wines"
   | "orders"
   | "testimonials"
-  | "content";
+  | "content"
+  | "restaurante"
+  | "navegacao";
 
 const nav: { id: SectionId; label: string; icon: typeof LayoutDashboard }[] = [
   { id: "overview", label: "Visão Geral", icon: LayoutDashboard },
+  { id: "restaurante", label: "Restaurante", icon: Store },
+  { id: "navegacao", label: "Navegação & Site", icon: Navigation },
   { id: "blocks", label: "Blocos", icon: ToggleLeft },
   { id: "pages", label: "Páginas", icon: FileText },
   { id: "menu", label: "Ementa", icon: UtensilsCrossed },
@@ -237,6 +245,8 @@ function AdminShell() {
 
         <main className="mx-auto w-full max-w-5xl flex-1 px-5 py-8 md:px-10">
           {active === "overview" && <OverviewSection />}
+          {active === "restaurante" && <RestauranteSection />}
+          {active === "navegacao" && <NavegacaoSection />}
           {active === "blocks" && <BlocksSection />}
           {active === "pages" && <PagesSection />}
           {active === "menu" && <MenuSection />}
