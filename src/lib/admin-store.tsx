@@ -478,10 +478,95 @@ const initialState: AdminState = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Contexto                                                           */
+/*  Helpers de persistência                                            */
 /* ------------------------------------------------------------------ */
 
-const CONFIG_KEY = "admin_state";
+const NOW = () => new Date().toISOString();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const db = (table: string) => supabase.from(table as any) as any;
+
+async function loadFromSupabase(): Promise<Partial<AdminState>> {
+  const [menuRes, winesRes, testimonialsRes, contentRes, settingsRes] =
+    await Promise.all([
+      db("site_menu").select("data").maybeSingle(),
+      db("site_wines").select("data").maybeSingle(),
+      db("site_testimonials").select("data").maybeSingle(),
+      db("site_content").select("key, value"),
+      db("site_settings").select("key, value"),
+    ]);
+
+  const partial: Partial<AdminState> = {};
+
+  // menu — garantir campo allergens em itens antigos
+  if (menuRes.data?.data) {
+    partial.menu = (menuRes.data.data as MenuCategory[]).map((cat) => ({
+      ...cat,
+      items: cat.items.map((item) => ({ ...item, allergens: item.allergens ?? [] })),
+    }));
+  }
+
+  if (winesRes.data?.data) partial.wines = winesRes.data.data as AdminState["wines"];
+  if (testimonialsRes.data?.data) partial.testimonials = testimonialsRes.data.data as AdminState["testimonials"];
+
+  // site_content → blocos e páginas
+  if (contentRes.data?.length) {
+    const blocks: BlockContent[] = [];
+    const pages: PageContent[] = [];
+    for (const row of contentRes.data as { key: string; value: unknown }[]) {
+      if (row.key.startsWith("block_")) blocks.push(row.value as BlockContent);
+      else if (row.key.startsWith("page_")) pages.push(row.value as PageContent);
+    }
+    if (blocks.length) partial.content = blocks;
+    if (pages.length) partial.pages = pages;
+  }
+
+  // site_settings → restaurante, navPages, maintenance, blocks
+  if (settingsRes.data?.length) {
+    for (const row of settingsRes.data as { key: string; value: unknown }[]) {
+      if (row.key === "restaurante") partial.restaurante = row.value as AdminState["restaurante"];
+      if (row.key === "navPages") partial.navPages = row.value as AdminState["navPages"];
+      if (row.key === "maintenance") partial.maintenance = row.value as AdminState["maintenance"];
+      if (row.key === "blocks") partial.blocks = row.value as AdminState["blocks"];
+    }
+  }
+
+  return partial;
+}
+
+async function saveToSupabase(state: AdminState): Promise<void> {
+  const contentRows = [
+    ...state.content.map((b) => ({ key: `block_${b.key}`, value: b, updated_at: NOW() })),
+    ...state.pages.map((p) => ({ key: `page_${p.key}`, value: p, updated_at: NOW() })),
+  ];
+  const settingsRows = [
+    { key: "restaurante",  value: state.restaurante,  updated_at: NOW() },
+    { key: "navPages",     value: state.navPages,      updated_at: NOW() },
+    { key: "maintenance",  value: state.maintenance,   updated_at: NOW() },
+    { key: "blocks",       value: state.blocks,        updated_at: NOW() },
+  ];
+
+  await Promise.all([
+    db("site_menu").upsert({ id: true, data: state.menu, updated_at: NOW() }),
+    db("site_wines").upsert({ id: true, data: state.wines, updated_at: NOW() }),
+    db("site_testimonials").upsert({ id: true, data: state.testimonials, updated_at: NOW() }),
+    db("site_content").upsert(contentRows),
+    db("site_settings").upsert(settingsRows),
+  ]);
+}
+
+async function resetSupabase(): Promise<void> {
+  await Promise.all([
+    db("site_menu").delete().eq("id", true),
+    db("site_wines").delete().eq("id", true),
+    db("site_testimonials").delete().eq("id", true),
+    db("site_content").delete().neq("key", ""),
+    db("site_settings").delete().neq("key", ""),
+  ]);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Contexto                                                           */
+/* ------------------------------------------------------------------ */
 
 type AdminContextValue = {
   state: AdminState;
@@ -498,46 +583,28 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const [saving, setSaving] = useState(false);
   const isFirstLoad = useRef(true);
 
+  // Carregar estado das novas tabelas ao montar
   useEffect(() => {
-    supabase
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .from("site_config" as any)
-      .select("value")
-      .eq("key", CONFIG_KEY)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (data?.value) {
-          const loaded = data.value as AdminState;
-          // Ensure new fields on MenuItem (e.g. allergens) have defaults for existing stored items
-          const menu = (loaded.menu ?? initialState.menu).map((cat) => ({
-            ...cat,
-            items: cat.items.map((item) => ({ ...item, allergens: item.allergens ?? [] })),
-          }));
-          setState({ ...initialState, ...loaded, menu });
-        }
-      });
+    loadFromSupabase().then((partial) => {
+      if (Object.keys(partial).length > 0) {
+        setState((s) => ({ ...s, ...partial }));
+      }
+    });
   }, []);
 
+  // Guardar nas novas tabelas sempre que o estado muda (exceto carga inicial)
   useEffect(() => {
     if (isFirstLoad.current) {
       isFirstLoad.current = false;
       return;
     }
     setSaving(true);
-    supabase
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .from("site_config" as any)
-      .upsert({ key: CONFIG_KEY, value: state, updated_at: new Date().toISOString() })
-      .then(() => setSaving(false));
+    saveToSupabase(state).finally(() => setSaving(false));
   }, [state]);
 
   const reset = useCallback(() => {
     setState(initialState);
-    supabase
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .from("site_config" as any)
-      .delete()
-      .eq("key", CONFIG_KEY);
+    resetSupabase();
   }, []);
 
   return (
