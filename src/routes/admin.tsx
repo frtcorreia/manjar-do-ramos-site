@@ -125,10 +125,10 @@ function AdminLoginPage() {
 }
 
 function AdminPage() {
-  const { user, loading, signOut } = useAuth();
+  const { user, isAdmin, loading, signOut } = useAuth();
   if (loading) return null;
   if (!user) return <AdminLoginPage />;
-  if (user.user_metadata?.role !== "admin") {
+  if (!isAdmin) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-charcoal text-cream">
         <img src={logo} alt="Manjar do Ramos" className="h-14 w-auto" />
