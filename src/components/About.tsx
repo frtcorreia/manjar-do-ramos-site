@@ -1,15 +1,20 @@
 import { Reveal } from "./Reveal";
-import about1 from "@/assets/about-1.jpg";
-import about2 from "@/assets/about-2.jpg";
+import about1Default from "@/assets/about-1.jpg";
+import about2Default from "@/assets/about-2.jpg";
+import { useBlockContent } from "@/hooks/useSiteConfig";
 
 export function About() {
+  const { field, image } = useBlockContent("about");
+  const img1 = image("Imagem 1", about1Default);
+  const img2 = image("Imagem 2", about2Default);
+
   return (
     <section id="conceito" className="bg-background py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <span className="eyebrow text-wine">O Nosso Conceito</span>
+          <span className="eyebrow text-wine">{field("Etiqueta", "O Nosso Conceito")}</span>
           <h2 className="mt-5 font-serif text-4xl font-medium leading-tight text-espresso md:text-5xl">
-            Tradição portuguesa reinterpretada, à volta da mesa
+            {field("Título", "Tradição portuguesa reinterpretada, à volta da mesa")}
           </h2>
         </Reveal>
 
@@ -18,7 +23,7 @@ export function About() {
           <Reveal>
             <div className="overflow-hidden rounded-2xl shadow-card">
               <img
-                src={about1}
+                src={img1}
                 alt="Interior acolhedor da taberna com madeira escura e luz quente"
                 width={1200}
                 height={1400}
@@ -30,17 +35,10 @@ export function About() {
           <Reveal delay={0.15}>
             <span className="eyebrow text-gold">Acolhedor</span>
             <h3 className="mt-4 font-serif text-3xl text-espresso md:text-4xl">
-              Uma casa feita de madeira, vinho e boa conversa
+              {field("Parágrafo 1", "Uma casa feita de madeira, vinho e boa conversa")}
             </h3>
             <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
-              No Manjar do Ramos, cada noite começa com o aroma da grelha e termina
-              com risos à volta de uma mesa cheia. Recuperámos a alma da taberna
-              portuguesa — generosa, sem pressas, profundamente humana — e vestimo-la
-              com um cuidado contemporâneo.
-            </p>
-            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-              É o lugar para um jantar a dois que se prolonga, ou para uma mesa grande
-              onde os pratos circulam de mão em mão.
+              {field("Parágrafo 2", "No Manjar do Ramos, cada noite começa com o aroma da grelha e termina com risos à volta de uma mesa cheia.")}
             </p>
           </Reveal>
         </div>
@@ -50,7 +48,7 @@ export function About() {
           <Reveal delay={0.15} className="md:order-2">
             <div className="overflow-hidden rounded-2xl shadow-card">
               <img
-                src={about2}
+                src={img2}
                 alt="Tábuas de partilha com petiscos portugueses generosos"
                 width={1200}
                 height={1400}
