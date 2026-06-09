@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   LayoutDashboard,
-  ToggleLeft,
   FileText,
   UtensilsCrossed,
   MessageSquareQuote,
@@ -26,7 +25,6 @@ import logo from "@/assets/logo-cream.png";
 import { AdminProvider, useAdmin } from "@/lib/admin-store";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { OverviewSection } from "@/components/admin/sections/OverviewSection";
-import { BlocksSection } from "@/components/admin/sections/BlocksSection";
 import { PagesSection } from "@/components/admin/sections/PagesSection";
 import { MenuSection } from "@/components/admin/sections/MenuSection";
 import { TestimonialsSection } from "@/components/admin/sections/TestimonialsSection";
@@ -48,7 +46,6 @@ export const Route = createFileRoute("/admin")({
 
 type SectionId =
   | "overview"
-  | "blocks"
   | "pages"
   | "menu"
   | "wines"
@@ -62,7 +59,6 @@ const nav: { id: SectionId; label: string; icon: typeof LayoutDashboard }[] = [
   { id: "overview", label: "Visão Geral", icon: LayoutDashboard },
   { id: "restaurante", label: "Restaurante", icon: Store },
   { id: "navegacao", label: "Navegação & Site", icon: Navigation },
-  { id: "blocks", label: "Blocos", icon: ToggleLeft },
   { id: "pages", label: "Páginas", icon: FileText },
   { id: "menu", label: "Ementa", icon: UtensilsCrossed },
   { id: "wines", label: "Carta de Vinhos", icon: Wine },
@@ -247,7 +243,6 @@ function AdminShell() {
           {active === "overview" && <OverviewSection />}
           {active === "restaurante" && <RestauranteSection />}
           {active === "navegacao" && <NavegacaoSection />}
-          {active === "blocks" && <BlocksSection />}
           {active === "pages" && <PagesSection />}
           {active === "menu" && <MenuSection />}
           {active === "wines" && <WinesSection />}
