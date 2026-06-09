@@ -12,7 +12,8 @@ export function Navbar() {
   const { user, signOut } = useAuth();
   const navPages = useNavPages();
   const restaurante = useRestaurante();
-  const visibleLinks = navPages.filter((p) => p.visible);
+  const visibleLinks = navPages.filter((p) => p.visible && p.key !== "a-minha-conta");
+  const showMinhaConta = navPages.find((p) => p.key === "a-minha-conta")?.visible ?? true;
   const logoSrc = restaurante.logo || logo;
 
   useEffect(() => {
@@ -60,28 +61,32 @@ export function Navbar() {
             ),
           )}
           {user ? (
-            <div className="flex items-center gap-3">
+            showMinhaConta && (
+              <div className="flex items-center gap-3">
+                <Link
+                  to="/minhas-encomendas"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-cream/85 transition-colors hover:text-gold"
+                >
+                  <UserIcon className="h-4 w-4" /> A minha conta
+                </Link>
+                <button
+                  onClick={() => signOut()}
+                  className="text-cream/60 transition-colors hover:text-gold"
+                  aria-label="Sair"
+                >
+                  <LogOut className="h-4 w-4" />
+                </button>
+              </div>
+            )
+          ) : (
+            showMinhaConta && (
               <Link
-                to="/minhas-encomendas"
+                to="/auth"
                 className="inline-flex items-center gap-1.5 text-sm font-medium text-cream/85 transition-colors hover:text-gold"
               >
-                <UserIcon className="h-4 w-4" /> A minha conta
+                <UserIcon className="h-4 w-4" /> Entrar
               </Link>
-              <button
-                onClick={() => signOut()}
-                className="text-cream/60 transition-colors hover:text-gold"
-                aria-label="Sair"
-              >
-                <LogOut className="h-4 w-4" />
-              </button>
-            </div>
-          ) : (
-            <Link
-              to="/auth"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-cream/85 transition-colors hover:text-gold"
-            >
-              <UserIcon className="h-4 w-4" /> Entrar
-            </Link>
+            )
           )}
           <a
             href="/#reservar"
@@ -131,29 +136,33 @@ export function Navbar() {
               ),
             )}
             {user ? (
-              <>
+              showMinhaConta && (
+                <>
+                  <Link
+                    to="/minhas-encomendas"
+                    onClick={() => setOpen(false)}
+                    className="text-base font-medium text-cream/90"
+                  >
+                    A minha conta
+                  </Link>
+                  <button
+                    onClick={() => { setOpen(false); signOut(); }}
+                    className="text-left text-base font-medium text-cream/70"
+                  >
+                    Sair
+                  </button>
+                </>
+              )
+            ) : (
+              showMinhaConta && (
                 <Link
-                  to="/minhas-encomendas"
+                  to="/auth"
                   onClick={() => setOpen(false)}
                   className="text-base font-medium text-cream/90"
                 >
-                  A minha conta
+                  Entrar / Criar conta
                 </Link>
-                <button
-                  onClick={() => { setOpen(false); signOut(); }}
-                  className="text-left text-base font-medium text-cream/70"
-                >
-                  Sair
-                </button>
-              </>
-            ) : (
-              <Link
-                to="/auth"
-                onClick={() => setOpen(false)}
-                className="text-base font-medium text-cream/90"
-              >
-                Entrar / Criar conta
-              </Link>
+              )
             )}
             <a
               href="/#reservar"

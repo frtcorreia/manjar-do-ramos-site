@@ -178,7 +178,8 @@ export type NavPageKey =
   | "catering"
   | "espaco"
   | "testemunhos"
-  | "carta-de-vinhos";
+  | "carta-de-vinhos"
+  | "a-minha-conta";
 
 export type NavPage = {
   key: NavPageKey;
@@ -469,6 +470,7 @@ const initialState: AdminState = {
     { key: "espaco", label: "Espaço", href: "/#espaco", route: false, visible: true },
     { key: "testemunhos", label: "Testemunhos", href: "/#testemunhos", route: false, visible: true },
     { key: "carta-de-vinhos", label: "Carta de Vinhos", href: "/carta-de-vinhos", route: true, visible: false },
+    { key: "a-minha-conta", label: "A minha conta", href: "/minhas-encomendas", route: true, visible: true },
   ],
   maintenance: {
     enabled: false,

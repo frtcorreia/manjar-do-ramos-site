@@ -3,7 +3,6 @@ import { useAdmin, type PageContent, type ContentField, type ContentImage } from
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import { ImagePlus } from "lucide-react";
 
 export function PagesSection() {
@@ -29,12 +28,6 @@ export function PagesSection() {
           ? { ...p, images: p.images.map((i) => (i.id === imageId ? { ...i, url } : i)) }
           : p,
       ),
-    }));
-
-  const toggleBlock = (key: string, visible: boolean) =>
-    setState((s) => ({
-      ...s,
-      blocks: s.blocks.map((b) => (b.key === key ? { ...b, visible } : b)),
     }));
 
   return (
@@ -64,33 +57,6 @@ export function PagesSection() {
       </div>
 
       {active && <PageEditor page={active} onField={updateField} onImage={updateImage} />}
-
-      {active?.key === "index" && (
-        <section className="space-y-4">
-          <div>
-            <h2 className="font-serif text-xl text-charcoal">Visibilidade dos Blocos</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Ative ou desative secções da página inicial.
-            </p>
-          </div>
-          <div className="divide-y divide-border rounded-xl border border-border bg-card">
-            {state.blocks.map((b) => (
-              <div key={b.key} className="flex items-center justify-between gap-4 p-5">
-                <div>
-                  <p className="font-medium text-charcoal">{b.label}</p>
-                  <p className="text-sm text-muted-foreground">{b.description}</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className={`text-xs font-semibold ${b.visible ? "text-green-600" : "text-muted-foreground"}`}>
-                    {b.visible ? "Visível" : "Oculto"}
-                  </span>
-                  <Switch checked={b.visible} onCheckedChange={(v) => toggleBlock(b.key, v)} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
     </div>
   );
 }
