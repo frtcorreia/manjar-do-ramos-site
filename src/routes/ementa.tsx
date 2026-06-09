@@ -4,6 +4,24 @@ import { Footer } from "@/components/Footer";
 import { Reveal } from "@/components/Reveal";
 import heroImgDefault from "@/assets/dish-carne.jpg";
 import { usePageContent, useSiteMenu } from "@/hooks/useSiteConfig";
+import type { Allergen } from "@/lib/admin-store";
+
+const ALLERGENS: { id: Allergen; label: string; emoji: string }[] = [
+  { id: "gluten",      label: "Glúten",                       emoji: "🌾" },
+  { id: "crustaceans", label: "Crustáceos",                    emoji: "🦐" },
+  { id: "eggs",        label: "Ovos",                          emoji: "🥚" },
+  { id: "fish",        label: "Peixes",                        emoji: "🐟" },
+  { id: "peanuts",     label: "Amendoins",                     emoji: "🥜" },
+  { id: "soy",         label: "Soja",                          emoji: "🫘" },
+  { id: "milk",        label: "Leite",                         emoji: "🥛" },
+  { id: "nuts",        label: "Frutos de casca rija",          emoji: "🌰" },
+  { id: "celery",      label: "Aipo",                          emoji: "🌿" },
+  { id: "mustard",     label: "Mostarda",                      emoji: "🟡" },
+  { id: "sesame",      label: "Sementes de sésamo",            emoji: "⚪" },
+  { id: "sulphites",   label: "Dióxido de enxofre e sulfitos", emoji: "🍷" },
+  { id: "lupin",       label: "Tremoço",                       emoji: "🟠" },
+  { id: "molluscs",    label: "Moluscos",                      emoji: "🦑" },
+];
 
 export const Route = createFileRoute("/ementa")({
   head: () => ({
@@ -83,6 +101,23 @@ function EmentaPage() {
                             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                               {item.description}
                             </p>
+                            {(item.allergens ?? []).length > 0 && (
+                              <div className="mt-1.5 flex flex-wrap gap-1">
+                                {(item.allergens ?? []).map((a) => {
+                                  const info = ALLERGENS.find((x) => x.id === a);
+                                  return info ? (
+                                    <span
+                                      key={a}
+                                      title={info.label}
+                                      aria-label={info.label}
+                                      className="text-base leading-none"
+                                    >
+                                      {info.emoji}
+                                    </span>
+                                  ) : null;
+                                })}
+                              </div>
+                            )}
                           </div>
                         </li>
                       ))}
@@ -92,7 +127,24 @@ function EmentaPage() {
               })}
             </div>
 
-            <Reveal className="mt-20 rounded-2xl bg-secondary p-10 text-center shadow-soft">
+            <Reveal className="mt-20 rounded-2xl border border-border bg-secondary/50 p-8">
+              <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                Legenda de alergénicos
+              </p>
+              <ul className="grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                {ALLERGENS.map((a) => (
+                  <li key={a.id} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <span className="text-base leading-none">{a.emoji}</span>
+                    <span>{a.label}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-5 text-[11px] leading-relaxed text-muted-foreground/70">
+                Os alergénicos indicados são de carácter informativo. Em caso de alergias ou intolerâncias alimentares graves, por favor informe o nosso pessoal antes de encomendar.
+              </p>
+            </Reveal>
+
+            <Reveal className="mt-10 rounded-2xl bg-secondary p-10 text-center shadow-soft">
               <h2 className="font-serif text-3xl text-espresso md:text-4xl">
                 {field("CTA — Título", "Pronto para uma mesa cheia?")}
               </h2>
