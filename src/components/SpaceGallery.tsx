@@ -6,14 +6,14 @@ import g4Default from "@/assets/gallery-4.jpg";
 import { useBlockContent } from "@/hooks/useSiteConfig";
 
 export function SpaceGallery() {
-  const { field, image } = useBlockContent("gallery");
+  const { field, image, backgroundColor } = useBlockContent("gallery");
   const g1 = image("Imagem 1", g1Default);
   const g2 = image("Imagem 2", g2Default);
   const g3 = image("Imagem 3", g3Default);
   const g4 = image("Imagem 4", g4Default);
 
   return (
-    <section id="espaco" className="bg-background py-24 md:py-32">
+    <section id="espaco" className="bg-background py-24 md:py-32" style={backgroundColor ? { backgroundColor } : undefined}>
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <Reveal className="mx-auto max-w-2xl text-center">
           <span className="eyebrow text-wine">{field("Etiqueta", "A Experiência do Espaço")}</span>

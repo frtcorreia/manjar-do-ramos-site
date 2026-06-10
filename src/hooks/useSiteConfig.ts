@@ -212,7 +212,9 @@ export function useBlockContent(blockKey: BlockKey) {
 
   const images = () => content?.images ?? [];
 
-  return { field, image, images };
+  const backgroundColor = content?.backgroundColor ?? "";
+
+  return { field, image, images, backgroundColor };
 }
 
 export function useRestaurante() {
