@@ -10,12 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  formatEUR,
-  ORDER_STATUS_LABEL,
-  ORDER_STATUS_ORDER,
-  type OrderStatus,
-} from "@/lib/cart";
+import { formatEUR, ORDER_STATUS_LABEL, ORDER_STATUS_ORDER, type OrderStatus } from "@/lib/cart";
 
 type OrderRow = {
   id: string;
@@ -79,7 +74,9 @@ export function OrdersSection() {
         <h2 className="font-serif text-2xl text-espresso">Encomendas</h2>
         <p className="mt-2 text-muted-foreground">
           Inicie sessão como administrador para gerir as encomendas.{" "}
-          <a className="text-wine underline" href="/auth?redirect=/admin">Entrar</a>
+          <a className="text-wine underline" href="/auth?redirect=/admin">
+            Entrar
+          </a>
         </p>
       </div>
     );
@@ -93,8 +90,9 @@ export function OrdersSection() {
           A sua conta ({user.email}) não tem permissões de administrador.
         </p>
         <p className="mt-3 text-sm text-muted-foreground">
-          Para conceder permissões a esta conta, adicione uma linha na tabela <code>user_roles</code> com{" "}
-          <code>user_id = {user.id}</code> e <code>role = 'admin'</code> através da Lovable Cloud.
+          Para conceder permissões a esta conta, adicione uma linha na tabela{" "}
+          <code>user_roles</code> com <code>user_id = {user.id}</code> e <code>role = 'admin'</code>{" "}
+          através da Lovable Cloud.
         </p>
       </div>
     );
@@ -123,22 +121,31 @@ export function OrdersSection() {
                     #{o.id.slice(0, 8)} · {new Date(o.created_at).toLocaleString("pt-PT")}
                   </p>
                   <p className="mt-1 font-serif text-xl text-espresso">{o.customer_name}</p>
-                  <p className="text-sm text-muted-foreground">{o.phone} · {o.address}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {o.phone} · {o.address}
+                  </p>
                   {o.nif && <p className="text-sm text-muted-foreground">NIF: {o.nif}</p>}
-                  {o.notes && <p className="mt-2 text-sm italic text-muted-foreground">“{o.notes}”</p>}
+                  {o.notes && (
+                    <p className="mt-2 text-sm italic text-muted-foreground">“{o.notes}”</p>
+                  )}
                 </div>
                 <div className="flex flex-col items-end gap-2">
                   <Badge className={`${statusColor[o.status]} border-none`}>
                     {ORDER_STATUS_LABEL[o.status]}
                   </Badge>
                   <p className="font-serif text-xl text-wine">{formatEUR(Number(o.total))}</p>
-                  <Select value={o.status} onValueChange={(v) => updateStatus(o.id, v as OrderStatus)}>
+                  <Select
+                    value={o.status}
+                    onValueChange={(v) => updateStatus(o.id, v as OrderStatus)}
+                  >
                     <SelectTrigger className="w-[180px]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       {ORDER_STATUS_ORDER.map((s) => (
-                        <SelectItem key={s} value={s}>{ORDER_STATUS_LABEL[s]}</SelectItem>
+                        <SelectItem key={s} value={s}>
+                          {ORDER_STATUS_LABEL[s]}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -147,8 +154,12 @@ export function OrdersSection() {
               <ul className="mt-3 divide-y divide-border border-t border-border pt-2 text-sm">
                 {o.order_items.map((i) => (
                   <li key={i.id} className="flex justify-between py-1.5">
-                    <span>{i.quantity}× {i.name}</span>
-                    <span className="text-muted-foreground">{formatEUR(Number(i.price) * i.quantity)}</span>
+                    <span>
+                      {i.quantity}× {i.name}
+                    </span>
+                    <span className="text-muted-foreground">
+                      {formatEUR(Number(i.price) * i.quantity)}
+                    </span>
                   </li>
                 ))}
               </ul>

@@ -14,10 +14,7 @@ import { lovable } from "@/integrations/lovable";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
-    meta: [
-      { title: "Entrar · Manjar do Ramos" },
-      { name: "robots", content: "noindex, nofollow" },
-    ],
+    meta: [{ title: "Entrar · Manjar do Ramos" }, { name: "robots", content: "noindex, nofollow" }],
   }),
   component: AuthPage,
 });
@@ -29,9 +26,7 @@ const nameSchema = z.string().trim().min(1, "Indique o nome").max(120);
 function AuthPage() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
-  const params = new URLSearchParams(
-    typeof window !== "undefined" ? window.location.search : "",
-  );
+  const params = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
   const redirectTo = params.get("redirect") || "/minhas-encomendas";
 
   useEffect(() => {
@@ -43,9 +38,7 @@ function AuthPage() {
       <Navbar />
       <main className="min-h-[80vh] pt-32 pb-20">
         <div className="mx-auto w-full max-w-md px-5">
-          <h1 className="font-serif text-4xl text-espresso text-center">
-            Bem-vindo
-          </h1>
+          <h1 className="font-serif text-4xl text-espresso text-center">Bem-vindo</h1>
           <p className="mt-2 text-center text-sm text-muted-foreground">
             Aceda à sua conta ou crie uma para finalizar a encomenda.
           </p>
@@ -82,7 +75,9 @@ function AuthPage() {
           </Button>
 
           <p className="mt-6 text-center text-xs text-muted-foreground">
-            <Link to="/" className="hover:text-wine">← Voltar ao site</Link>
+            <Link to="/" className="hover:text-wine">
+              ← Voltar ao site
+            </Link>
           </p>
         </div>
       </main>
@@ -116,11 +111,25 @@ function LoginForm() {
     <form onSubmit={submit} className="mt-6 space-y-4">
       <div className="space-y-2">
         <Label htmlFor="login-email">Email</Label>
-        <Input id="login-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
+        <Input
+          id="login-email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          autoComplete="email"
+          required
+        />
       </div>
       <div className="space-y-2">
         <Label htmlFor="login-password">Palavra-passe</Label>
-        <Input id="login-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />
+        <Input
+          id="login-password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          autoComplete="current-password"
+          required
+        />
       </div>
       <Button type="submit" disabled={busy} className="w-full bg-wine text-cream hover:bg-wine/90">
         {busy ? "A entrar…" : "Entrar"}
@@ -161,15 +170,36 @@ function SignupForm() {
     <form onSubmit={submit} className="mt-6 space-y-4">
       <div className="space-y-2">
         <Label htmlFor="signup-name">Nome</Label>
-        <Input id="signup-name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required />
+        <Input
+          id="signup-name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          autoComplete="name"
+          required
+        />
       </div>
       <div className="space-y-2">
         <Label htmlFor="signup-email">Email</Label>
-        <Input id="signup-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
+        <Input
+          id="signup-email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          autoComplete="email"
+          required
+        />
       </div>
       <div className="space-y-2">
         <Label htmlFor="signup-password">Palavra-passe</Label>
-        <Input id="signup-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" required minLength={8} />
+        <Input
+          id="signup-password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          autoComplete="new-password"
+          required
+          minLength={8}
+        />
         <p className="text-xs text-muted-foreground">Mínimo 8 caracteres.</p>
       </div>
       <Button type="submit" disabled={busy} className="w-full bg-wine text-cream hover:bg-wine/90">

@@ -96,7 +96,9 @@ function AdminLoginPage() {
         </div>
         <form onSubmit={submit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="admin-email" className="text-cream/80">Email</Label>
+            <Label htmlFor="admin-email" className="text-cream/80">
+              Email
+            </Label>
             <Input
               id="admin-email"
               type="email"
@@ -108,7 +110,9 @@ function AdminLoginPage() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="admin-password" className="text-cream/80">Palavra-passe</Label>
+            <Label htmlFor="admin-password" className="text-cream/80">
+              Palavra-passe
+            </Label>
             <Input
               id="admin-password"
               type="password"
@@ -119,7 +123,11 @@ function AdminLoginPage() {
               className="border-cream/20 bg-cream/5 text-cream placeholder:text-cream/30 focus-visible:ring-gold"
             />
           </div>
-          <Button type="submit" disabled={busy} className="w-full bg-gold text-charcoal hover:bg-gold/90 font-semibold">
+          <Button
+            type="submit"
+            disabled={busy}
+            className="w-full bg-gold text-charcoal hover:bg-gold/90 font-semibold"
+          >
             {busy ? "A entrar…" : "Entrar"}
           </Button>
         </form>
@@ -150,13 +158,7 @@ function AdminPage() {
   );
 }
 
-function NavMenu({
-  active,
-  onSelect,
-}: {
-  active: SectionId;
-  onSelect: (id: SectionId) => void;
-}) {
+function NavMenu({ active, onSelect }: { active: SectionId; onSelect: (id: SectionId) => void }) {
   const { reset } = useAdmin();
   return (
     <div className="flex h-full flex-col px-4 py-6">

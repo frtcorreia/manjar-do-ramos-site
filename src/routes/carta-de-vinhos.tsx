@@ -12,8 +12,7 @@ export const Route = createFileRoute("/carta-de-vinhos")({
       { name: "robots", content: "noindex, nofollow" },
       {
         name: "description",
-        content:
-          "Garrafeira do Manjar do Ramos: tintos, brancos e espumantes portugueses.",
+        content: "Garrafeira do Manjar do Ramos: tintos, brancos e espumantes portugueses.",
       },
     ],
   }),
@@ -54,9 +53,7 @@ function WinesPage() {
                 return (
                   <Reveal key={cat.id}>
                     <div className="mb-8 text-center">
-                      <h2 className="font-serif text-3xl text-espresso md:text-4xl">
-                        {cat.name}
-                      </h2>
+                      <h2 className="font-serif text-3xl text-espresso md:text-4xl">{cat.name}</h2>
                       <span className="mx-auto mt-4 block h-0.5 w-12 bg-gold" />
                     </div>
                     <ul className="divide-y divide-border">

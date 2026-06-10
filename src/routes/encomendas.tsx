@@ -21,8 +21,7 @@ export const Route = createFileRoute("/encomendas")({
       { property: "og:title", content: "Encomendas · Manjar do Ramos" },
       {
         property: "og:description",
-        content:
-          "Os sabores da taberna entregues em sua casa. Encomende online.",
+        content: "Os sabores da taberna entregues em sua casa. Encomende online.",
       },
     ],
   }),
@@ -62,8 +61,7 @@ function EncomendasInner() {
     return map;
   }, [categories]);
 
-  const inc = (id: string) =>
-    setCart((c) => ({ ...c, [id]: (c[id] ?? 0) + 1 }));
+  const inc = (id: string) => setCart((c) => ({ ...c, [id]: (c[id] ?? 0) + 1 }));
   const dec = (id: string) =>
     setCart((c) => {
       const n = (c[id] ?? 0) - 1;
@@ -77,10 +75,7 @@ function EncomendasInner() {
     .map(([id, qty]) => ({ item: allItems[id], qty }))
     .filter((e) => e.item);
 
-  const total = cartEntries.reduce(
-    (acc, { item, qty }) => acc + parsePrice(item.price) * qty,
-    0,
-  );
+  const total = cartEntries.reduce((acc, { item, qty }) => acc + parsePrice(item.price) * qty, 0);
 
   useEffect(() => {
     const lines = cartEntries.map(({ item, qty }) => ({
@@ -124,9 +119,7 @@ function EncomendasInner() {
               )}
               {categories.map((cat) => (
                 <Reveal key={cat.id}>
-                  <h2 className="font-serif text-3xl text-espresso md:text-4xl">
-                    {cat.name}
-                  </h2>
+                  <h2 className="font-serif text-3xl text-espresso md:text-4xl">{cat.name}</h2>
                   <span className="mt-3 block h-0.5 w-12 bg-gold" />
                   <ul className="mt-8 space-y-5">
                     {cat.items.map((item) => {
@@ -144,9 +137,7 @@ function EncomendasInner() {
                             />
                           )}
                           <div className="flex-1">
-                            <h3 className="font-serif text-xl text-espresso">
-                              {item.name}
-                            </h3>
+                            <h3 className="font-serif text-xl text-espresso">{item.name}</h3>
                             {item.description && (
                               <p className="mt-1 text-sm text-muted-foreground">
                                 {item.description}
@@ -211,9 +202,7 @@ function EncomendasInner() {
                   <ul className="mt-4 divide-y divide-border">
                     {cartEntries.map(({ item, qty }) => (
                       <li key={item.id} className="flex items-center gap-3 py-3 text-sm">
-                        <span className="w-6 text-center font-semibold text-wine">
-                          {qty}×
-                        </span>
+                        <span className="w-6 text-center font-semibold text-wine">{qty}×</span>
                         <span className="flex-1 text-charcoal">{item.name}</span>
                         <span className="font-medium text-charcoal">
                           {formatEUR(parsePrice(item.price) * qty)}
@@ -225,9 +214,7 @@ function EncomendasInner() {
 
                 <div className="mt-4 flex items-baseline justify-between border-t border-border pt-4">
                   <span className="text-sm text-muted-foreground">Total</span>
-                  <span className="font-serif text-2xl text-wine">
-                    {formatEUR(total)}
-                  </span>
+                  <span className="font-serif text-2xl text-wine">{formatEUR(total)}</span>
                 </div>
 
                 <Button

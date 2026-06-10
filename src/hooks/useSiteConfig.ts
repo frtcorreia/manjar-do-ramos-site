@@ -39,23 +39,35 @@ type WinesData = {
 /* ------------------------------------------------------------------ */
 
 const DEFAULT_BLOCKS: Block[] = [
-  { key: "hero",         label: "Hero",          description: "", visible: true },
-  { key: "about",        label: "Conceito",       description: "", visible: true },
-  { key: "specialties",  label: "Especialidades", description: "", visible: true },
-  { key: "gallery",      label: "Espaço",         description: "", visible: true },
-  { key: "testimonials", label: "Testemunhos",    description: "", visible: true },
-  { key: "reservation",  label: "Reservas",       description: "", visible: true },
+  { key: "hero", label: "Hero", description: "", visible: true },
+  { key: "about", label: "Conceito", description: "", visible: true },
+  { key: "specialties", label: "Especialidades", description: "", visible: true },
+  { key: "gallery", label: "Espaço", description: "", visible: true },
+  { key: "testimonials", label: "Testemunhos", description: "", visible: true },
+  { key: "reservation", label: "Reservas", description: "", visible: true },
 ];
 
 const DEFAULT_NAV_PAGES: NavPage[] = [
-  { key: "conceito",        label: "Conceito",        href: "/#conceito",        route: false, visible: true  },
-  { key: "ementa",          label: "Ementa",          href: "/ementa",           route: true,  visible: true  },
-  { key: "encomendas",      label: "Encomendas",      href: "/encomendas",       route: true,  visible: true  },
-  { key: "catering",        label: "Catering",        href: "/catering",         route: true,  visible: true  },
-  { key: "espaco",          label: "Espaço",          href: "/#espaco",          route: false, visible: true  },
-  { key: "testemunhos",     label: "Testemunhos",     href: "/#testemunhos",     route: false, visible: true  },
-  { key: "carta-de-vinhos", label: "Carta de Vinhos", href: "/carta-de-vinhos",  route: true,  visible: false },
-  { key: "a-minha-conta",  label: "A minha conta",  href: "/minhas-encomendas", route: true,  visible: true  },
+  { key: "conceito", label: "Conceito", href: "/#conceito", route: false, visible: true },
+  { key: "ementa", label: "Ementa", href: "/ementa", route: true, visible: true },
+  { key: "encomendas", label: "Encomendas", href: "/encomendas", route: true, visible: true },
+  { key: "catering", label: "Catering", href: "/catering", route: true, visible: true },
+  { key: "espaco", label: "Espaço", href: "/#espaco", route: false, visible: true },
+  { key: "testemunhos", label: "Testemunhos", href: "/#testemunhos", route: false, visible: true },
+  {
+    key: "carta-de-vinhos",
+    label: "Carta de Vinhos",
+    href: "/carta-de-vinhos",
+    route: true,
+    visible: false,
+  },
+  {
+    key: "a-minha-conta",
+    label: "A minha conta",
+    href: "/minhas-encomendas",
+    route: true,
+    visible: true,
+  },
 ];
 
 const DEFAULT_RESTAURANTE: RestauranteConfig = {
@@ -67,9 +79,9 @@ const DEFAULT_RESTAURANTE: RestauranteConfig = {
   googleMapsUrl: "#",
   googleMapsEmbed: "",
   social: {
-    instagram:   { url: "#",  visible: true  },
-    facebook:    { url: "#",  visible: true  },
-    tripadvisor: { url: "",   visible: false },
+    instagram: { url: "#", visible: true },
+    facebook: { url: "#", visible: true },
+    tripadvisor: { url: "", visible: false },
   },
 };
 
@@ -124,8 +136,7 @@ export function useSiteBlocks() {
     });
   }, []);
 
-  const isVisible = (key: Block["key"]) =>
-    blocks.find((b) => b.key === key)?.visible ?? true;
+  const isVisible = (key: Block["key"]) => blocks.find((b) => b.key === key)?.visible ?? true;
 
   return { isVisible };
 }

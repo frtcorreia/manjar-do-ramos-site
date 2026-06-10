@@ -219,7 +219,10 @@ export type AdminState = {
 const uid = () => Math.random().toString(36).slice(2, 10);
 
 const f = (label: string, value: string, multiline?: boolean): ContentField => ({
-  id: uid(), label, value, multiline,
+  id: uid(),
+  label,
+  value,
+  multiline,
 });
 
 const img = (
@@ -227,7 +230,10 @@ const img = (
   url: string,
   extra?: { title?: string; description?: string },
 ): ContentImage => ({
-  id: uid(), label, url, ...extra,
+  id: uid(),
+  label,
+  url,
+  ...extra,
 });
 
 /* ------------------------------------------------------------------ */
@@ -236,12 +242,32 @@ const img = (
 
 const initialState: AdminState = {
   blocks: [
-    { key: "hero", label: "Hero", description: "Imagem principal e chamada de ação.", visible: true },
+    {
+      key: "hero",
+      label: "Hero",
+      description: "Imagem principal e chamada de ação.",
+      visible: true,
+    },
     { key: "about", label: "Conceito", description: "Secção sobre a taberna.", visible: true },
-    { key: "specialties", label: "Especialidades", description: "Cards dos pratos da casa.", visible: true },
+    {
+      key: "specialties",
+      label: "Especialidades",
+      description: "Cards dos pratos da casa.",
+      visible: true,
+    },
     { key: "gallery", label: "Espaço", description: "Galeria do ambiente.", visible: true },
-    { key: "testimonials", label: "Testemunhos", description: "Avaliações de clientes.", visible: true },
-    { key: "reservation", label: "Reservas", description: "Formulário de reserva de mesa.", visible: true },
+    {
+      key: "testimonials",
+      label: "Testemunhos",
+      description: "Avaliações de clientes.",
+      visible: true,
+    },
+    {
+      key: "reservation",
+      label: "Reservas",
+      description: "Formulário de reserva de mesa.",
+      visible: true,
+    },
   ],
   pages: [
     {
@@ -249,9 +275,17 @@ const initialState: AdminState = {
       label: "Início",
       fields: [
         f("Título (SEO)", "Manjar do Ramos · Taberna Moderna Portuguesa em Lisboa"),
-        f("Descrição (SEO)", "Sabores portugueses com alma de taberna. Carnes maturadas, petiscos e tábuas de partilha num ambiente acolhedor. Reserve a sua mesa.", true),
+        f(
+          "Descrição (SEO)",
+          "Sabores portugueses com alma de taberna. Carnes maturadas, petiscos e tábuas de partilha num ambiente acolhedor. Reserve a sua mesa.",
+          true,
+        ),
         f("OG Título", "Manjar do Ramos · Taberna Moderna Portuguesa"),
-        f("OG Descrição", "Uma experiência gastronómica feita para partilhar, saborear e voltar. Reserve a sua mesa no Manjar do Ramos.", true),
+        f(
+          "OG Descrição",
+          "Uma experiência gastronómica feita para partilhar, saborear e voltar. Reserve a sua mesa no Manjar do Ramos.",
+          true,
+        ),
       ],
       images: [],
     },
@@ -260,49 +294,80 @@ const initialState: AdminState = {
       label: "Ementa",
       fields: [
         f("Título (SEO)", "Ementa · Manjar do Ramos · Taberna Moderna Portuguesa"),
-        f("Descrição (SEO)", "Descubra a ementa do Manjar do Ramos: petiscos, carnes maturadas, bacalhau, tábuas de partilha, sobremesas e cocktails. Sabores portugueses para partilhar.", true),
+        f(
+          "Descrição (SEO)",
+          "Descubra a ementa do Manjar do Ramos: petiscos, carnes maturadas, bacalhau, tábuas de partilha, sobremesas e cocktails. Sabores portugueses para partilhar.",
+          true,
+        ),
         f("OG Título", "Ementa · Manjar do Ramos"),
-        f("OG Descrição", "Petiscos, carnes maturadas, bacalhau e tábuas de partilha numa taberna portuguesa contemporânea.", true),
+        f(
+          "OG Descrição",
+          "Petiscos, carnes maturadas, bacalhau e tábuas de partilha numa taberna portuguesa contemporânea.",
+          true,
+        ),
         f("Hero — Etiqueta", "Ementa da Casa"),
         f("Hero — Título", "A nossa ementa", true),
         f("Hero — Subtítulo", "Sabores portugueses pensados para partilhar à volta da mesa.", true),
         f("CTA — Título", "Pronto para uma mesa cheia?", true),
-        f("CTA — Subtítulo", "Reserve a sua mesa e deixe a noite acontecer entre pratos, vinho e boa conversa.", true),
+        f(
+          "CTA — Subtítulo",
+          "Reserve a sua mesa e deixe a noite acontecer entre pratos, vinho e boa conversa.",
+          true,
+        ),
         f("CTA — Botão", "Reservar Mesa"),
       ],
-      images: [
-        img("Hero — Imagem de fundo", dishCarne),
-      ],
+      images: [img("Hero — Imagem de fundo", dishCarne)],
     },
     {
       key: "catering",
       label: "Catering",
       fields: [
         f("Título (SEO)", "Catering · Manjar do Ramos · Eventos & Celebrações"),
-        f("Descrição (SEO)", "Serviço de catering do Manjar do Ramos para casamentos, eventos de empresa e festas privadas. Sabores portugueses de taberna levados até si.", true),
+        f(
+          "Descrição (SEO)",
+          "Serviço de catering do Manjar do Ramos para casamentos, eventos de empresa e festas privadas. Sabores portugueses de taberna levados até si.",
+          true,
+        ),
         f("OG Título", "Catering · Manjar do Ramos"),
-        f("OG Descrição", "Leve a alma da taberna ao seu evento: petiscos, tábuas, carnes na brasa e doçaria portuguesa.", true),
+        f(
+          "OG Descrição",
+          "Leve a alma da taberna ao seu evento: petiscos, tábuas, carnes na brasa e doçaria portuguesa.",
+          true,
+        ),
         f("Hero — Etiqueta", "Catering & Eventos"),
         f("Hero — Título", "A taberna vai até si", true),
-        f("Hero — Subtítulo", "Levamos a abundância, o convívio e os sabores do Manjar do Ramos ao seu evento.", true),
+        f(
+          "Hero — Subtítulo",
+          "Levamos a abundância, o convívio e os sabores do Manjar do Ramos ao seu evento.",
+          true,
+        ),
         f("Hero — Botão", "Pedir Orçamento"),
         f("Intro — Etiqueta", "O Nosso Catering"),
         f("Intro — Título", "Mesas que reúnem, sabores que ficam", true),
-        f("Intro — Parágrafo 1", "Quer seja um jantar íntimo ou uma grande celebração, levamos a alma da taberna portuguesa onde quiser. Petiscos generosos, carnes na brasa, tábuas de partilha e doçaria de sempre — servidos com o calor e o cuidado que nos definem.", true),
-        f("Intro — Parágrafo 2", "Cada evento é único, por isso desenhamos cada ementa a pensar em si e nos seus convidados.", true),
+        f(
+          "Intro — Parágrafo 1",
+          "Quer seja um jantar íntimo ou uma grande celebração, levamos a alma da taberna portuguesa onde quiser. Petiscos generosos, carnes na brasa, tábuas de partilha e doçaria de sempre — servidos com o calor e o cuidado que nos definem.",
+          true,
+        ),
+        f(
+          "Intro — Parágrafo 2",
+          "Cada evento é único, por isso desenhamos cada ementa a pensar em si e nos seus convidados.",
+          true,
+        ),
         f("Serviços — Etiqueta", "O Que Oferecemos"),
         f("Serviços — Título", "Um serviço pensado ao detalhe", true),
         f("Como Funciona — Etiqueta", "Como Funciona"),
         f("Como Funciona — Título", "Simples, do primeiro contacto ao brinde", true),
         f("CTA — Título", "Vamos planear o seu evento", true),
-        f("CTA — Subtítulo", "Conte-nos os detalhes e enviamos-lhe uma proposta à medida. Resposta em até 48 horas.", true),
+        f(
+          "CTA — Subtítulo",
+          "Conte-nos os detalhes e enviamos-lhe uma proposta à medida. Resposta em até 48 horas.",
+          true,
+        ),
         f("CTA — Email", "eventos@manjardoramos.pt"),
         f("CTA — Telefone", "+351 210 000 000"),
       ],
-      images: [
-        img("Hero — Imagem de fundo", dishTabua),
-        img("Intro — Imagem", about2),
-      ],
+      images: [img("Hero — Imagem de fundo", dishTabua), img("Intro — Imagem", about2)],
     },
   ],
   menu: [
@@ -310,61 +375,157 @@ const initialState: AdminState = {
       id: uid(),
       name: "Petiscos",
       items: [
-        { id: uid(), name: "Gambas à Guilho", description: "Alho, malagueta e coentros.", price: "12,50€", image: dishPetiscos, delivery: true, takeaway: true, restaurant: true, visible: true, allergens: ["crustaceans"] },
-        { id: uid(), name: "Croquetes de Vitela", description: "Estaladiços, com mostarda da casa.", price: "8,00€", image: dishPetiscos, delivery: true, takeaway: true, restaurant: true, visible: true, allergens: ["gluten", "eggs", "milk", "mustard"] },
+        {
+          id: uid(),
+          name: "Gambas à Guilho",
+          description: "Alho, malagueta e coentros.",
+          price: "12,50€",
+          image: dishPetiscos,
+          delivery: true,
+          takeaway: true,
+          restaurant: true,
+          visible: true,
+          allergens: ["crustaceans"],
+        },
+        {
+          id: uid(),
+          name: "Croquetes de Vitela",
+          description: "Estaladiços, com mostarda da casa.",
+          price: "8,00€",
+          image: dishPetiscos,
+          delivery: true,
+          takeaway: true,
+          restaurant: true,
+          visible: true,
+          allergens: ["gluten", "eggs", "milk", "mustard"],
+        },
       ],
     },
     {
       id: uid(),
       name: "Carnes Maturadas",
       items: [
-        { id: uid(), name: "Bife do Lombo (300g)", description: "Maturado 30 dias, na brasa.", price: "24,00€", image: dishCarne, delivery: false, takeaway: true, restaurant: true, visible: true, allergens: [] },
-        { id: uid(), name: "Picanha à Taberna", description: "Sal grosso e legumes assados.", price: "21,00€", image: dishCarne, delivery: true, takeaway: true, restaurant: true, visible: true, allergens: [] },
+        {
+          id: uid(),
+          name: "Bife do Lombo (300g)",
+          description: "Maturado 30 dias, na brasa.",
+          price: "24,00€",
+          image: dishCarne,
+          delivery: false,
+          takeaway: true,
+          restaurant: true,
+          visible: true,
+          allergens: [],
+        },
+        {
+          id: uid(),
+          name: "Picanha à Taberna",
+          description: "Sal grosso e legumes assados.",
+          price: "21,00€",
+          image: dishCarne,
+          delivery: true,
+          takeaway: true,
+          restaurant: true,
+          visible: true,
+          allergens: [],
+        },
       ],
     },
   ],
   wines: {
     eyebrow: "Garrafeira da Casa",
     title: "Carta de Vinhos",
-    subtitle: "Uma seleção rotativa de produtores portugueses, escolhidos a dedo para acompanhar a mesa.",
+    subtitle:
+      "Uma seleção rotativa de produtores portugueses, escolhidos a dedo para acompanhar a mesa.",
     categories: [
       {
         id: uid(),
         name: "Tintos",
         items: [
-          { id: uid(), name: "Quinta do Crasto Reserva", producer: "Quinta do Crasto", region: "Douro", year: "2019", price: "38,00€", image: dishCocktails, notes: "Encorpado, taninos firmes, notas de frutos pretos e especiarias.", visible: true },
-          { id: uid(), name: "Mouchão", producer: "Herdade do Mouchão", region: "Alentejo", year: "2017", price: "62,00€", image: dishCocktails, notes: "Clássico alentejano, complexo, com madeira bem integrada.", visible: true },
+          {
+            id: uid(),
+            name: "Quinta do Crasto Reserva",
+            producer: "Quinta do Crasto",
+            region: "Douro",
+            year: "2019",
+            price: "38,00€",
+            image: dishCocktails,
+            notes: "Encorpado, taninos firmes, notas de frutos pretos e especiarias.",
+            visible: true,
+          },
+          {
+            id: uid(),
+            name: "Mouchão",
+            producer: "Herdade do Mouchão",
+            region: "Alentejo",
+            year: "2017",
+            price: "62,00€",
+            image: dishCocktails,
+            notes: "Clássico alentejano, complexo, com madeira bem integrada.",
+            visible: true,
+          },
         ],
       },
       {
         id: uid(),
         name: "Brancos",
         items: [
-          { id: uid(), name: "Soalheiro Alvarinho", producer: "Soalheiro", region: "Vinho Verde", year: "2022", price: "32,00€", image: dishCocktails, notes: "Fresco, mineral, com notas cítricas e final persistente.", visible: true },
-          { id: uid(), name: "Quinta dos Roques Encruzado", producer: "Quinta dos Roques", region: "Dão", year: "2021", price: "34,00€", image: dishCocktails, notes: "Elegante, com volume de boca e ligeira madeira.", visible: true },
+          {
+            id: uid(),
+            name: "Soalheiro Alvarinho",
+            producer: "Soalheiro",
+            region: "Vinho Verde",
+            year: "2022",
+            price: "32,00€",
+            image: dishCocktails,
+            notes: "Fresco, mineral, com notas cítricas e final persistente.",
+            visible: true,
+          },
+          {
+            id: uid(),
+            name: "Quinta dos Roques Encruzado",
+            producer: "Quinta dos Roques",
+            region: "Dão",
+            year: "2021",
+            price: "34,00€",
+            image: dishCocktails,
+            notes: "Elegante, com volume de boca e ligeira madeira.",
+            visible: true,
+          },
         ],
       },
       {
         id: uid(),
         name: "Espumantes & Champanhes",
         items: [
-          { id: uid(), name: "Murganheira Bruto", producer: "Caves da Murganheira", region: "Távora-Varosa", year: "NV", price: "28,00€", image: dishCocktails, notes: "Bolha fina, fresco, ideal para começar a refeição.", visible: true },
+          {
+            id: uid(),
+            name: "Murganheira Bruto",
+            producer: "Caves da Murganheira",
+            region: "Távora-Varosa",
+            year: "NV",
+            price: "28,00€",
+            image: dishCocktails,
+            notes: "Bolha fina, fresco, ideal para começar a refeição.",
+            visible: true,
+          },
         ],
       },
     ],
   },
   testimonials: [
-
     {
       id: uid(),
-      quote: "Fomos jantar a dois e saímos a planear a próxima visita. A carne na brasa é das melhores que provei em Lisboa.",
+      quote:
+        "Fomos jantar a dois e saímos a planear a próxima visita. A carne na brasa é das melhores que provei em Lisboa.",
       name: "Inês Carvalho",
       context: "Jantar romântico",
       visible: true,
     },
     {
       id: uid(),
-      quote: "Levei o grupo todo do trabalho. As tábuas de partilha foram um sucesso e o ambiente é acolhedor.",
+      quote:
+        "Levei o grupo todo do trabalho. As tábuas de partilha foram um sucesso e o ambiente é acolhedor.",
       name: "Tiago Mendes",
       context: "Jantar de grupo",
       visible: true,
@@ -377,7 +538,12 @@ const initialState: AdminState = {
       fields: [
         { id: uid(), label: "Etiqueta", value: "Taberna Moderna Portuguesa" },
         { id: uid(), label: "Título", value: "Manjar do Ramos", multiline: true },
-        { id: uid(), label: "Subtítulo", value: "Comida de alma, mesa cheia e o calor de uma taberna portuguesa contemporânea.", multiline: true },
+        {
+          id: uid(),
+          label: "Subtítulo",
+          value: "Comida de alma, mesa cheia e o calor de uma taberna portuguesa contemporânea.",
+          multiline: true,
+        },
         { id: uid(), label: "Botão principal", value: "Reservar Mesa" },
         { id: uid(), label: "Botão secundário", value: "Ver Ementa" },
       ],
@@ -389,8 +555,18 @@ const initialState: AdminState = {
       fields: [
         { id: uid(), label: "Etiqueta", value: "O Nosso Conceito" },
         { id: uid(), label: "Título", value: "Uma taberna com alma portuguesa", multiline: true },
-        { id: uid(), label: "Parágrafo 1", value: "Nascemos do desejo de juntar pessoas à volta de boa comida.", multiline: true },
-        { id: uid(), label: "Parágrafo 2", value: "Sabores tradicionais reinterpretados, num ambiente rústico e acolhedor.", multiline: true },
+        {
+          id: uid(),
+          label: "Parágrafo 1",
+          value: "Nascemos do desejo de juntar pessoas à volta de boa comida.",
+          multiline: true,
+        },
+        {
+          id: uid(),
+          label: "Parágrafo 2",
+          value: "Sabores tradicionais reinterpretados, num ambiente rústico e acolhedor.",
+          multiline: true,
+        },
       ],
       images: [
         { id: uid(), label: "Imagem 1", url: about1 },
@@ -405,12 +581,48 @@ const initialState: AdminState = {
         { id: uid(), label: "Título", value: "Cada prato, uma razão para voltar", multiline: true },
       ],
       images: [
-        { id: uid(), label: "Prato 1", url: dishCarne, title: "Carnes Maturadas", description: "Cortes nobres na brasa, crosta estaladiça e o ponto certo de sal grosso." },
-        { id: uid(), label: "Prato 2", url: dishBacalhau, title: "Bacalhau à Lagareiro", description: "Lombo alourado, batata a murro e o azeite a perfumar a mesa." },
-        { id: uid(), label: "Prato 3", url: dishPetiscos, title: "Petiscos Portugueses", description: "Gambas, chouriço e croquetes — para começar e nunca mais parar." },
-        { id: uid(), label: "Prato 4", url: dishTabua, title: "Tábuas de Partilha", description: "Enchidos, queijos regionais e mel, servidos para toda a mesa." },
-        { id: uid(), label: "Prato 5", url: dishSobremesa, title: "Sobremesas de Sempre", description: "Doçaria tradicional reinterpretada, com canela e açúcar caramelizado." },
-        { id: uid(), label: "Prato 6", url: dishCocktails, title: "Cocktails & Sangrias", description: "Sangrias de fruta e criações de autor para acompanhar a noite." },
+        {
+          id: uid(),
+          label: "Prato 1",
+          url: dishCarne,
+          title: "Carnes Maturadas",
+          description: "Cortes nobres na brasa, crosta estaladiça e o ponto certo de sal grosso.",
+        },
+        {
+          id: uid(),
+          label: "Prato 2",
+          url: dishBacalhau,
+          title: "Bacalhau à Lagareiro",
+          description: "Lombo alourado, batata a murro e o azeite a perfumar a mesa.",
+        },
+        {
+          id: uid(),
+          label: "Prato 3",
+          url: dishPetiscos,
+          title: "Petiscos Portugueses",
+          description: "Gambas, chouriço e croquetes — para começar e nunca mais parar.",
+        },
+        {
+          id: uid(),
+          label: "Prato 4",
+          url: dishTabua,
+          title: "Tábuas de Partilha",
+          description: "Enchidos, queijos regionais e mel, servidos para toda a mesa.",
+        },
+        {
+          id: uid(),
+          label: "Prato 5",
+          url: dishSobremesa,
+          title: "Sobremesas de Sempre",
+          description: "Doçaria tradicional reinterpretada, com canela e açúcar caramelizado.",
+        },
+        {
+          id: uid(),
+          label: "Prato 6",
+          url: dishCocktails,
+          title: "Cocktails & Sangrias",
+          description: "Sangrias de fruta e criações de autor para acompanhar a noite.",
+        },
       ],
     },
     {
@@ -418,8 +630,18 @@ const initialState: AdminState = {
       label: "Espaço",
       fields: [
         { id: uid(), label: "Etiqueta", value: "A Experiência do Espaço" },
-        { id: uid(), label: "Título", value: "Madeira, luz quente e mesas cheias", multiline: true },
-        { id: uid(), label: "Subtítulo", value: "Um ambiente rústico e contemporâneo, onde cada detalhe convida a ficar.", multiline: true },
+        {
+          id: uid(),
+          label: "Título",
+          value: "Madeira, luz quente e mesas cheias",
+          multiline: true,
+        },
+        {
+          id: uid(),
+          label: "Subtítulo",
+          value: "Um ambiente rústico e contemporâneo, onde cada detalhe convida a ficar.",
+          multiline: true,
+        },
       ],
       images: [
         { id: uid(), label: "Imagem 1", url: g1 },
@@ -443,7 +665,12 @@ const initialState: AdminState = {
       fields: [
         { id: uid(), label: "Etiqueta", value: "Reserve a Sua Mesa" },
         { id: uid(), label: "Título", value: "Venha sentar-se à nossa mesa", multiline: true },
-        { id: uid(), label: "Subtítulo", value: "Reserve já e garanta o seu lugar numa noite memorável.", multiline: true },
+        {
+          id: uid(),
+          label: "Subtítulo",
+          value: "Reserve já e garanta o seu lugar numa noite memorável.",
+          multiline: true,
+        },
       ],
       images: [],
     },
@@ -468,9 +695,27 @@ const initialState: AdminState = {
     { key: "encomendas", label: "Encomendas", href: "/encomendas", route: true, visible: true },
     { key: "catering", label: "Catering", href: "/catering", route: true, visible: true },
     { key: "espaco", label: "Espaço", href: "/#espaco", route: false, visible: true },
-    { key: "testemunhos", label: "Testemunhos", href: "/#testemunhos", route: false, visible: true },
-    { key: "carta-de-vinhos", label: "Carta de Vinhos", href: "/carta-de-vinhos", route: true, visible: false },
-    { key: "a-minha-conta", label: "A minha conta", href: "/minhas-encomendas", route: true, visible: true },
+    {
+      key: "testemunhos",
+      label: "Testemunhos",
+      href: "/#testemunhos",
+      route: false,
+      visible: true,
+    },
+    {
+      key: "carta-de-vinhos",
+      label: "Carta de Vinhos",
+      href: "/carta-de-vinhos",
+      route: true,
+      visible: false,
+    },
+    {
+      key: "a-minha-conta",
+      label: "A minha conta",
+      href: "/minhas-encomendas",
+      route: true,
+      visible: true,
+    },
   ],
   maintenance: {
     enabled: false,
@@ -488,14 +733,13 @@ const NOW = () => new Date().toISOString();
 const db = (table: string) => supabase.from(table as any) as any;
 
 async function loadFromSupabase(): Promise<Partial<AdminState>> {
-  const [menuRes, winesRes, testimonialsRes, contentRes, settingsRes] =
-    await Promise.all([
-      db("site_menu").select("data").maybeSingle(),
-      db("site_wines").select("data").maybeSingle(),
-      db("site_testimonials").select("data").maybeSingle(),
-      db("site_content").select("key, value"),
-      db("site_settings").select("key, value"),
-    ]);
+  const [menuRes, winesRes, testimonialsRes, contentRes, settingsRes] = await Promise.all([
+    db("site_menu").select("data").maybeSingle(),
+    db("site_wines").select("data").maybeSingle(),
+    db("site_testimonials").select("data").maybeSingle(),
+    db("site_content").select("key, value"),
+    db("site_settings").select("key, value"),
+  ]);
 
   const partial: Partial<AdminState> = {};
 
@@ -508,7 +752,8 @@ async function loadFromSupabase(): Promise<Partial<AdminState>> {
   }
 
   if (winesRes.data?.data) partial.wines = winesRes.data.data as AdminState["wines"];
-  if (testimonialsRes.data?.data) partial.testimonials = testimonialsRes.data.data as AdminState["testimonials"];
+  if (testimonialsRes.data?.data)
+    partial.testimonials = testimonialsRes.data.data as AdminState["testimonials"];
 
   // site_content → blocos e páginas
   if (contentRes.data?.length) {
@@ -541,10 +786,10 @@ async function saveToSupabase(state: AdminState): Promise<void> {
     ...state.pages.map((p) => ({ key: `page_${p.key}`, value: p, updated_at: NOW() })),
   ];
   const settingsRows = [
-    { key: "restaurante",  value: state.restaurante,  updated_at: NOW() },
-    { key: "navPages",     value: state.navPages,      updated_at: NOW() },
-    { key: "maintenance",  value: state.maintenance,   updated_at: NOW() },
-    { key: "blocks",       value: state.blocks,        updated_at: NOW() },
+    { key: "restaurante", value: state.restaurante, updated_at: NOW() },
+    { key: "navPages", value: state.navPages, updated_at: NOW() },
+    { key: "maintenance", value: state.maintenance, updated_at: NOW() },
+    { key: "blocks", value: state.blocks, updated_at: NOW() },
   ];
 
   await Promise.all([

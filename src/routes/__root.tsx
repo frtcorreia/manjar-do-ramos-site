@@ -7,6 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { Analytics } from "@vercel/analytics/react";
 
 import appCss from "../styles.css?url";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
@@ -77,17 +78,37 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Manjar do Ramos — Taberna Moderna Portuguesa" },
-      { name: "description", content: "Ramos' Table: Portuguese Comfort is a premium website for Manjar do Ramos, a contemporary Portuguese restaurant." },
+      {
+        name: "description",
+        content:
+          "Ramos' Table: Portuguese Comfort is a premium website for Manjar do Ramos, a contemporary Portuguese restaurant.",
+      },
       { name: "author", content: "Lovable" },
       { property: "og:title", content: "Manjar do Ramos — Taberna Moderna Portuguesa" },
-      { property: "og:description", content: "Ramos' Table: Portuguese Comfort is a premium website for Manjar do Ramos, a contemporary Portuguese restaurant." },
+      {
+        property: "og:description",
+        content:
+          "Ramos' Table: Portuguese Comfort is a premium website for Manjar do Ramos, a contemporary Portuguese restaurant.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "Manjar do Ramos — Taberna Moderna Portuguesa" },
-      { name: "twitter:description", content: "Ramos' Table: Portuguese Comfort is a premium website for Manjar do Ramos, a contemporary Portuguese restaurant." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/KuPm4WAuXNe8XFvMqhAjX0VRWXr2/social-images/social-1780001642279-logo.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/KuPm4WAuXNe8XFvMqhAjX0VRWXr2/social-images/social-1780001642279-logo.webp" },
+      {
+        name: "twitter:description",
+        content:
+          "Ramos' Table: Portuguese Comfort is a premium website for Manjar do Ramos, a contemporary Portuguese restaurant.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/KuPm4WAuXNe8XFvMqhAjX0VRWXr2/social-images/social-1780001642279-logo.webp",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/KuPm4WAuXNe8XFvMqhAjX0VRWXr2/social-images/social-1780001642279-logo.webp",
+      },
     ],
     links: [
       {
@@ -123,6 +144,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        <Analytics />
         <Scripts />
       </body>
     </html>

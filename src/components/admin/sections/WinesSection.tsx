@@ -5,17 +5,37 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
 } from "@/components/ui/dialog";
-import { Plus, Trash2, FolderPlus, ArrowUp, ArrowDown, ExternalLink, ImagePlus, Pencil } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  FolderPlus,
+  ArrowUp,
+  ArrowDown,
+  ExternalLink,
+  ImagePlus,
+  Pencil,
+} from "lucide-react";
 
 export function WinesSection() {
   const { state, setState, newId } = useAdmin();
   const [newCat, setNewCat] = useState("");
-  const [editing, setEditing] = useState<{ catId: string; item: WineItem; isNew: boolean } | null>(null);
+  const [editing, setEditing] = useState<{ catId: string; item: WineItem; isNew: boolean } | null>(
+    null,
+  );
 
   const updateHero = (patch: Partial<typeof state.wines>) =>
     setState((s) => ({ ...s, wines: { ...s.wines, ...patch } }));
@@ -138,11 +158,17 @@ export function WinesSection() {
         <div className="grid gap-3 md:grid-cols-2">
           <div>
             <label className="text-xs font-medium text-muted-foreground">Etiqueta</label>
-            <Input value={state.wines.eyebrow} onChange={(e) => updateHero({ eyebrow: e.target.value })} />
+            <Input
+              value={state.wines.eyebrow}
+              onChange={(e) => updateHero({ eyebrow: e.target.value })}
+            />
           </div>
           <div>
             <label className="text-xs font-medium text-muted-foreground">Título</label>
-            <Input value={state.wines.title} onChange={(e) => updateHero({ title: e.target.value })} />
+            <Input
+              value={state.wines.title}
+              onChange={(e) => updateHero({ title: e.target.value })}
+            />
           </div>
         </div>
         <div>
@@ -158,7 +184,11 @@ export function WinesSection() {
       <div className="flex flex-wrap items-end gap-3 rounded-xl border border-border bg-card p-4">
         <div className="min-w-[200px] flex-1">
           <label className="text-xs font-medium text-muted-foreground">Nova categoria</label>
-          <Input value={newCat} onChange={(e) => setNewCat(e.target.value)} placeholder="Ex.: Rosés" />
+          <Input
+            value={newCat}
+            onChange={(e) => setNewCat(e.target.value)}
+            placeholder="Ex.: Rosés"
+          />
         </div>
         <Button onClick={addCategory} className="gap-2">
           <FolderPlus className="h-4 w-4" /> Criar categoria
@@ -195,7 +225,12 @@ export function WinesSection() {
                 className="max-w-xs border-transparent bg-transparent px-1 font-serif text-lg text-charcoal focus-visible:border-input"
               />
               <div className="ml-auto flex gap-2">
-                <Button variant="outline" size="sm" onClick={() => openNew(cat.id)} className="gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => openNew(cat.id)}
+                  className="gap-2"
+                >
                   <Plus className="h-4 w-4" /> Vinho
                 </Button>
                 <Button variant="ghost" size="icon" onClick={() => removeCategory(cat.id)}>
@@ -212,7 +247,11 @@ export function WinesSection() {
                 <div key={wine.id} className="flex items-center gap-3 p-4">
                   <div className="h-14 w-14 shrink-0 overflow-hidden rounded-md border border-border bg-secondary/40">
                     {wine.image ? (
-                      <img src={wine.image} alt={wine.name} className="h-full w-full object-cover" />
+                      <img
+                        src={wine.image}
+                        alt={wine.name}
+                        className="h-full w-full object-cover"
+                      />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center text-muted-foreground">
                         <ImagePlus className="h-4 w-4" />
@@ -222,10 +261,16 @@ export function WinesSection() {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-baseline gap-2">
                       <p className="truncate font-serif text-base text-charcoal">
-                        {wine.name || <span className="italic text-muted-foreground">Sem nome</span>}
+                        {wine.name || (
+                          <span className="italic text-muted-foreground">Sem nome</span>
+                        )}
                       </p>
-                      {wine.year && <span className="text-xs text-muted-foreground">{wine.year}</span>}
-                      <span className="ml-auto shrink-0 text-sm text-muted-foreground">{wine.price}</span>
+                      {wine.year && (
+                        <span className="text-xs text-muted-foreground">{wine.year}</span>
+                      )}
+                      <span className="ml-auto shrink-0 text-sm text-muted-foreground">
+                        {wine.price}
+                      </span>
                     </div>
                     <p className="truncate text-xs text-muted-foreground">
                       {[wine.producer, wine.region].filter(Boolean).join(" · ")}
@@ -253,9 +298,7 @@ export function WinesSection() {
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
             <DialogTitle>{editing?.isNew ? "Adicionar vinho" : "Editar vinho"}</DialogTitle>
-            <DialogDescription>
-              Preencha os dados do vinho e guarde para aplicar.
-            </DialogDescription>
+            <DialogDescription>Preencha os dados do vinho e guarde para aplicar.</DialogDescription>
           </DialogHeader>
           {editing && (
             <div className="space-y-4">
@@ -312,7 +355,9 @@ export function WinesSection() {
                   </SelectTrigger>
                   <SelectContent>
                     {WINE_REGIONS.map((r) => (
-                      <SelectItem key={r} value={r}>{r}</SelectItem>
+                      <SelectItem key={r} value={r}>
+                        {r}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -335,7 +380,9 @@ export function WinesSection() {
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setEditing(null)}>Cancelar</Button>
+            <Button variant="outline" onClick={() => setEditing(null)}>
+              Cancelar
+            </Button>
             <Button onClick={saveEditing}>Guardar</Button>
           </DialogFooter>
         </DialogContent>

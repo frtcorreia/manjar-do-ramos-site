@@ -26,8 +26,8 @@ writeFileSync(
       supportsResponseStreaming: true,
     },
     null,
-    2
-  )
+    2,
+  ),
 );
 
 // Vercel routing config
@@ -47,8 +47,8 @@ writeFileSync(
       ],
     },
     null,
-    2
-  )
+    2,
+  ),
 );
 
 console.log("✓ .vercel/output created from dist/");

@@ -8,21 +8,50 @@ import cocktails from "@/assets/dish-cocktails.jpg";
 import { useBlockContent } from "@/hooks/useSiteConfig";
 
 const DEFAULT_DISHES = [
-  { img: carne, name: "Carnes Maturadas", desc: "Cortes nobres na brasa, crosta estaladiça e o ponto certo de sal grosso." },
-  { img: bacalhau, name: "Bacalhau à Lagareiro", desc: "Lombo alourado, batata a murro e o azeite a perfumar a mesa." },
-  { img: petiscos, name: "Petiscos Portugueses", desc: "Gambas, chouriço e croquetes — para começar e nunca mais parar." },
-  { img: tabua, name: "Tábuas de Partilha", desc: "Enchidos, queijos regionais e mel, servidos para toda a mesa." },
-  { img: sobremesa, name: "Sobremesas de Sempre", desc: "Doçaria tradicional reinterpretada, com canela e açúcar caramelizado." },
-  { img: cocktails, name: "Cocktails & Sangrias", desc: "Sangrias de fruta e criações de autor para acompanhar a noite." },
+  {
+    img: carne,
+    name: "Carnes Maturadas",
+    desc: "Cortes nobres na brasa, crosta estaladiça e o ponto certo de sal grosso.",
+  },
+  {
+    img: bacalhau,
+    name: "Bacalhau à Lagareiro",
+    desc: "Lombo alourado, batata a murro e o azeite a perfumar a mesa.",
+  },
+  {
+    img: petiscos,
+    name: "Petiscos Portugueses",
+    desc: "Gambas, chouriço e croquetes — para começar e nunca mais parar.",
+  },
+  {
+    img: tabua,
+    name: "Tábuas de Partilha",
+    desc: "Enchidos, queijos regionais e mel, servidos para toda a mesa.",
+  },
+  {
+    img: sobremesa,
+    name: "Sobremesas de Sempre",
+    desc: "Doçaria tradicional reinterpretada, com canela e açúcar caramelizado.",
+  },
+  {
+    img: cocktails,
+    name: "Cocktails & Sangrias",
+    desc: "Sangrias de fruta e criações de autor para acompanhar a noite.",
+  },
 ];
 
 export function Specialties() {
   const { field, images } = useBlockContent("specialties");
   const blockImages = images();
 
-  const dishes = blockImages.length > 0
-    ? blockImages.map((img) => ({ img: img.url, name: img.title ?? "", desc: img.description ?? "" }))
-    : DEFAULT_DISHES;
+  const dishes =
+    blockImages.length > 0
+      ? blockImages.map((img) => ({
+          img: img.url,
+          name: img.title ?? "",
+          desc: img.description ?? "",
+        }))
+      : DEFAULT_DISHES;
 
   return (
     <section id="especialidades" className="bg-charcoal py-24 md:py-32">

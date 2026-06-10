@@ -8,10 +8,18 @@ export function OverviewSection() {
   const blockImages = state.content.reduce((acc, b) => acc + b.images.length, 0);
   const pageImages = state.pages.reduce((acc, p) => acc + p.images.length, 0);
   const stats = [
-    { label: "Blocos visíveis", value: `${state.blocks.filter((b) => b.visible).length}/${state.blocks.length}`, icon: LayoutGrid },
+    {
+      label: "Blocos visíveis",
+      value: `${state.blocks.filter((b) => b.visible).length}/${state.blocks.length}`,
+      icon: LayoutGrid,
+    },
     { label: "Páginas", value: state.pages.length, icon: FileText },
     { label: "Pratos na ementa", value: dishes, icon: UtensilsCrossed },
-    { label: "Testemunhos ativos", value: state.testimonials.filter((t) => t.visible).length, icon: MessageSquareQuote },
+    {
+      label: "Testemunhos ativos",
+      value: state.testimonials.filter((t) => t.visible).length,
+      icon: MessageSquareQuote,
+    },
     { label: "Imagens (blocos)", value: blockImages, icon: Images },
     { label: "Imagens (páginas)", value: pageImages, icon: Images },
   ];
@@ -27,7 +35,10 @@ export function OverviewSection() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((s) => (
-          <div key={s.label} className="flex items-center gap-4 rounded-xl border border-border bg-card p-5">
+          <div
+            key={s.label}
+            className="flex items-center gap-4 rounded-xl border border-border bg-card p-5"
+          >
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gold/15 text-gold">
               <s.icon className="h-6 w-6" />
             </div>

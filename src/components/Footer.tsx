@@ -14,8 +14,7 @@ export function Footer() {
           <div className="md:col-span-1">
             <img src={logoSrc} alt="Manjar do Ramos" className="h-24 w-auto" />
             <p className="mt-5 text-sm leading-relaxed">
-              Sabores portugueses com alma de taberna. Feitos para partilhar,
-              saborear e voltar.
+              Sabores portugueses com alma de taberna. Feitos para partilhar, saborear e voltar.
             </p>
             <div className="mt-5 flex gap-3">
               {r.social.instagram.visible && (
@@ -54,13 +53,19 @@ export function Footer() {
             </div>
             <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm">
               <li>
-                <Link to="/ementa" className="transition-colors hover:text-gold">Ementa</Link>
+                <Link to="/ementa" className="transition-colors hover:text-gold">
+                  Ementa
+                </Link>
               </li>
               <li>
-                <Link to="/catering" className="transition-colors hover:text-gold">Catering</Link>
+                <Link to="/catering" className="transition-colors hover:text-gold">
+                  Catering
+                </Link>
               </li>
               <li>
-                <a href="/#reservar" className="transition-colors hover:text-gold">Reservar</a>
+                <a href="/#reservar" className="transition-colors hover:text-gold">
+                  Reservar
+                </a>
               </li>
             </ul>
           </div>
@@ -70,7 +75,10 @@ export function Footer() {
             <ul className="mt-4 space-y-3 text-sm">
               <li className="flex items-center gap-3">
                 <Phone className="h-4 w-4 text-gold" />
-                <a href={`tel:${r.telefone.replace(/\s/g, "")}`} className="transition-colors hover:text-gold">
+                <a
+                  href={`tel:${r.telefone.replace(/\s/g, "")}`}
+                  className="transition-colors hover:text-gold"
+                >
                   {r.telefone}
                 </a>
               </li>
