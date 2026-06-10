@@ -756,8 +756,19 @@ async function loadFromSupabase(): Promise<Partial<AdminState>> {
     const blocks: BlockContent[] = [];
     const pages: PageContent[] = [];
     for (const row of contentRes.data as { key: string; value: unknown }[]) {
-      if (row.key.startsWith("block_")) blocks.push(row.value as BlockContent);
-      else if (row.key.startsWith("page_")) pages.push(row.value as PageContent);
+      if (row.key.startsWith("block_")) {
+        const loaded = row.value as BlockContent;
+        // Garante que campos adicionados ao initialState depois da última gravação
+        // no Supabase também aparecem no backoffice.
+        const defaults = initialState.content.find((b) => b.key === loaded.key);
+        if (defaults) {
+          const existingLabels = new Set(loaded.fields.map((f) => f.label));
+          const missingFields = defaults.fields.filter((f) => !existingLabels.has(f.label));
+          blocks.push({ ...loaded, fields: [...loaded.fields, ...missingFields] });
+        } else {
+          blocks.push(loaded);
+        }
+      } else if (row.key.startsWith("page_")) pages.push(row.value as PageContent);
     }
     if (blocks.length) partial.content = blocks;
     if (pages.length) partial.pages = pages;
