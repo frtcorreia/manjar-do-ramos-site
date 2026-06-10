@@ -12,11 +12,36 @@ const HOMEPAGE_SECTIONS: {
   blockKey: BlockKey;
   navKey: NavPageKey | null;
 }[] = [
-  { label: "Conceito", description: "Secção 'O Nosso Conceito' na homepage.", blockKey: "about", navKey: "conceito" },
-  { label: "Pratos & Especialidades", description: "Secção com os pratos em destaque.", blockKey: "specialties", navKey: null },
-  { label: "Espaço", description: "Galeria de fotos do espaço.", blockKey: "gallery", navKey: "espaco" },
-  { label: "Testemunhos", description: "Avaliações e comentários de clientes.", blockKey: "testimonials", navKey: "testemunhos" },
-  { label: "Reservas", description: "Formulário de reserva de mesa.", blockKey: "reservation", navKey: null },
+  {
+    label: "Conceito",
+    description: "Secção 'O Nosso Conceito' na homepage.",
+    blockKey: "about",
+    navKey: "conceito",
+  },
+  {
+    label: "Pratos & Especialidades",
+    description: "Secção com os pratos em destaque.",
+    blockKey: "specialties",
+    navKey: null,
+  },
+  {
+    label: "Espaço",
+    description: "Galeria de fotos do espaço.",
+    blockKey: "gallery",
+    navKey: "espaco",
+  },
+  {
+    label: "Testemunhos",
+    description: "Avaliações e comentários de clientes.",
+    blockKey: "testimonials",
+    navKey: "testemunhos",
+  },
+  {
+    label: "Reservas",
+    description: "Formulário de reserva de mesa.",
+    blockKey: "reservation",
+    navKey: null,
+  },
 ];
 
 /* Páginas: só link de nav */
@@ -76,7 +101,9 @@ export function NavegacaoSection() {
                   <p className="text-sm text-muted-foreground">{description}</p>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
-                  <span className={`text-xs font-semibold ${visible ? "text-green-600" : "text-muted-foreground"}`}>
+                  <span
+                    className={`text-xs font-semibold ${visible ? "text-green-600" : "text-muted-foreground"}`}
+                  >
                     {visible ? "Visível" : "Oculto"}
                   </span>
                   <Switch
@@ -110,7 +137,9 @@ export function NavegacaoSection() {
                   <p className="text-xs text-muted-foreground">{page.href}</p>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
-                  <span className={`text-xs font-semibold ${visible ? "text-green-600" : "text-muted-foreground"}`}>
+                  <span
+                    className={`text-xs font-semibold ${visible ? "text-green-600" : "text-muted-foreground"}`}
+                  >
                     {visible ? "Visível" : "Oculto"}
                   </span>
                   <Switch checked={visible} onCheckedChange={(v) => togglePage(key, v)} />
@@ -122,19 +151,26 @@ export function NavegacaoSection() {
       </section>
 
       {/* Modo manutenção */}
-      <section className={`space-y-5 rounded-xl border p-6 ${maintenance.enabled ? "border-amber-400 bg-amber-50" : "border-border bg-card"}`}>
+      <section
+        className={`space-y-5 rounded-xl border p-6 ${maintenance.enabled ? "border-amber-400 bg-amber-50" : "border-border bg-card"}`}
+      >
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <AlertTriangle className={`h-5 w-5 ${maintenance.enabled ? "text-amber-500" : "text-muted-foreground"}`} />
+            <AlertTriangle
+              className={`h-5 w-5 ${maintenance.enabled ? "text-amber-500" : "text-muted-foreground"}`}
+            />
             <div>
               <p className="font-semibold text-charcoal">Modo Manutenção</p>
               <p className="text-sm text-muted-foreground">
-                Quando ativo, os visitantes veem a página de manutenção. Admins continuam a ver o site normalmente.
+                Quando ativo, os visitantes veem a página de manutenção. Admins continuam a ver o
+                site normalmente.
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <span className={`text-xs font-semibold ${maintenance.enabled ? "text-amber-600" : "text-muted-foreground"}`}>
+            <span
+              className={`text-xs font-semibold ${maintenance.enabled ? "text-amber-600" : "text-muted-foreground"}`}
+            >
               {maintenance.enabled ? "Ativo" : "Inativo"}
             </span>
             <Switch
@@ -146,7 +182,9 @@ export function NavegacaoSection() {
 
         <div className="space-y-4">
           <div className="space-y-1.5">
-            <Label className="text-sm font-medium text-charcoal">Título da página de manutenção</Label>
+            <Label className="text-sm font-medium text-charcoal">
+              Título da página de manutenção
+            </Label>
             <Input
               value={maintenance.titulo}
               onChange={(e) => setMaintenance({ titulo: e.target.value })}

@@ -21,7 +21,10 @@ export function SpaceGallery() {
             {field("Título", "Madeira, luz quente e mesas cheias")}
           </h2>
           <p className="mt-5 text-lg text-muted-foreground">
-            {field("Subtítulo", "Um ambiente rústico e contemporâneo, onde cada detalhe convida a ficar.")}
+            {field(
+              "Subtítulo",
+              "Um ambiente rústico e contemporâneo, onde cada detalhe convida a ficar.",
+            )}
           </p>
         </Reveal>
 

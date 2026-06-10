@@ -43,10 +43,7 @@ export const Route = createFileRoute("/")({
             addressCountry: "PT",
           },
           telephone: "+351 210 000 000",
-          openingHours: [
-            "Tu-Su 12:00-15:00",
-            "Tu-Su 19:00-23:30",
-          ],
+          openingHours: ["Tu-Su 12:00-15:00", "Tu-Su 19:00-23:30"],
         }),
       },
     ],

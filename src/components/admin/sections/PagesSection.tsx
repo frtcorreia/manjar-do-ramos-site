@@ -1,5 +1,10 @@
 import { useState, useRef } from "react";
-import { useAdmin, type PageContent, type ContentField, type ContentImage } from "@/lib/admin-store";
+import {
+  useAdmin,
+  type PageContent,
+  type ContentField,
+  type ContentImage,
+} from "@/lib/admin-store";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -71,9 +76,7 @@ function PageEditor({
   onImage: (pageKey: PageContent["key"], imageId: string, url: string) => void;
 }) {
   // Separar SEO, textos e imagens para organização visual
-  const seoFields = page.fields.filter((f) =>
-    f.label.includes("SEO") || f.label.includes("OG")
-  );
+  const seoFields = page.fields.filter((f) => f.label.includes("SEO") || f.label.includes("OG"));
   const otherFields = page.fields.filter(
     (f) => !f.label.includes("SEO") && !f.label.includes("OG"),
   );

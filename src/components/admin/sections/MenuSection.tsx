@@ -6,31 +6,38 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Plus, Trash2, FolderPlus, ArrowUp, ArrowDown, Pencil, ImagePlus } from "lucide-react";
 
 const ALLERGENS: { id: Allergen; label: string; emoji: string }[] = [
-  { id: "gluten",      label: "Glúten",                      emoji: "🌾" },
-  { id: "crustaceans", label: "Crustáceos",                   emoji: "🦐" },
-  { id: "eggs",        label: "Ovos",                         emoji: "🥚" },
-  { id: "fish",        label: "Peixes",                       emoji: "🐟" },
-  { id: "peanuts",     label: "Amendoins",                    emoji: "🥜" },
-  { id: "soy",         label: "Soja",                         emoji: "🫘" },
-  { id: "milk",        label: "Leite",                        emoji: "🥛" },
-  { id: "nuts",        label: "Frutos de casca rija",         emoji: "🌰" },
-  { id: "celery",      label: "Aipo",                         emoji: "🌿" },
-  { id: "mustard",     label: "Mostarda",                     emoji: "🟡" },
-  { id: "sesame",      label: "Sementes de sésamo",           emoji: "⚪" },
-  { id: "sulphites",   label: "Dióxido de enxofre e sulfitos", emoji: "🍷" },
-  { id: "lupin",       label: "Tremoço",                      emoji: "🟠" },
-  { id: "molluscs",    label: "Moluscos",                     emoji: "🦑" },
+  { id: "gluten", label: "Glúten", emoji: "🌾" },
+  { id: "crustaceans", label: "Crustáceos", emoji: "🦐" },
+  { id: "eggs", label: "Ovos", emoji: "🥚" },
+  { id: "fish", label: "Peixes", emoji: "🐟" },
+  { id: "peanuts", label: "Amendoins", emoji: "🥜" },
+  { id: "soy", label: "Soja", emoji: "🫘" },
+  { id: "milk", label: "Leite", emoji: "🥛" },
+  { id: "nuts", label: "Frutos de casca rija", emoji: "🌰" },
+  { id: "celery", label: "Aipo", emoji: "🌿" },
+  { id: "mustard", label: "Mostarda", emoji: "🟡" },
+  { id: "sesame", label: "Sementes de sésamo", emoji: "⚪" },
+  { id: "sulphites", label: "Dióxido de enxofre e sulfitos", emoji: "🍷" },
+  { id: "lupin", label: "Tremoço", emoji: "🟠" },
+  { id: "molluscs", label: "Moluscos", emoji: "🦑" },
 ];
 
 export function MenuSection() {
   const { state, setState, newId } = useAdmin();
   const [newCat, setNewCat] = useState("");
-  const [editing, setEditing] = useState<{ catId: string; item: MenuItem; isNew: boolean } | null>(null);
+  const [editing, setEditing] = useState<{ catId: string; item: MenuItem; isNew: boolean } | null>(
+    null,
+  );
 
   const addCategory = () => {
     if (!newCat.trim()) return;
@@ -63,7 +70,18 @@ export function MenuSection() {
     setEditing({
       catId,
       isNew: true,
-      item: { id: newId(), name: "", description: "", price: "0,00€", image: "", delivery: true, takeaway: true, restaurant: true, visible: true, allergens: [] },
+      item: {
+        id: newId(),
+        name: "",
+        description: "",
+        price: "0,00€",
+        image: "",
+        delivery: true,
+        takeaway: true,
+        restaurant: true,
+        visible: true,
+        allergens: [],
+      },
     });
 
   const openEdit = (catId: string, item: MenuItem) =>
@@ -78,9 +96,7 @@ export function MenuSection() {
         c.id === catId
           ? {
               ...c,
-              items: isNew
-                ? [...c.items, item]
-                : c.items.map((i) => (i.id === item.id ? item : i)),
+              items: isNew ? [...c.items, item] : c.items.map((i) => (i.id === item.id ? item : i)),
             }
           : c,
       ),
@@ -111,7 +127,11 @@ export function MenuSection() {
       <div className="flex flex-wrap items-end gap-3 rounded-xl border border-border bg-card p-4">
         <div className="flex-1 min-w-[200px]">
           <label className="text-xs font-medium text-muted-foreground">Nova categoria</label>
-          <Input value={newCat} onChange={(e) => setNewCat(e.target.value)} placeholder="Ex.: Sobremesas" />
+          <Input
+            value={newCat}
+            onChange={(e) => setNewCat(e.target.value)}
+            placeholder="Ex.: Sobremesas"
+          />
         </div>
         <Button onClick={addCategory} className="gap-2">
           <FolderPlus className="h-4 w-4" /> Criar categoria
@@ -150,7 +170,12 @@ export function MenuSection() {
                 />
               </div>
               <div className="ml-auto flex gap-2">
-                <Button variant="outline" size="sm" onClick={() => openNew(cat.id)} className="gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => openNew(cat.id)}
+                  className="gap-2"
+                >
                   <Plus className="h-4 w-4" /> Prato
                 </Button>
                 <Button variant="ghost" size="icon" onClick={() => removeCategory(cat.id)}>
@@ -164,13 +189,14 @@ export function MenuSection() {
                 <p className="p-4 text-sm text-muted-foreground">Sem pratos nesta categoria.</p>
               )}
               {cat.items.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center gap-3 p-4"
-                >
+                <div key={item.id} className="flex items-center gap-3 p-4">
                   <div className="h-14 w-14 shrink-0 overflow-hidden rounded-md border border-border bg-secondary/40">
                     {item.image ? (
-                      <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="h-full w-full object-cover"
+                      />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center text-muted-foreground">
                         <ImagePlus className="h-4 w-4" />
@@ -180,7 +206,9 @@ export function MenuSection() {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-baseline gap-2">
                       <p className="truncate font-serif text-base text-charcoal">
-                        {item.name || <span className="text-muted-foreground italic">Sem nome</span>}
+                        {item.name || (
+                          <span className="text-muted-foreground italic">Sem nome</span>
+                        )}
                       </p>
                       <span className="shrink-0 text-sm text-muted-foreground">{item.price}</span>
                     </div>
@@ -239,9 +267,7 @@ export function MenuSection() {
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
             <DialogTitle>{editing?.isNew ? "Adicionar prato" : "Editar prato"}</DialogTitle>
-            <DialogDescription>
-              Preencha os dados do prato e guarde para aplicar.
-            </DialogDescription>
+            <DialogDescription>Preencha os dados do prato e guarde para aplicar.</DialogDescription>
           </DialogHeader>
           {editing && (
             <div className="space-y-4">
@@ -338,9 +364,8 @@ export function MenuSection() {
                           onCheckedChange={(v) => {
                             const current = editing.item.allergens ?? [];
                             patchEditing({
-                              allergens: v === true
-                                ? [...current, a.id]
-                                : current.filter((x) => x !== a.id),
+                              allergens:
+                                v === true ? [...current, a.id] : current.filter((x) => x !== a.id),
                             });
                           }}
                         />

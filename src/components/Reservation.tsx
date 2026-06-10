@@ -20,7 +20,10 @@ export function Reservation() {
             {field("Título", "Reserve a sua mesa e viva a experiência")}
           </h2>
           <p className="mt-5 text-lg text-cream/75">
-            {field("Subtítulo", "Para jantares a dois ou grandes mesas de convívio. Confirmamos a sua reserva com a maior brevidade.")}
+            {field(
+              "Subtítulo",
+              "Para jantares a dois ou grandes mesas de convívio. Confirmamos a sua reserva com a maior brevidade.",
+            )}
           </p>
         </Reveal>
 
@@ -29,8 +32,8 @@ export function Reservation() {
             <div className="rounded-2xl bg-cream/8 p-10 text-center ring-1 ring-gold/40">
               <p className="font-serif text-2xl text-gold">Obrigado!</p>
               <p className="mt-2 text-cream/80">
-                Recebemos o seu pedido de reserva. Entraremos em contacto em breve
-                para confirmar a sua mesa.
+                Recebemos o seu pedido de reserva. Entraremos em contacto em breve para confirmar a
+                sua mesa.
               </p>
             </div>
           ) : (
@@ -77,7 +80,9 @@ function PeopleSelect() {
             {n} {n === 1 ? "pessoa" : "pessoas"}
           </option>
         ))}
-        <option value="9+" className="bg-charcoal text-cream">9+ pessoas (grupo)</option>
+        <option value="9+" className="bg-charcoal text-cream">
+          9+ pessoas (grupo)
+        </option>
       </select>
     </div>
   );
@@ -97,7 +102,9 @@ function Field({
   const id = useId();
   return (
     <div>
-      <label htmlFor={id} className="mb-2 block text-sm font-medium text-cream/80">{label}</label>
+      <label htmlFor={id} className="mb-2 block text-sm font-medium text-cream/80">
+        {label}
+      </label>
       <input
         id={id}
         required

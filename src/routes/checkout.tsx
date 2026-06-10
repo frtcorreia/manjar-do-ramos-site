@@ -160,13 +160,40 @@ function CheckoutPage() {
             </div>
           ) : (
             <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_360px]">
-              <form onSubmit={submit} className="space-y-5 rounded-2xl border border-border bg-card p-6 shadow-soft">
+              <form
+                onSubmit={submit}
+                className="space-y-5 rounded-2xl border border-border bg-card p-6 shadow-soft"
+              >
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Field label="Nome" id="co-name" value={form.customer_name} onChange={(v) => setForm({ ...form, customer_name: v })} required />
-                  <Field label="Telefone" id="co-phone" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} required type="tel" />
+                  <Field
+                    label="Nome"
+                    id="co-name"
+                    value={form.customer_name}
+                    onChange={(v) => setForm({ ...form, customer_name: v })}
+                    required
+                  />
+                  <Field
+                    label="Telefone"
+                    id="co-phone"
+                    value={form.phone}
+                    onChange={(v) => setForm({ ...form, phone: v })}
+                    required
+                    type="tel"
+                  />
                 </div>
-                <Field label="Morada de entrega" id="co-address" value={form.address} onChange={(v) => setForm({ ...form, address: v })} required />
-                <Field label="NIF (opcional)" id="co-nif" value={form.nif} onChange={(v) => setForm({ ...form, nif: v })} />
+                <Field
+                  label="Morada de entrega"
+                  id="co-address"
+                  value={form.address}
+                  onChange={(v) => setForm({ ...form, address: v })}
+                  required
+                />
+                <Field
+                  label="NIF (opcional)"
+                  id="co-nif"
+                  value={form.nif}
+                  onChange={(v) => setForm({ ...form, nif: v })}
+                />
                 <div className="space-y-2">
                   <Label htmlFor="co-notes">Observações (opcional)</Label>
                   <Textarea
@@ -177,7 +204,11 @@ function CheckoutPage() {
                     rows={4}
                   />
                 </div>
-                <Button type="submit" disabled={busy} className="w-full gap-2 bg-wine text-cream hover:bg-wine/90">
+                <Button
+                  type="submit"
+                  disabled={busy}
+                  className="w-full gap-2 bg-wine text-cream hover:bg-wine/90"
+                >
                   <Truck className="h-4 w-4" />
                   {busy ? "A enviar…" : `Confirmar encomenda · ${formatEUR(total)}`}
                 </Button>
@@ -189,9 +220,13 @@ function CheckoutPage() {
                   <ul className="mt-4 divide-y divide-border">
                     {cart.map((l) => (
                       <li key={l.id} className="flex items-center gap-3 py-3 text-sm">
-                        <span className="w-6 text-center font-semibold text-wine">{l.quantity}×</span>
+                        <span className="w-6 text-center font-semibold text-wine">
+                          {l.quantity}×
+                        </span>
                         <span className="flex-1 text-charcoal">{l.name}</span>
-                        <span className="font-medium text-charcoal">{formatEUR(l.price * l.quantity)}</span>
+                        <span className="font-medium text-charcoal">
+                          {formatEUR(l.price * l.quantity)}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -211,15 +246,30 @@ function CheckoutPage() {
 }
 
 function Field({
-  label, id, value, onChange, required, type = "text",
+  label,
+  id,
+  value,
+  onChange,
+  required,
+  type = "text",
 }: {
-  label: string; id: string; value: string; onChange: (v: string) => void;
-  required?: boolean; type?: string;
+  label: string;
+  id: string;
+  value: string;
+  onChange: (v: string) => void;
+  required?: boolean;
+  type?: string;
 }) {
   return (
     <div className="space-y-2">
       <Label htmlFor={id}>{label}</Label>
-      <Input id={id} type={type} value={value} onChange={(e) => onChange(e.target.value)} required={required} />
+      <Input
+        id={id}
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        required={required}
+      />
     </div>
   );
 }

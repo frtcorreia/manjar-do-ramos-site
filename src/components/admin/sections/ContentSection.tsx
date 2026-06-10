@@ -1,5 +1,10 @@
 import { useRef, useState } from "react";
-import { useAdmin, type BlockContent, type ContentField, type ContentImage } from "@/lib/admin-store";
+import {
+  useAdmin,
+  type BlockContent,
+  type ContentField,
+  type ContentImage,
+} from "@/lib/admin-store";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -23,11 +28,7 @@ export function ContentSection() {
   const updateImage = (blockKey: string, imageId: string, url: string) =>
     patchImage(blockKey, imageId, { url });
 
-  const patchImage = (
-    blockKey: string,
-    imageId: string,
-    patch: Partial<ContentImage>,
-  ) =>
+  const patchImage = (blockKey: string, imageId: string, patch: Partial<ContentImage>) =>
     setState((s) => ({
       ...s,
       content: s.content.map((b) =>
