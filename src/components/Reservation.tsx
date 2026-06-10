@@ -6,6 +6,7 @@ export function Reservation() {
   const { field } = useBlockContent("reservation");
   const restaurante = useRestaurante();
   const telefone = field("Telefone", restaurante.telefone);
+  const labelTelefone = field("Label Telefone", "Chamada para a rede móvel nacional");
 
   return (
     <section id="reservar" className="relative bg-espresso py-24 md:py-32">
