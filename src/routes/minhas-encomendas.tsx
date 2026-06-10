@@ -42,14 +42,17 @@ function MinhasEncomendasPage() {
   const [orders, setOrders] = useState<OrderRow[] | null>(null);
 
   useEffect(() => {
-    if (!loading && !user) navigate({ to: "/auth", search: { redirect: "/minhas-encomendas" } as never });
+    if (!loading && !user)
+      navigate({ to: "/auth", search: { redirect: "/minhas-encomendas" } as never });
   }, [user, loading, navigate]);
 
   useEffect(() => {
     if (!user) return;
     supabase
       .from("orders")
-      .select("id, status, total, customer_name, address, created_at, order_items(id,name,price,quantity)")
+      .select(
+        "id, status, total, customer_name, address, created_at, order_items(id,name,price,quantity)",
+      )
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
       .then(({ data }) => setOrders((data as OrderRow[]) ?? []));
@@ -62,7 +65,9 @@ function MinhasEncomendasPage() {
         <div className="mx-auto max-w-4xl px-5 md:px-10">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <h1 className="font-serif text-4xl text-espresso md:text-5xl">As minhas encomendas</h1>
+              <h1 className="font-serif text-4xl text-espresso md:text-5xl">
+                As minhas encomendas
+              </h1>
               <p className="mt-2 text-muted-foreground">{user?.email}</p>
             </div>
             {isAdmin && (
@@ -98,14 +103,20 @@ function MinhasEncomendasPage() {
                       <Badge className={`${statusColor[o.status]} border-none`}>
                         {ORDER_STATUS_LABEL[o.status]}
                       </Badge>
-                      <p className="mt-2 font-serif text-2xl text-wine">{formatEUR(Number(o.total))}</p>
+                      <p className="mt-2 font-serif text-2xl text-wine">
+                        {formatEUR(Number(o.total))}
+                      </p>
                     </div>
                   </div>
                   <ul className="mt-4 divide-y divide-border border-t border-border pt-2 text-sm">
                     {o.order_items.map((i) => (
                       <li key={i.id} className="flex justify-between py-2">
-                        <span>{i.quantity}× {i.name}</span>
-                        <span className="text-muted-foreground">{formatEUR(Number(i.price) * i.quantity)}</span>
+                        <span>
+                          {i.quantity}× {i.name}
+                        </span>
+                        <span className="text-muted-foreground">
+                          {formatEUR(Number(i.price) * i.quantity)}
+                        </span>
                       </li>
                     ))}
                   </ul>

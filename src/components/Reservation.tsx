@@ -15,7 +15,10 @@ export function Reservation() {
             {field("Título", "Reserve a sua mesa e viva a experiência")}
           </h2>
           <p className="mt-5 text-lg text-cream/75">
-            {field("Subtítulo", "Para jantares a dois ou grandes mesas de convívio. Confirmamos a sua reserva com a maior brevidade.")}
+            {field(
+              "Subtítulo",
+              "Para jantares a dois ou grandes mesas de convívio. Confirmamos a sua reserva com a maior brevidade.",
+            )}
           </p>
         </Reveal>
 

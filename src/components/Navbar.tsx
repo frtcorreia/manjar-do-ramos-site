@@ -12,7 +12,8 @@ export function Navbar() {
   const { user, signOut } = useAuth();
   const navPages = useNavPages();
   const restaurante = useRestaurante();
-  const visibleLinks = navPages.filter((p) => p.visible);
+  const visibleLinks = navPages.filter((p) => p.visible && p.key !== "a-minha-conta");
+  const showMinhaConta = navPages.find((p) => p.key === "a-minha-conta")?.visible ?? true;
   const logoSrc = restaurante.logo || logo;
 
   useEffect(() => {
@@ -28,9 +29,7 @@ export function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
-        scrolled
-          ? "bg-charcoal/95 backdrop-blur-md shadow-soft"
-          : "bg-transparent"
+        scrolled ? "bg-charcoal/95 backdrop-blur-md shadow-soft" : "bg-transparent"
       }`}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-10 md:py-5">
@@ -59,30 +58,32 @@ export function Navbar() {
               </a>
             ),
           )}
-          {user ? (
-            <div className="flex items-center gap-3">
-              <Link
-                to="/minhas-encomendas"
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-cream/85 transition-colors hover:text-gold"
-              >
-                <UserIcon className="h-4 w-4" /> A minha conta
-              </Link>
-              <button
-                onClick={() => signOut()}
-                className="text-cream/60 transition-colors hover:text-gold"
-                aria-label="Sair"
-              >
-                <LogOut className="h-4 w-4" />
-              </button>
-            </div>
-          ) : (
-            <Link
-              to="/auth"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-cream/85 transition-colors hover:text-gold"
-            >
-              <UserIcon className="h-4 w-4" /> Entrar
-            </Link>
-          )}
+          {user
+            ? showMinhaConta && (
+                <div className="flex items-center gap-3">
+                  <Link
+                    to="/minhas-encomendas"
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-cream/85 transition-colors hover:text-gold"
+                  >
+                    <UserIcon className="h-4 w-4" /> A minha conta
+                  </Link>
+                  <button
+                    onClick={() => signOut()}
+                    className="text-cream/60 transition-colors hover:text-gold"
+                    aria-label="Sair"
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </button>
+                </div>
+              )
+            : showMinhaConta && (
+                <Link
+                  to="/auth"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-cream/85 transition-colors hover:text-gold"
+                >
+                  <UserIcon className="h-4 w-4" /> Entrar
+                </Link>
+              )}
           <a
             href="/#reservar"
             className="rounded-full border border-gold/70 px-5 py-2 text-sm font-semibold text-gold transition-all hover:bg-gold hover:text-charcoal"
@@ -96,9 +97,13 @@ export function Navbar() {
           className="flex flex-col gap-1.5 md:hidden"
           aria-label="Menu"
         >
-          <span className={`h-0.5 w-6 bg-cream transition-transform ${open ? "translate-y-2 rotate-45" : ""}`} />
+          <span
+            className={`h-0.5 w-6 bg-cream transition-transform ${open ? "translate-y-2 rotate-45" : ""}`}
+          />
           <span className={`h-0.5 w-6 bg-cream transition-opacity ${open ? "opacity-0" : ""}`} />
-          <span className={`h-0.5 w-6 bg-cream transition-transform ${open ? "-translate-y-2 -rotate-45" : ""}`} />
+          <span
+            className={`h-0.5 w-6 bg-cream transition-transform ${open ? "-translate-y-2 -rotate-45" : ""}`}
+          />
         </button>
       </nav>
 
@@ -130,31 +135,36 @@ export function Navbar() {
                 </a>
               ),
             )}
-            {user ? (
-              <>
-                <Link
-                  to="/minhas-encomendas"
-                  onClick={() => setOpen(false)}
-                  className="text-base font-medium text-cream/90"
-                >
-                  A minha conta
-                </Link>
-                <button
-                  onClick={() => { setOpen(false); signOut(); }}
-                  className="text-left text-base font-medium text-cream/70"
-                >
-                  Sair
-                </button>
-              </>
-            ) : (
-              <Link
-                to="/auth"
-                onClick={() => setOpen(false)}
-                className="text-base font-medium text-cream/90"
-              >
-                Entrar / Criar conta
-              </Link>
-            )}
+            {user
+              ? showMinhaConta && (
+                  <>
+                    <Link
+                      to="/minhas-encomendas"
+                      onClick={() => setOpen(false)}
+                      className="text-base font-medium text-cream/90"
+                    >
+                      A minha conta
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setOpen(false);
+                        signOut();
+                      }}
+                      className="text-left text-base font-medium text-cream/70"
+                    >
+                      Sair
+                    </button>
+                  </>
+                )
+              : showMinhaConta && (
+                  <Link
+                    to="/auth"
+                    onClick={() => setOpen(false)}
+                    className="text-base font-medium text-cream/90"
+                  >
+                    Entrar / Criar conta
+                  </Link>
+                )}
             <a
               href="/#reservar"
               onClick={() => setOpen(false)}

@@ -7,20 +7,20 @@ import { usePageContent, useSiteMenu } from "@/hooks/useSiteConfig";
 import type { Allergen } from "@/lib/admin-store";
 
 const ALLERGENS: { id: Allergen; label: string; emoji: string }[] = [
-  { id: "gluten",      label: "Glúten",                       emoji: "🌾" },
-  { id: "crustaceans", label: "Crustáceos",                    emoji: "🦐" },
-  { id: "eggs",        label: "Ovos",                          emoji: "🥚" },
-  { id: "fish",        label: "Peixes",                        emoji: "🐟" },
-  { id: "peanuts",     label: "Amendoins",                     emoji: "🥜" },
-  { id: "soy",         label: "Soja",                          emoji: "🫘" },
-  { id: "milk",        label: "Leite",                         emoji: "🥛" },
-  { id: "nuts",        label: "Frutos de casca rija",          emoji: "🌰" },
-  { id: "celery",      label: "Aipo",                          emoji: "🌿" },
-  { id: "mustard",     label: "Mostarda",                      emoji: "🟡" },
-  { id: "sesame",      label: "Sementes de sésamo",            emoji: "⚪" },
-  { id: "sulphites",   label: "Dióxido de enxofre e sulfitos", emoji: "🍷" },
-  { id: "lupin",       label: "Tremoço",                       emoji: "🟠" },
-  { id: "molluscs",    label: "Moluscos",                      emoji: "🦑" },
+  { id: "gluten", label: "Glúten", emoji: "🌾" },
+  { id: "crustaceans", label: "Crustáceos", emoji: "🦐" },
+  { id: "eggs", label: "Ovos", emoji: "🥚" },
+  { id: "fish", label: "Peixes", emoji: "🐟" },
+  { id: "peanuts", label: "Amendoins", emoji: "🥜" },
+  { id: "soy", label: "Soja", emoji: "🫘" },
+  { id: "milk", label: "Leite", emoji: "🥛" },
+  { id: "nuts", label: "Frutos de casca rija", emoji: "🌰" },
+  { id: "celery", label: "Aipo", emoji: "🌿" },
+  { id: "mustard", label: "Mostarda", emoji: "🟡" },
+  { id: "sesame", label: "Sementes de sésamo", emoji: "⚪" },
+  { id: "sulphites", label: "Dióxido de enxofre e sulfitos", emoji: "🍷" },
+  { id: "lupin", label: "Tremoço", emoji: "🟠" },
+  { id: "molluscs", label: "Moluscos", emoji: "🦑" },
 ];
 
 export const Route = createFileRoute("/ementa")({
@@ -67,7 +67,10 @@ function EmentaPage() {
               {field("Hero — Título", "A nossa ementa")}
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-base text-cream/85 md:text-lg">
-              {field("Hero — Subtítulo", "Sabores portugueses pensados para partilhar à volta da mesa.")}
+              {field(
+                "Hero — Subtítulo",
+                "Sabores portugueses pensados para partilhar à volta da mesa.",
+              )}
             </p>
           </Reveal>
         </section>
@@ -140,7 +143,9 @@ function EmentaPage() {
                 ))}
               </ul>
               <p className="mt-5 text-[11px] leading-relaxed text-muted-foreground/70">
-                Os alergénicos indicados são de carácter informativo. Em caso de alergias ou intolerâncias alimentares graves, por favor informe o nosso pessoal antes de encomendar.
+                Os alergénicos indicados são de carácter informativo. Em caso de alergias ou
+                intolerâncias alimentares graves, por favor informe o nosso pessoal antes de
+                encomendar.
               </p>
             </Reveal>
 
@@ -149,7 +154,10 @@ function EmentaPage() {
                 {field("CTA — Título", "Pronto para uma mesa cheia?")}
               </h2>
               <p className="mx-auto mt-4 max-w-md text-muted-foreground">
-                {field("CTA — Subtítulo", "Reserve a sua mesa e deixe a noite acontecer entre pratos, vinho e boa conversa.")}
+                {field(
+                  "CTA — Subtítulo",
+                  "Reserve a sua mesa e deixe a noite acontecer entre pratos, vinho e boa conversa.",
+                )}
               </p>
               <a
                 href="/#reservar"

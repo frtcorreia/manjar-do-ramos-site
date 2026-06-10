@@ -63,7 +63,11 @@ const services = [
 
 const steps = [
   { n: "01", title: "Conte-nos a sua ideia", desc: "Data, número de convidados e tipo de evento." },
-  { n: "02", title: "Desenhamos a ementa", desc: "Uma proposta à medida do seu gosto e orçamento." },
+  {
+    n: "02",
+    title: "Desenhamos a ementa",
+    desc: "Uma proposta à medida do seu gosto e orçamento.",
+  },
   { n: "03", title: "Tratamos de tudo", desc: "Logística, montagem e serviço no dia." },
   { n: "04", title: "Celebrem juntos", desc: "Vocês aproveitam, nós cuidamos da mesa." },
 ];
@@ -86,12 +90,17 @@ function CateringPage() {
           />
           <div className="absolute inset-0 bg-gradient-hero" />
           <Reveal className="relative z-10 px-5 text-center">
-            <span className="eyebrow text-gold">{field("Hero — Etiqueta", "Catering & Eventos")}</span>
+            <span className="eyebrow text-gold">
+              {field("Hero — Etiqueta", "Catering & Eventos")}
+            </span>
             <h1 className="mt-5 font-serif text-5xl font-medium leading-tight text-cream md:text-7xl">
               {field("Hero — Título", "A taberna vai até si")}
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-base text-cream/85 md:text-lg">
-              {field("Hero — Subtítulo", "Levamos a abundância, o convívio e os sabores do Manjar do Ramos ao seu evento.")}
+              {field(
+                "Hero — Subtítulo",
+                "Levamos a abundância, o convívio e os sabores do Manjar do Ramos ao seu evento.",
+              )}
             </p>
             <a
               href="#pedido"
@@ -116,15 +125,23 @@ function CateringPage() {
               </div>
             </Reveal>
             <Reveal delay={0.15}>
-              <span className="eyebrow text-wine">{field("Intro — Etiqueta", "O Nosso Catering")}</span>
+              <span className="eyebrow text-wine">
+                {field("Intro — Etiqueta", "O Nosso Catering")}
+              </span>
               <h2 className="mt-4 font-serif text-3xl text-espresso md:text-4xl">
                 {field("Intro — Título", "Mesas que reúnem, sabores que ficam")}
               </h2>
               <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
-                {field("Intro — Parágrafo 1", "Quer seja um jantar íntimo ou uma grande celebração, levamos a alma da taberna portuguesa onde quiser. Petiscos generosos, carnes na brasa, tábuas de partilha e doçaria de sempre — servidos com o calor e o cuidado que nos definem.")}
+                {field(
+                  "Intro — Parágrafo 1",
+                  "Quer seja um jantar íntimo ou uma grande celebração, levamos a alma da taberna portuguesa onde quiser. Petiscos generosos, carnes na brasa, tábuas de partilha e doçaria de sempre — servidos com o calor e o cuidado que nos definem.",
+                )}
               </p>
               <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-                {field("Intro — Parágrafo 2", "Cada evento é único, por isso desenhamos cada ementa a pensar em si e nos seus convidados.")}
+                {field(
+                  "Intro — Parágrafo 2",
+                  "Cada evento é único, por isso desenhamos cada ementa a pensar em si e nos seus convidados.",
+                )}
               </p>
             </Reveal>
           </div>
@@ -134,7 +151,9 @@ function CateringPage() {
         <section className="bg-charcoal py-24 md:py-32">
           <div className="mx-auto max-w-7xl px-5 md:px-10">
             <Reveal className="mx-auto max-w-2xl text-center">
-              <span className="eyebrow text-gold">{field("Serviços — Etiqueta", "O Que Oferecemos")}</span>
+              <span className="eyebrow text-gold">
+                {field("Serviços — Etiqueta", "O Que Oferecemos")}
+              </span>
               <h2 className="mt-5 font-serif text-4xl font-medium leading-tight text-cream md:text-5xl">
                 {field("Serviços — Título", "Um serviço pensado ao detalhe")}
               </h2>
@@ -157,7 +176,9 @@ function CateringPage() {
         <section className="bg-background py-24 md:py-32">
           <div className="mx-auto max-w-7xl px-5 md:px-10">
             <Reveal className="mx-auto max-w-2xl text-center">
-              <span className="eyebrow text-wine">{field("Como Funciona — Etiqueta", "Como Funciona")}</span>
+              <span className="eyebrow text-wine">
+                {field("Como Funciona — Etiqueta", "Como Funciona")}
+              </span>
               <h2 className="mt-5 font-serif text-4xl font-medium leading-tight text-espresso md:text-5xl">
                 {field("Como Funciona — Título", "Simples, do primeiro contacto ao brinde")}
               </h2>
@@ -187,7 +208,10 @@ function CateringPage() {
                 {field("CTA — Título", "Vamos planear o seu evento")}
               </h2>
               <p className="mx-auto mt-5 max-w-md text-muted-foreground">
-                {field("CTA — Subtítulo", "Conte-nos os detalhes e enviamos-lhe uma proposta à medida. Resposta em até 48 horas.")}
+                {field(
+                  "CTA — Subtítulo",
+                  "Conte-nos os detalhes e enviamos-lhe uma proposta à medida. Resposta em até 48 horas.",
+                )}
               </p>
               <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <a

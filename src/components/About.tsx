@@ -38,7 +38,10 @@ export function About() {
               {field("Parágrafo 1", "Uma casa feita de madeira, vinho e boa conversa")}
             </h3>
             <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
-              {field("Parágrafo 2", "No Manjar do Ramos, cada noite começa com o aroma da grelha e termina com risos à volta de uma mesa cheia.")}
+              {field(
+                "Parágrafo 2",
+                "No Manjar do Ramos, cada noite começa com o aroma da grelha e termina com risos à volta de uma mesa cheia.",
+              )}
             </p>
           </Reveal>
         </div>
@@ -63,9 +66,9 @@ export function About() {
               Pratos generosos, pensados para partilhar
             </h3>
             <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
-              Produtos honestos, fogo lento e receitas que atravessam gerações. Das
-              carnes maturadas ao bacalhau, das tábuas aos petiscos — tudo chega à
-              mesa para ser dividido, provado e celebrado.
+              Produtos honestos, fogo lento e receitas que atravessam gerações. Das carnes maturadas
+              ao bacalhau, das tábuas aos petiscos — tudo chega à mesa para ser dividido, provado e
+              celebrado.
             </p>
             <div className="mt-8 flex gap-10">
               <div>

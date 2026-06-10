@@ -7,7 +7,10 @@ export function Hero() {
   const heroImg = image("Imagem de fundo", heroImgDefault);
 
   return (
-    <section id="top" className="relative h-[100svh] min-h-[640px] w-full overflow-hidden bg-charcoal">
+    <section
+      id="top"
+      className="relative h-[100svh] min-h-[640px] w-full overflow-hidden bg-charcoal"
+    >
       <img
         src={heroImg}
         alt="Mesa de taberna portuguesa com bife grelhado, queijo derretido e vinho a ser servido"
@@ -44,7 +47,10 @@ export function Hero() {
           transition={{ duration: 0.9, delay: 0.8 }}
           className="mt-6 max-w-xl text-base text-cream/85 md:text-lg"
         >
-          {field("Subtítulo", "Uma experiência gastronómica feita para partilhar, saborear e voltar.")}
+          {field(
+            "Subtítulo",
+            "Uma experiência gastronómica feita para partilhar, saborear e voltar.",
+          )}
         </motion.p>
 
         <motion.div

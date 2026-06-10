@@ -161,7 +161,9 @@ function SocialRow({
         />
       </div>
       <div className="flex items-center gap-2">
-        <span className={`text-xs font-semibold ${visible ? "text-green-600" : "text-muted-foreground"}`}>
+        <span
+          className={`text-xs font-semibold ${visible ? "text-green-600" : "text-muted-foreground"}`}
+        >
           {visible ? "Visível" : "Oculto"}
         </span>
         <Switch checked={visible} onCheckedChange={onVisible} />

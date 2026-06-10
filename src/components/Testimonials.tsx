@@ -4,21 +4,24 @@ import { useSiteTestimonials } from "@/hooks/useSiteConfig";
 const DEFAULT_REVIEWS = [
   {
     id: "1",
-    quote: "Fomos jantar a dois e saímos a planear a próxima visita. A carne na brasa é das melhores que provei em Lisboa.",
+    quote:
+      "Fomos jantar a dois e saímos a planear a próxima visita. A carne na brasa é das melhores que provei em Lisboa.",
     name: "Inês Carvalho",
     context: "Jantar romântico",
     visible: true,
   },
   {
     id: "2",
-    quote: "Levei o grupo todo do trabalho. As tábuas de partilha foram um sucesso e o ambiente é simplesmente acolhedor.",
+    quote:
+      "Levei o grupo todo do trabalho. As tábuas de partilha foram um sucesso e o ambiente é simplesmente acolhedor.",
     name: "Tiago Mendes",
     context: "Jantar de grupo",
     visible: true,
   },
   {
     id: "3",
-    quote: "Comida portuguesa com alma e um serviço impecável. Sente-se que cada prato é feito com carinho.",
+    quote:
+      "Comida portuguesa com alma e um serviço impecável. Sente-se que cada prato é feito com carinho.",
     name: "Sofia Almeida",
     context: "Cliente habitual",
     visible: true,
@@ -39,9 +42,7 @@ function Stars() {
 
 export function Testimonials() {
   const testimonials = useSiteTestimonials();
-  const reviews = testimonials
-    ? testimonials.filter((t) => t.visible)
-    : DEFAULT_REVIEWS;
+  const reviews = testimonials ? testimonials.filter((t) => t.visible) : DEFAULT_REVIEWS;
 
   return (
     <section id="testemunhos" className="bg-wine py-24 md:py-32">
