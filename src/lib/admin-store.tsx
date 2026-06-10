@@ -672,6 +672,7 @@ const initialState: AdminState = {
           multiline: true,
         },
         { id: uid(), label: "Telefone", value: "+351 210 000 000" },
+        { id: uid(), label: "Label Telefone", value: "Chamada para a rede móvel nacional" },
       ],
       images: [],
     },

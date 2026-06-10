@@ -23,7 +23,7 @@ export function Reservation() {
           </p>
         </Reveal>
 
-        <Reveal delay={0.15} className="mt-12 flex justify-center">
+        <Reveal delay={0.15} className="mt-12 flex flex-col items-center gap-3">
           <a
             href={`tel:${telefone.replace(/\s/g, "")}`}
             className="inline-flex items-center gap-4 rounded-2xl bg-cream/[0.04] px-10 py-8 ring-1 ring-cream/15 backdrop-blur-sm transition-colors hover:bg-cream/10"
@@ -35,6 +35,9 @@ export function Reservation() {
               {telefone}
             </span>
           </a>
+          {labelTelefone && (
+            <p className="text-xs text-cream/50">{labelTelefone}</p>
+          )}
         </Reveal>
       </div>
     </section>
