@@ -667,6 +667,7 @@ const initialState: AdminState = {
         { id: uid(), label: "Título", value: "Venha sentar-se à nossa mesa", multiline: true },
         { id: uid(), label: "Subtítulo", value: "Reserve já e garanta o seu lugar numa noite memorável.", multiline: true },
         { id: uid(), label: "Telefone", value: "+351 210 000 000" },
+        { id: uid(), label: "Label Telefone", value: "Chamada para a rede móvel nacional" },
       ],
       images: [],
     },

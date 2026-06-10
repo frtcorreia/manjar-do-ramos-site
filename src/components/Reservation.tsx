@@ -5,6 +5,7 @@ import { useBlockContent } from "@/hooks/useSiteConfig";
 export function Reservation() {
   const { field } = useBlockContent("reservation");
   const telefone = field("Telefone", "+351 210 000 000");
+  const labelTelefone = field("Label Telefone", "Chamada para a rede móvel nacional");
 
   return (
     <section id="reservar" className="relative bg-espresso py-24 md:py-32">
@@ -22,7 +23,7 @@ export function Reservation() {
           </p>
         </Reveal>
 
-        <Reveal delay={0.15} className="mt-12 flex justify-center">
+        <Reveal delay={0.15} className="mt-12 flex flex-col items-center gap-3">
           <a
             href={`tel:${telefone.replace(/\s/g, "")}`}
             className="inline-flex items-center gap-4 rounded-2xl bg-cream/[0.04] px-10 py-8 ring-1 ring-cream/15 backdrop-blur-sm transition-colors hover:bg-cream/10"
@@ -34,6 +35,9 @@ export function Reservation() {
               {telefone}
             </span>
           </a>
+          {labelTelefone && (
+            <p className="text-xs text-cream/50">{labelTelefone}</p>
+          )}
         </Reveal>
       </div>
     </section>
