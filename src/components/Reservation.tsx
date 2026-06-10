@@ -1,11 +1,11 @@
 import { Phone } from "lucide-react";
 import { Reveal } from "./Reveal";
-import { useBlockContent } from "@/hooks/useSiteConfig";
+import { useBlockContent, useRestaurante } from "@/hooks/useSiteConfig";
 
 export function Reservation() {
   const { field } = useBlockContent("reservation");
-  const telefone = field("Telefone", "+351 210 000 000");
-  const labelTelefone = field("Label Telefone", "Chamada para a rede móvel nacional");
+  const restaurante = useRestaurante();
+  const telefone = field("Telefone", restaurante.telefone);
 
   return (
     <section id="reservar" className="relative bg-espresso py-24 md:py-32">
