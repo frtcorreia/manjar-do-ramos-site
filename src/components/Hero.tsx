@@ -3,13 +3,14 @@ import heroImgDefault from "@/assets/hero.jpg";
 import { useBlockContent } from "@/hooks/useSiteConfig";
 
 export function Hero() {
-  const { field, image } = useBlockContent("hero");
+  const { field, image, backgroundColor } = useBlockContent("hero");
   const heroImg = image("Imagem de fundo", heroImgDefault);
 
   return (
     <section
       id="top"
       className="relative h-[100svh] min-h-[640px] w-full overflow-hidden bg-charcoal"
+      style={backgroundColor ? { backgroundColor } : undefined}
     >
       <img
         src={heroImg}

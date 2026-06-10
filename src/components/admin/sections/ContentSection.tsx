@@ -15,6 +15,14 @@ export function ContentSection() {
   const [activeKey, setActiveKey] = useState(state.content[0]?.key ?? "hero");
   const active = state.content.find((b) => b.key === activeKey) ?? state.content[0];
 
+  const updateBackgroundColor = (blockKey: string, color: string) =>
+    setState((s) => ({
+      ...s,
+      content: s.content.map((b) =>
+        b.key === blockKey ? { ...b, backgroundColor: color } : b,
+      ),
+    }));
+
   const updateField = (blockKey: string, fieldId: string, value: string) =>
     setState((s) => ({
       ...s,
@@ -70,6 +78,7 @@ export function ContentSection() {
           onField={updateField}
           onImage={updateImage}
           onImageMeta={patchImage}
+          onBackgroundColor={updateBackgroundColor}
         />
       )}
     </div>
@@ -81,41 +90,78 @@ function BlockEditor({
   onField,
   onImage,
   onImageMeta,
+  onBackgroundColor,
 }: {
   block: BlockContent;
   onField: (blockKey: string, fieldId: string, value: string) => void;
   onImage: (blockKey: string, imageId: string, url: string) => void;
   onImageMeta: (blockKey: string, imageId: string, patch: Partial<ContentImage>) => void;
+  onBackgroundColor: (blockKey: string, color: string) => void;
 }) {
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
-      {/* Textos */}
-      {block.fields.length > 0 && (
-        <section className="space-y-4 rounded-xl border border-border bg-card p-5">
-          <h2 className="font-serif text-lg text-charcoal">Textos</h2>
-          {block.fields.map((f) => (
-            <FieldEditor key={f.id} field={f} blockKey={block.key} onField={onField} />
-          ))}
-        </section>
-      )}
-
-      {/* Imagens */}
-      {block.images.length > 0 && (
-        <section className="space-y-4 rounded-xl border border-border bg-card p-5">
-          <h2 className="font-serif text-lg text-charcoal">Imagens</h2>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {block.images.map((img) => (
-              <ImageEditor
-                key={img.id}
-                image={img}
-                blockKey={block.key}
-                onImage={onImage}
-                onImageMeta={onImageMeta}
-              />
-            ))}
+    <div className="space-y-6">
+      {/* Cor de fundo */}
+      <section className="rounded-xl border border-border bg-card p-5">
+        <h2 className="font-serif text-lg text-charcoal mb-4">Cor de fundo</h2>
+        <div className="flex items-center gap-4">
+          <div className="relative">
+            <input
+              type="color"
+              value={block.backgroundColor || "#ffffff"}
+              onChange={(e) => onBackgroundColor(block.key, e.target.value)}
+              className="h-10 w-20 cursor-pointer rounded-lg border border-border bg-transparent p-1"
+              title="Escolher cor de fundo"
+            />
           </div>
-        </section>
-      )}
+          <div className="flex items-center gap-3">
+            <div
+              className="h-8 w-8 rounded-md border border-border shadow-sm"
+              style={{ backgroundColor: block.backgroundColor || "#ffffff" }}
+            />
+            <span className="text-sm text-muted-foreground font-mono">
+              {block.backgroundColor || "#ffffff"}
+            </span>
+          </div>
+          {block.backgroundColor && (
+            <button
+              onClick={() => onBackgroundColor(block.key, "")}
+              className="text-xs text-muted-foreground underline hover:text-charcoal"
+            >
+              Repor padrão
+            </button>
+          )}
+        </div>
+      </section>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Textos */}
+        {block.fields.length > 0 && (
+          <section className="space-y-4 rounded-xl border border-border bg-card p-5">
+            <h2 className="font-serif text-lg text-charcoal">Textos</h2>
+            {block.fields.map((f) => (
+              <FieldEditor key={f.id} field={f} blockKey={block.key} onField={onField} />
+            ))}
+          </section>
+        )}
+
+        {/* Imagens */}
+        {block.images.length > 0 && (
+          <section className="space-y-4 rounded-xl border border-border bg-card p-5">
+            <h2 className="font-serif text-lg text-charcoal">Imagens</h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {block.images.map((img) => (
+                <ImageEditor
+                  key={img.id}
+                  image={img}
+                  blockKey={block.key}
+                  onImage={onImage}
+                  onImageMeta={onImageMeta}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
     </div>
   );
 }

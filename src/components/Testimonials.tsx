@@ -1,5 +1,5 @@
 import { Reveal } from "./Reveal";
-import { useSiteTestimonials } from "@/hooks/useSiteConfig";
+import { useSiteTestimonials, useBlockContent } from "@/hooks/useSiteConfig";
 
 const DEFAULT_REVIEWS = [
   {
@@ -43,9 +43,10 @@ function Stars() {
 export function Testimonials() {
   const testimonials = useSiteTestimonials();
   const reviews = testimonials ? testimonials.filter((t) => t.visible) : DEFAULT_REVIEWS;
+  const { backgroundColor } = useBlockContent("testimonials");
 
   return (
-    <section id="testemunhos" className="bg-wine py-24 md:py-32">
+    <section id="testemunhos" className="bg-wine py-24 md:py-32" style={backgroundColor ? { backgroundColor } : undefined}>
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <Reveal className="mx-auto max-w-2xl text-center">
           <span className="eyebrow text-gold">Quem Já Se Sentou À Mesa</span>

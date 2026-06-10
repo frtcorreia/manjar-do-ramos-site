@@ -41,7 +41,7 @@ const DEFAULT_DISHES = [
 ];
 
 export function Specialties() {
-  const { field, images } = useBlockContent("specialties");
+  const { field, images, backgroundColor } = useBlockContent("specialties");
   const blockImages = images();
 
   const dishes =
@@ -54,7 +54,7 @@ export function Specialties() {
       : DEFAULT_DISHES;
 
   return (
-    <section id="especialidades" className="bg-charcoal py-24 md:py-32">
+    <section id="especialidades" className="bg-charcoal py-24 md:py-32" style={backgroundColor ? { backgroundColor } : undefined}>
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <Reveal className="mx-auto max-w-2xl text-center">
           <span className="eyebrow text-gold">{field("Etiqueta", "Especialidades da Casa")}</span>

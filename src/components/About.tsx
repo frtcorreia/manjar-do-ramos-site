@@ -4,12 +4,12 @@ import about2Default from "@/assets/about-2.jpg";
 import { useBlockContent } from "@/hooks/useSiteConfig";
 
 export function About() {
-  const { field, image } = useBlockContent("about");
+  const { field, image, backgroundColor } = useBlockContent("about");
   const img1 = image("Imagem 1", about1Default);
   const img2 = image("Imagem 2", about2Default);
 
   return (
-    <section id="conceito" className="bg-background py-24 md:py-32">
+    <section id="conceito" className="bg-background py-24 md:py-32" style={backgroundColor ? { backgroundColor } : undefined}>
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <Reveal className="mx-auto max-w-2xl text-center">
           <span className="eyebrow text-wine">{field("Etiqueta", "O Nosso Conceito")}</span>

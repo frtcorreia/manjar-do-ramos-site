@@ -149,6 +149,7 @@ export type BlockContent = {
   label: string;
   fields: ContentField[];
   images: ContentImage[];
+  backgroundColor?: string;
 };
 
 export type SocialNetwork = {

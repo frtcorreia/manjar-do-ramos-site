@@ -3,12 +3,12 @@ import { Reveal } from "./Reveal";
 import { useBlockContent, useRestaurante } from "@/hooks/useSiteConfig";
 
 export function Reservation() {
-  const { field } = useBlockContent("reservation");
+  const { field, backgroundColor } = useBlockContent("reservation");
   const restaurante = useRestaurante();
   const telefone = field("Telefone", restaurante.telefone);
 
   return (
-    <section id="reservar" className="relative bg-espresso py-24 md:py-32">
+    <section id="reservar" className="relative bg-espresso py-24 md:py-32" style={backgroundColor ? { backgroundColor } : undefined}>
       <div className="mx-auto max-w-3xl px-5 md:px-10">
         <Reveal className="text-center">
           <span className="eyebrow text-gold">{field("Etiqueta", "Reservas")}</span>
