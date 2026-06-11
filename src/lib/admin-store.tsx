@@ -180,7 +180,8 @@ export type NavPageKey =
   | "espaco"
   | "testemunhos"
   | "carta-de-vinhos"
-  | "a-minha-conta";
+  | "a-minha-conta"
+  | "auth";
 
 export type NavPage = {
   key: NavPageKey;
@@ -850,6 +851,7 @@ const initialState: AdminState = {
       route: true,
       visible: true,
     },
+    { key: "auth", label: "Login / Registo", href: "/auth", route: true, visible: true },
   ],
   maintenance: {
     enabled: false,
