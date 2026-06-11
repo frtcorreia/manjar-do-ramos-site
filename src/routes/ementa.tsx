@@ -4,7 +4,10 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Reveal } from "@/components/Reveal";
 import { usePageContent, useSiteMenu } from "@/hooks/useSiteConfig";
+import { supabase } from "@/integrations/supabase/client";
 import type { Allergen } from "@/lib/admin-store";
+
+const EMENTA_SESSION_KEY = "ementa_read_recorded";
 
 const ALLERGENS: { id: Allergen; label: string; emoji: string }[] = [
   { id: "gluten", label: "Glúten", emoji: "🌾" },
@@ -115,6 +118,13 @@ function EmentaPage() {
   usePageContent("ementa");
   const menu = useSiteMenu();
   const [activeId, setActiveId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (sessionStorage.getItem(EMENTA_SESSION_KEY)) return;
+    sessionStorage.setItem(EMENTA_SESSION_KEY, "1");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (supabase.rpc as any)("record_ementa_read").catch(() => {});
+  }, []);
 
   const visibleCategories = (menu ?? [])
     .filter((cat) => cat.items.some((i) => i.visible))

@@ -26,6 +26,7 @@ type StatsRow = {
   total: number;
 };
 type SettingsRow = { location: Location; secret_key: string; duration_minutes: number };
+type EmentaStats = { today: number; this_week: number; this_month: number; total: number } | null;
 
 const LOCATIONS: { id: Location; label: string }[] = [
   { id: "restaurante", label: "Restaurante" },
@@ -38,6 +39,7 @@ const rpc = (name: string, args?: Record<string, unknown>) =>
 
 export function QrReadingsSection() {
   const [activeTab, setActiveTab] = useState<Tab>("ementa");
+  const [ementaStats, setEmentaStats] = useState<EmentaStats>(null);
   const [stats, setStats] = useState<Record<Location, StatsRow | null>>({
     restaurante: null,
     esplanada: null,
@@ -48,10 +50,20 @@ export function QrReadingsSection() {
   });
 
   const load = useCallback(async () => {
-    const [statsRes, settingsRes] = await Promise.all([
+    const [ementaRes, statsRes, settingsRes] = await Promise.all([
+      rpc("ementa_stats"),
       rpc("qr_stats"),
       rpc("qr_admin_settings"),
     ]);
+    const eRow = Array.isArray(ementaRes.data) ? ementaRes.data[0] : ementaRes.data;
+    if (eRow) {
+      setEmentaStats({
+        today: Number(eRow.today),
+        this_week: Number(eRow.this_week),
+        this_month: Number(eRow.this_month),
+        total: Number(eRow.total),
+      });
+    }
     if (Array.isArray(statsRes.data)) {
       const next: Record<Location, StatsRow | null> = { restaurante: null, esplanada: null };
       for (const row of statsRes.data as StatsRow[]) {
@@ -87,11 +99,9 @@ export function QrReadingsSection() {
             Gestão de QR codes e estatísticas de acesso.
           </p>
         </div>
-        {activeTab === "carta-de-vinhos" && (
-          <Button variant="outline" size="sm" onClick={load} className="gap-2">
-            <RefreshCw className="h-4 w-4" /> Atualizar
-          </Button>
-        )}
+        <Button variant="outline" size="sm" onClick={load} className="gap-2">
+          <RefreshCw className="h-4 w-4" /> Atualizar
+        </Button>
       </header>
 
       {/* Tab selector */}
@@ -118,7 +128,7 @@ export function QrReadingsSection() {
         </button>
       </div>
 
-      {activeTab === "ementa" && <EmentaBlock />}
+      {activeTab === "ementa" && <EmentaBlock stats={ementaStats} />}
 
       {activeTab === "carta-de-vinhos" &&
         LOCATIONS.map((loc) => (
@@ -135,7 +145,7 @@ export function QrReadingsSection() {
   );
 }
 
-function EmentaBlock() {
+function EmentaBlock({ stats }: { stats: EmentaStats }) {
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -163,12 +173,36 @@ function EmentaBlock() {
     a.click();
   };
 
+  const cards = [
+    { label: "Hoje", value: stats?.today ?? 0 },
+    { label: "Esta semana", value: stats?.this_week ?? 0 },
+    { label: "Este mês", value: stats?.this_month ?? 0 },
+    { label: "Total", value: stats?.total ?? 0 },
+  ];
+
   return (
     <section className="space-y-4">
       <p className="text-sm text-muted-foreground">
         A ementa está sempre acessível a qualquer pessoa com este URL. Não é necessário token
         nem autenticação.
       </p>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {cards.map((c) => (
+          <div
+            key={c.label}
+            className="flex items-center gap-4 rounded-xl border border-border bg-card p-5"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gold/15 text-gold">
+              <QrCode className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="font-serif text-2xl text-charcoal">{c.value}</p>
+              <p className="text-sm text-muted-foreground">{c.label}</p>
+            </div>
+          </div>
+        ))}
+      </div>
 
       <div className="grid gap-6 rounded-xl border border-border bg-card p-5 lg:grid-cols-[1fr_auto]">
         <div className="space-y-4">
