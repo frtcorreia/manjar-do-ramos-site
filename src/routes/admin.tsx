@@ -160,11 +160,12 @@ function AdminPage() {
 }
 
 function NavMenu({ active, onSelect }: { active: SectionId; onSelect: (id: SectionId) => void }) {
-  const { reset } = useAdmin();
+  const { reset, state } = useAdmin();
+  const logoSrc = state.restaurante.logo || logo;
   return (
     <div className="flex h-full flex-col px-4 py-6">
       <Link to="/" className="px-2">
-        <img src={logo} alt="Manjar do Ramos" className="h-12 w-auto" />
+        <img src={logoSrc} alt="Manjar do Ramos" className="h-12 max-w-[140px] object-contain" />
       </Link>
       <p className="mt-1 px-2 text-xs uppercase tracking-[0.3em] text-cream/40">Backoffice</p>
 
