@@ -1,8 +1,10 @@
+import { useRef } from "react";
 import { useAdmin } from "@/lib/admin-store";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Instagram, Facebook, Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Instagram, Facebook, Star, ImagePlus } from "lucide-react";
 
 export function RestauranteSection() {
   const { state, setState } = useAdmin();
@@ -34,6 +36,17 @@ export function RestauranteSection() {
           Dados de contacto, localização e redes sociais.
         </p>
       </header>
+
+      {/* Logo */}
+      <section className="space-y-4 rounded-xl border border-border bg-card p-6">
+        <div>
+          <h2 className="font-semibold text-charcoal">Logo do restaurante</h2>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Imagem usada no cabeçalho e em zonas escuras do site.
+          </p>
+        </div>
+        <LogoUpload url={r.logo} onChange={(v) => set({ logo: v })} />
+      </section>
 
       {/* Contactos */}
       <section className="space-y-4 rounded-xl border border-border bg-card p-6">
@@ -103,6 +116,57 @@ export function RestauranteSection() {
           />
         </div>
       </section>
+    </div>
+  );
+}
+
+function LogoUpload({ url, onChange }: { url: string; onChange: (url: string) => void }) {
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const onFile = (file: File | undefined) => {
+    if (!file) return;
+    onChange(URL.createObjectURL(file));
+  };
+
+  return (
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+      <button
+        type="button"
+        onClick={() => fileRef.current?.click()}
+        className="group relative flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-md border border-dashed border-border bg-charcoal"
+      >
+        {url ? (
+          <img src={url} alt="Logo" className="h-full w-full object-contain p-2" />
+        ) : (
+          <ImagePlus className="h-6 w-6 text-cream/60" />
+        )}
+        <span className="absolute inset-0 flex items-center justify-center gap-2 bg-charcoal/0 text-xs font-medium text-cream opacity-0 transition-all group-hover:bg-charcoal/55 group-hover:opacity-100">
+          <ImagePlus className="h-4 w-4" /> Substituir
+        </span>
+      </button>
+      <div className="flex flex-col gap-2">
+        <Button type="button" variant="outline" size="sm" onClick={() => fileRef.current?.click()}>
+          Carregar logo
+        </Button>
+        {url && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => onChange("")}
+            className="text-muted-foreground"
+          >
+            Remover
+          </Button>
+        )}
+      </div>
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => onFile(e.target.files?.[0])}
+      />
     </div>
   );
 }
