@@ -45,7 +45,7 @@ const HOMEPAGE_SECTIONS: {
 ];
 
 /* Páginas: só link de nav */
-const PAGE_KEYS: NavPageKey[] = ["ementa", "catering", "carta-de-vinhos", "a-minha-conta"];
+const PAGE_KEYS: NavPageKey[] = ["ementa", "encomendas", "catering", "carta-de-vinhos", "a-minha-conta", "auth"];
 
 export function NavegacaoSection() {
   const { state, setState } = useAdmin();
