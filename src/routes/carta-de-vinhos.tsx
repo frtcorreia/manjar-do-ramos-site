@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Reveal } from "@/components/Reveal";
@@ -35,6 +35,9 @@ function writeToken(durationMinutes: number) {
 }
 
 export const Route = createFileRoute("/carta-de-vinhos")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    key: typeof search.key === "string" ? search.key : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Carta de Vinhos · Manjar do Ramos" },
@@ -49,22 +52,20 @@ export const Route = createFileRoute("/carta-de-vinhos")({
 });
 
 function WinesPage() {
+  const { key } = Route.useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
   const [status, setStatus] = useState<"checking" | "granted" | "denied">("checking");
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const url = new URL(window.location.href);
-      const key = url.searchParams.get("key");
-
       if (key) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const { data, error } = await (supabase.rpc as any)("redeem_qr_key", { p_key: key });
         const row = Array.isArray(data) ? data[0] : data;
         if (!error && row?.valid) {
           writeToken(Number(row.duration_minutes));
-          url.searchParams.delete("key");
-          window.history.replaceState({}, "", url.pathname + url.search);
+          navigate({ search: { key: undefined }, replace: true });
           if (!cancelled) setStatus("granted");
           return;
         }
@@ -76,7 +77,7 @@ function WinesPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [key, navigate]);
 
   if (status === "checking") {
     return (
