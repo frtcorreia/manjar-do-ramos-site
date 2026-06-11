@@ -6,7 +6,6 @@ import { Reveal } from "@/components/Reveal";
 import { useSiteWines } from "@/hooks/useSiteConfig";
 import { supabase } from "@/integrations/supabase/client";
 import { QrCode } from "lucide-react";
-import heroImg from "@/assets/dish-cocktails.jpg";
 
 const TOKEN_KEY = "qr_carta_token";
 
@@ -120,25 +119,7 @@ function WinesContent() {
     <div className="bg-background">
       <Navbar forceScrolled />
       <main>
-        <section className="relative flex h-[55svh] min-h-[380px] items-center justify-center overflow-hidden bg-charcoal">
-          <img
-            src={heroImg}
-            alt="Carta de vinhos do Manjar do Ramos"
-            className="absolute inset-0 h-full w-full object-cover opacity-50"
-          />
-          <div className="absolute inset-0 bg-gradient-hero" />
-          <Reveal className="relative z-10 px-5 text-center">
-            <span className="eyebrow text-gold">{wines?.eyebrow ?? "Garrafeira da Casa"}</span>
-            <h1 className="mt-5 font-serif text-5xl font-medium leading-tight text-cream md:text-7xl">
-              {wines?.title ?? "Carta de Vinhos"}
-            </h1>
-            <p className="mx-auto mt-5 max-w-xl text-base text-cream/85 md:text-lg">
-              {wines?.subtitle ?? "Uma seleção rotativa de produtores portugueses."}
-            </p>
-          </Reveal>
-        </section>
-
-        <section className="bg-background py-24 md:py-32">
+        <section className="bg-background pt-32 pb-24 md:pt-40 md:pb-32">
           <div className="mx-auto max-w-4xl px-5 md:px-10">
             <div className="space-y-16">
               {(wines?.categories ?? []).map((cat) => {
