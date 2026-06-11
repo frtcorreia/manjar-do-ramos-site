@@ -12,8 +12,11 @@ export function Navbar({ forceScrolled = false }: { forceScrolled?: boolean }) {
   const { user, signOut } = useAuth();
   const navPages = useNavPages();
   const restaurante = useRestaurante();
-  const visibleLinks = navPages.filter((p) => p.visible && p.key !== "a-minha-conta");
+  const visibleLinks = navPages.filter(
+    (p) => p.visible && p.key !== "a-minha-conta" && p.key !== "auth",
+  );
   const showMinhaConta = navPages.find((p) => p.key === "a-minha-conta")?.visible ?? true;
+  const showAuth = navPages.find((p) => p.key === "auth")?.visible ?? true;
   const logoSrc = restaurante.logo || logo;
 
   useEffect(() => {
@@ -76,7 +79,7 @@ export function Navbar({ forceScrolled = false }: { forceScrolled?: boolean }) {
                   </button>
                 </div>
               )
-            : showMinhaConta && (
+            : showAuth && (
                 <Link
                   to="/auth"
                   className="inline-flex items-center gap-1.5 text-sm font-medium text-cream/85 transition-colors hover:text-gold"
@@ -156,7 +159,7 @@ export function Navbar({ forceScrolled = false }: { forceScrolled?: boolean }) {
                     </button>
                   </>
                 )
-              : showMinhaConta && (
+              : showAuth && (
                   <Link
                     to="/auth"
                     onClick={() => setOpen(false)}
