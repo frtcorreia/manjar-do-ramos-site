@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useNavPages, useRestaurante } from "@/hooks/useSiteConfig";
 import { User as UserIcon, LogOut } from "lucide-react";
 
-export function Navbar() {
+export function Navbar({ forceScrolled = false }: { forceScrolled?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { user, signOut } = useAuth();
@@ -29,7 +29,7 @@ export function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
-        scrolled ? "bg-charcoal/95 backdrop-blur-md shadow-soft" : "bg-transparent"
+        scrolled || forceScrolled ? "bg-charcoal/95 backdrop-blur-md shadow-soft" : "bg-transparent"
       }`}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-10 md:py-5">
