@@ -13,7 +13,7 @@ import {
   DialogFooter,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Plus, Trash2, FolderPlus, ArrowUp, ArrowDown, Pencil, ImagePlus } from "lucide-react";
+import { Plus, Trash2, FolderPlus, ArrowUp, ArrowDown, Pencil, ImagePlus, ChevronDown, ChevronRight } from "lucide-react";
 
 const ALLERGENS: { id: Allergen; label: string; emoji: string }[] = [
   { id: "gluten", label: "Glúten", emoji: "🌾" },
@@ -35,9 +35,17 @@ const ALLERGENS: { id: Allergen; label: string; emoji: string }[] = [
 export function MenuSection() {
   const { state, setState, newId } = useAdmin();
   const [newCat, setNewCat] = useState("");
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [editing, setEditing] = useState<{ catId: string; item: MenuItem; isNew: boolean } | null>(
     null,
   );
+
+  const toggleCollapse = (id: string) =>
+    setCollapsed((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
 
   const addCategory = () => {
     if (!newCat.trim()) return;
@@ -141,7 +149,19 @@ export function MenuSection() {
       <div className="space-y-5">
         {state.menu.map((cat, catIdx) => (
           <div key={cat.id} className="rounded-xl border border-border bg-card">
-            <div className="flex items-center gap-3 border-b border-border p-4">
+            <div className={`flex items-center gap-3 p-4 ${!collapsed.has(cat.id) ? "border-b border-border" : ""}`}>
+              <button
+                type="button"
+                onClick={() => toggleCollapse(cat.id)}
+                className="shrink-0 text-muted-foreground hover:text-charcoal transition-colors"
+                title={collapsed.has(cat.id) ? "Expandir categoria" : "Colapsar categoria"}
+              >
+                {collapsed.has(cat.id) ? (
+                  <ChevronRight className="h-4 w-4" />
+                ) : (
+                  <ChevronDown className="h-4 w-4" />
+                )}
+              </button>
               <div className="flex items-center gap-2">
                 <div className="flex flex-col gap-0.5">
                   <Button
@@ -169,6 +189,11 @@ export function MenuSection() {
                   className="max-w-xs border-transparent bg-transparent px-1 font-serif text-lg text-charcoal focus-visible:border-input"
                 />
               </div>
+              {collapsed.has(cat.id) && (
+                <span className="text-xs text-muted-foreground">
+                  {cat.items.length} {cat.items.length === 1 ? "prato" : "pratos"}
+                </span>
+              )}
               <div className="ml-auto flex gap-2">
                 <Button
                   variant="outline"
@@ -184,7 +209,7 @@ export function MenuSection() {
               </div>
             </div>
 
-            <div className="divide-y divide-border">
+            {!collapsed.has(cat.id) && <div className="divide-y divide-border">
               {cat.items.length === 0 && (
                 <p className="p-4 text-sm text-muted-foreground">Sem pratos nesta categoria.</p>
               )}
@@ -258,7 +283,7 @@ export function MenuSection() {
                   </Button>
                 </div>
               ))}
-            </div>
+            </div>}
           </div>
         ))}
       </div>
