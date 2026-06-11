@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { QrCode, Copy, Download, RefreshCw, Eye, EyeOff } from "lucide-react";
 
+type Tab = "ementa" | "carta-de-vinhos";
 type Location = "restaurante" | "esplanada";
 type StatsRow = {
   location: Location;
@@ -36,6 +37,7 @@ const rpc = (name: string, args?: Record<string, unknown>) =>
   (supabase.rpc as any)(name, args ?? {});
 
 export function QrReadingsSection() {
+  const [activeTab, setActiveTab] = useState<Tab>("ementa");
   const [stats, setStats] = useState<Record<Location, StatsRow | null>>({
     restaurante: null,
     esplanada: null,
@@ -82,25 +84,118 @@ export function QrReadingsSection() {
         <div>
           <h1 className="font-serif text-3xl text-charcoal">Leituras QR</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Estatísticas de acesso à carta de vinhos via QR code, separadas por local.
+            Gestão de QR codes e estatísticas de acesso.
           </p>
         </div>
-        <Button variant="outline" size="sm" onClick={load} className="gap-2">
-          <RefreshCw className="h-4 w-4" /> Atualizar
-        </Button>
+        {activeTab === "carta-de-vinhos" && (
+          <Button variant="outline" size="sm" onClick={load} className="gap-2">
+            <RefreshCw className="h-4 w-4" /> Atualizar
+          </Button>
+        )}
       </header>
 
-      {LOCATIONS.map((loc) => (
-        <LocationBlock
-          key={loc.id}
-          location={loc.id}
-          label={loc.label}
-          stats={stats[loc.id]}
-          settings={settings[loc.id]}
-          onReload={load}
-        />
-      ))}
+      {/* Tab selector */}
+      <div className="flex gap-1 rounded-lg border border-border bg-muted p-1 w-fit">
+        <button
+          onClick={() => setActiveTab("ementa")}
+          className={`rounded-md px-4 py-2 text-sm font-medium transition-all ${
+            activeTab === "ementa"
+              ? "bg-background text-charcoal shadow-sm"
+              : "text-muted-foreground hover:text-charcoal"
+          }`}
+        >
+          Ementa
+        </button>
+        <button
+          onClick={() => setActiveTab("carta-de-vinhos")}
+          className={`rounded-md px-4 py-2 text-sm font-medium transition-all ${
+            activeTab === "carta-de-vinhos"
+              ? "bg-background text-charcoal shadow-sm"
+              : "text-muted-foreground hover:text-charcoal"
+          }`}
+        >
+          Carta de Vinhos
+        </button>
+      </div>
+
+      {activeTab === "ementa" && <EmentaBlock />}
+
+      {activeTab === "carta-de-vinhos" &&
+        LOCATIONS.map((loc) => (
+          <LocationBlock
+            key={loc.id}
+            location={loc.id}
+            label={loc.label}
+            stats={stats[loc.id]}
+            settings={settings[loc.id]}
+            onReload={load}
+          />
+        ))}
     </div>
+  );
+}
+
+function EmentaBlock() {
+  const [qrDataUrl, setQrDataUrl] = useState<string>("");
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const ementaUrl =
+    typeof window !== "undefined" ? `${window.location.origin}/ementa` : "";
+
+  useEffect(() => {
+    if (!ementaUrl) return;
+    QRCode.toDataURL(ementaUrl, { width: 512, margin: 2 }).then(setQrDataUrl).catch(() => {});
+    if (canvasRef.current) {
+      QRCode.toCanvas(canvasRef.current, ementaUrl, { width: 240, margin: 2 }).catch(() => {});
+    }
+  }, [ementaUrl]);
+
+  const copyUrl = async () => {
+    await navigator.clipboard.writeText(ementaUrl);
+    toast.success("URL copiado");
+  };
+
+  const downloadQr = () => {
+    if (!qrDataUrl) return;
+    const a = document.createElement("a");
+    a.href = qrDataUrl;
+    a.download = "qr-ementa.png";
+    a.click();
+  };
+
+  return (
+    <section className="space-y-4">
+      <p className="text-sm text-muted-foreground">
+        A ementa está sempre acessível a qualquer pessoa com este URL. Não é necessário token
+        nem autenticação.
+      </p>
+
+      <div className="grid gap-6 rounded-xl border border-border bg-card p-5 lg:grid-cols-[1fr_auto]">
+        <div className="space-y-4">
+          <div>
+            <label className="text-xs font-medium text-muted-foreground">URL da Ementa</label>
+            <div className="mt-1 flex items-center gap-2">
+              <Input value={ementaUrl} readOnly className="font-mono text-xs" />
+              <Button variant="outline" size="icon" onClick={copyUrl} title="Copiar URL">
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+
+          <div>
+            <Button onClick={downloadQr} className="gap-2" disabled={!qrDataUrl}>
+              <Download className="h-4 w-4" /> Descarregar PNG
+            </Button>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-center">
+          <div className="rounded-lg border border-border bg-white p-3">
+            <canvas ref={canvasRef} />
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
