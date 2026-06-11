@@ -918,7 +918,15 @@ async function loadFromSupabase(): Promise<Partial<AdminState>> {
   if (settingsRes.data?.length) {
     for (const row of settingsRes.data as { key: string; value: unknown }[]) {
       if (row.key === "restaurante") partial.restaurante = row.value as AdminState["restaurante"];
-      if (row.key === "navPages") partial.navPages = row.value as AdminState["navPages"];
+      if (row.key === "navPages") {
+        const saved = row.value as AdminState["navPages"];
+        // merge: keep saved entries, append any new keys from initialState not yet persisted
+        const merged = [...saved];
+        for (const def of initialState.navPages) {
+          if (!merged.find((p) => p.key === def.key)) merged.push(def);
+        }
+        partial.navPages = merged;
+      }
       if (row.key === "maintenance") partial.maintenance = row.value as AdminState["maintenance"];
       if (row.key === "blocks") partial.blocks = row.value as AdminState["blocks"];
     }
