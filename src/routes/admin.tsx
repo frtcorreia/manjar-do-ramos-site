@@ -25,7 +25,6 @@ import {
 import logo from "@/assets/logo-cream.png";
 import { AdminProvider, useAdmin } from "@/lib/admin-store";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { OverviewSection } from "@/components/admin/sections/OverviewSection";
 import { PagesSection } from "@/components/admin/sections/PagesSection";
 import { MenuSection } from "@/components/admin/sections/MenuSection";
 import { TestimonialsSection } from "@/components/admin/sections/TestimonialsSection";
@@ -47,7 +46,6 @@ export const Route = createFileRoute("/admin")({
 });
 
 type SectionId =
-  | "overview"
   | "pages"
   | "menu"
   | "wines"
@@ -59,7 +57,6 @@ type SectionId =
   | "qr-readings";
 
 const nav: { id: SectionId; label: string; icon: typeof LayoutDashboard }[] = [
-  { id: "overview", label: "Visão Geral", icon: LayoutDashboard },
   { id: "restaurante", label: "Restaurante", icon: Store },
   { id: "navegacao", label: "Navegação & Site", icon: Navigation },
   { id: "pages", label: "Páginas", icon: FileText },
@@ -209,7 +206,7 @@ function NavMenu({ active, onSelect }: { active: SectionId; onSelect: (id: Secti
 }
 
 function AdminShell() {
-  const [active, setActive] = useState<SectionId>("overview");
+  const [active, setActive] = useState<SectionId>("restaurante");
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const select = (id: SectionId) => {
@@ -246,7 +243,6 @@ function AdminShell() {
         </div>
 
         <main className="mx-auto w-full max-w-5xl flex-1 px-5 py-8 md:px-10">
-          {active === "overview" && <OverviewSection />}
           {active === "restaurante" && <RestauranteSection />}
           {active === "navegacao" && <NavegacaoSection />}
           {active === "pages" && <PagesSection />}
