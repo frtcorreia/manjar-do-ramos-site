@@ -20,6 +20,7 @@ import {
   ShoppingBag,
   Store,
   Navigation,
+  QrCode,
 } from "lucide-react";
 import logo from "@/assets/logo-cream.png";
 import { AdminProvider, useAdmin } from "@/lib/admin-store";
@@ -33,6 +34,7 @@ import { WinesSection } from "@/components/admin/sections/WinesSection";
 import { OrdersSection } from "@/components/admin/sections/OrdersSection";
 import { RestauranteSection } from "@/components/admin/sections/RestauranteSection";
 import { NavegacaoSection } from "@/components/admin/sections/NavegacaoSection";
+import { QrReadingsSection } from "@/components/admin/sections/QrReadingsSection";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -53,7 +55,8 @@ type SectionId =
   | "testimonials"
   | "content"
   | "restaurante"
-  | "navegacao";
+  | "navegacao"
+  | "qr-readings";
 
 const nav: { id: SectionId; label: string; icon: typeof LayoutDashboard }[] = [
   { id: "overview", label: "Visão Geral", icon: LayoutDashboard },
@@ -62,6 +65,7 @@ const nav: { id: SectionId; label: string; icon: typeof LayoutDashboard }[] = [
   { id: "pages", label: "Páginas", icon: FileText },
   { id: "menu", label: "Ementa", icon: UtensilsCrossed },
   { id: "wines", label: "Carta de Vinhos", icon: Wine },
+  { id: "qr-readings", label: "Leituras QR", icon: QrCode },
   { id: "orders", label: "Encomendas", icon: ShoppingBag },
   { id: "testimonials", label: "Testemunhos", icon: MessageSquareQuote },
   { id: "content", label: "Conteúdo & Imagens", icon: Images },
@@ -248,6 +252,7 @@ function AdminShell() {
           {active === "pages" && <PagesSection />}
           {active === "menu" && <MenuSection />}
           {active === "wines" && <WinesSection />}
+          {active === "qr-readings" && <QrReadingsSection />}
           {active === "orders" && <OrdersSection />}
           {active === "testimonials" && <TestimonialsSection />}
           {active === "content" && <ContentSection />}
