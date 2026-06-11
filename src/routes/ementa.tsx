@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Reveal } from "@/components/Reveal";
@@ -146,30 +146,6 @@ function EmentaPage() {
                 Os alergénicos indicados são de carácter informativo. Em caso de alergias ou
                 intolerâncias alimentares graves, por favor informe o nosso pessoal antes de
                 encomendar.
-              </p>
-            </Reveal>
-
-            <Reveal className="mt-10 rounded-2xl bg-secondary p-10 text-center shadow-soft">
-              <h2 className="font-serif text-3xl text-espresso md:text-4xl">
-                {field("CTA — Título", "Pronto para uma mesa cheia?")}
-              </h2>
-              <p className="mx-auto mt-4 max-w-md text-muted-foreground">
-                {field(
-                  "CTA — Subtítulo",
-                  "Reserve a sua mesa e deixe a noite acontecer entre pratos, vinho e boa conversa.",
-                )}
-              </p>
-              <a
-                href="/#reservar"
-                className="mt-8 inline-block rounded-full bg-wine px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-cream shadow-soft transition-transform hover:scale-[1.03]"
-              >
-                {field("CTA — Botão", "Reservar Mesa")}
-              </a>
-              <p className="mt-6 text-xs text-muted-foreground">
-                Organiza um evento?{" "}
-                <Link to="/catering" className="font-semibold text-wine underline">
-                  Conheça o nosso serviço de catering
-                </Link>
               </p>
             </Reveal>
           </div>
