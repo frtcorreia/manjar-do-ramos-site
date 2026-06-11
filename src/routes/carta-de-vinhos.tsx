@@ -1,9 +1,38 @@
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Reveal } from "@/components/Reveal";
 import { useSiteWines } from "@/hooks/useSiteConfig";
+import { supabase } from "@/integrations/supabase/client";
+import { QrCode } from "lucide-react";
 import heroImg from "@/assets/dish-cocktails.jpg";
+
+const TOKEN_KEY = "qr_carta_token";
+
+type TokenState = { expiresAt: number } | null;
+
+function readToken(): TokenState {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(TOKEN_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { expiresAt: number };
+    if (!parsed?.expiresAt || parsed.expiresAt < Date.now()) {
+      localStorage.removeItem(TOKEN_KEY);
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function writeToken(durationMinutes: number) {
+  const expiresAt = Date.now() + durationMinutes * 60_000;
+  localStorage.setItem(TOKEN_KEY, JSON.stringify({ expiresAt }));
+  return expiresAt;
+}
 
 export const Route = createFileRoute("/carta-de-vinhos")({
   head: () => ({
@@ -20,6 +49,70 @@ export const Route = createFileRoute("/carta-de-vinhos")({
 });
 
 function WinesPage() {
+  const [status, setStatus] = useState<"checking" | "granted" | "denied">("checking");
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const url = new URL(window.location.href);
+      const key = url.searchParams.get("key");
+
+      if (key) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data, error } = await (supabase.rpc as any)("redeem_qr_key", { p_key: key });
+        const row = Array.isArray(data) ? data[0] : data;
+        if (!error && row?.valid) {
+          writeToken(Number(row.duration_minutes));
+          url.searchParams.delete("key");
+          window.history.replaceState({}, "", url.pathname + url.search);
+          if (!cancelled) setStatus("granted");
+          return;
+        }
+      }
+
+      const existing = readToken();
+      if (!cancelled) setStatus(existing ? "granted" : "denied");
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (status === "checking") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <p className="text-sm text-muted-foreground">A verificar acesso…</p>
+      </div>
+    );
+  }
+
+  if (status === "denied") return <LockedScreen />;
+
+  return <WinesContent />;
+}
+
+function LockedScreen() {
+  return (
+    <div className="bg-background">
+      <Navbar />
+      <main className="flex min-h-[70vh] items-center justify-center px-5 py-24">
+        <div className="max-w-md text-center">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gold/15 text-gold">
+            <QrCode className="h-8 w-8" />
+          </div>
+          <h1 className="mt-6 font-serif text-3xl text-espresso md:text-4xl">Carta de Vinhos</h1>
+          <p className="mt-4 text-muted-foreground">
+            A nossa carta de vinhos está disponível apenas para quem se senta à nossa mesa. Por
+            favor leia o QR code disponível no restaurante para aceder.
+          </p>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+function WinesContent() {
   const wines = useSiteWines();
 
   return (
