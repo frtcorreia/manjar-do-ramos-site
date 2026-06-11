@@ -309,13 +309,6 @@ const initialState: AdminState = {
         f("Hero — Etiqueta", "Ementa da Casa"),
         f("Hero — Título", "A nossa ementa", true),
         f("Hero — Subtítulo", "Sabores portugueses pensados para partilhar à volta da mesa.", true),
-        f("CTA — Título", "Pronto para uma mesa cheia?", true),
-        f(
-          "CTA — Subtítulo",
-          "Reserve a sua mesa e deixe a noite acontecer entre pratos, vinho e boa conversa.",
-          true,
-        ),
-        f("CTA — Botão", "Reservar Mesa"),
       ],
       images: [img("Hero — Imagem de fundo", dishCarne)],
     },
