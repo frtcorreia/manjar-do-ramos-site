@@ -94,8 +94,8 @@ function WinesPage() {
 function LockedScreen() {
   return (
     <div className="bg-background">
-      <Navbar />
-      <main className="flex min-h-[70vh] items-center justify-center px-5 py-24">
+      <Navbar forceScrolled />
+      <main className="flex min-h-[70vh] items-center justify-center px-5 py-24 pt-32">
         <div className="max-w-md text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gold/15 text-gold">
             <QrCode className="h-8 w-8" />
@@ -117,7 +117,7 @@ function WinesContent() {
 
   return (
     <div className="bg-background">
-      <Navbar />
+      <Navbar forceScrolled />
       <main>
         <section className="relative flex h-[55svh] min-h-[380px] items-center justify-center overflow-hidden bg-charcoal">
           <img
