@@ -61,23 +61,24 @@ export function About() {
             </div>
           </Reveal>
           <Reveal className="md:order-1">
-            <span className="eyebrow text-gold">Abundância</span>
+            <span className="eyebrow text-gold">{field("Etiqueta 2", "Abundância")}</span>
             <h3 className="mt-4 font-serif text-3xl text-espresso md:text-4xl">
-              Pratos generosos, pensados para partilhar
+              {field("Título 2", "Pratos generosos, pensados para partilhar")}
             </h3>
             <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
-              Produtos honestos, fogo lento e receitas que atravessam gerações. Das carnes maturadas
-              ao bacalhau, das tábuas aos petiscos — tudo chega à mesa para ser dividido, provado e
-              celebrado.
+              {field(
+                "Parágrafo 3",
+                "Produtos honestos, fogo lento e receitas que atravessam gerações. Das carnes maturadas ao bacalhau, das tábuas aos petiscos — tudo chega à mesa para ser dividido, provado e celebrado.",
+              )}
             </p>
             <div className="mt-8 flex gap-10">
               <div>
-                <p className="font-serif text-4xl text-wine">+40</p>
-                <p className="mt-1 text-sm text-muted-foreground">Petiscos & pratos</p>
+                <p className="font-serif text-4xl text-wine">{field("Stat 1 Valor", "+40")}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{field("Stat 1 Label", "Petiscos & pratos")}</p>
               </div>
               <div>
-                <p className="font-serif text-4xl text-wine">120</p>
-                <p className="mt-1 text-sm text-muted-foreground">Referências de vinho</p>
+                <p className="font-serif text-4xl text-wine">{field("Stat 2 Valor", "120")}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{field("Stat 2 Label", "Referências de vinho")}</p>
               </div>
             </div>
           </Reveal>
