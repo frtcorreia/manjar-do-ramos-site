@@ -159,6 +159,8 @@ export type SocialNetwork = {
 
 export type RestauranteConfig = {
   logo: string;
+  nomeProprietario: string;
+  nif: string;
   morada: string;
   telefone: string;
   email: string;
@@ -212,6 +214,7 @@ export type AdminState = {
   restaurante: RestauranteConfig;
   navPages: NavPage[];
   maintenance: MaintenanceConfig;
+  menuPrices: { takeawayBox: string; bag: string };
 };
 
 /* ------------------------------------------------------------------ */
@@ -812,6 +815,8 @@ const initialState: AdminState = {
   ],
   restaurante: {
     logo: "",
+    nomeProprietario: "Elsa Maria Dias da Silva Ramos",
+    nif: "207373/28",
     morada: "Rua da Taberna 12, Lisboa",
     telefone: "+351 210 000 000",
     email: "geral@manjardoramos.pt",
@@ -858,6 +863,7 @@ const initialState: AdminState = {
     titulo: "Em manutenção",
     mensagem: "Estamos a preparar algo especial. Voltamos em breve.",
   },
+  menuPrices: { takeawayBox: "0,50€", bag: "0,20€" },
 };
 
 /* ------------------------------------------------------------------ */
@@ -929,6 +935,7 @@ async function loadFromSupabase(): Promise<Partial<AdminState>> {
       }
       if (row.key === "maintenance") partial.maintenance = row.value as AdminState["maintenance"];
       if (row.key === "blocks") partial.blocks = row.value as AdminState["blocks"];
+      if (row.key === "menuPrices") partial.menuPrices = row.value as AdminState["menuPrices"];
     }
   }
 
@@ -945,6 +952,7 @@ async function saveToSupabase(state: AdminState): Promise<void> {
     { key: "navPages", value: state.navPages, updated_at: NOW() },
     { key: "maintenance", value: state.maintenance, updated_at: NOW() },
     { key: "blocks", value: state.blocks, updated_at: NOW() },
+    { key: "menuPrices", value: state.menuPrices, updated_at: NOW() },
   ];
 
   await Promise.all([

@@ -38,15 +38,13 @@ export function RestauranteSection() {
         </p>
       </header>
 
-      {/* Logo */}
+      {/* Proprietário */}
       <section className="space-y-4 rounded-xl border border-border bg-card p-6">
-        <div>
-          <h2 className="font-semibold text-charcoal">Logo do restaurante</h2>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Imagem usada no cabeçalho e em zonas escuras do site.
-          </p>
+        <h2 className="font-semibold text-charcoal">Proprietário</h2>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Nome do proprietário" value={r.nomeProprietario ?? ""} onChange={(v) => set({ nomeProprietario: v })} />
+          <Field label="NIF" value={r.nif ?? ""} onChange={(v) => set({ nif: v })} />
         </div>
-        <LogoUpload url={r.logo} onChange={(v) => set({ logo: v })} />
       </section>
 
       {/* Contactos */}
