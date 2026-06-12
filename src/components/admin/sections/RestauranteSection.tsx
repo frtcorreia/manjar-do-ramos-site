@@ -35,6 +35,15 @@ export function RestauranteSection() {
         </p>
       </header>
 
+      {/* Proprietário */}
+      <section className="space-y-4 rounded-xl border border-border bg-card p-6">
+        <h2 className="font-semibold text-charcoal">Proprietário</h2>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Nome do proprietário" value={r.nomeProprietario ?? ""} onChange={(v) => set({ nomeProprietario: v })} />
+          <Field label="NIF" value={r.nif ?? ""} onChange={(v) => set({ nif: v })} />
+        </div>
+      </section>
+
       {/* Contactos */}
       <section className="space-y-4 rounded-xl border border-border bg-card p-6">
         <h2 className="font-semibold text-charcoal">Contactos</h2>

@@ -72,6 +72,8 @@ const DEFAULT_NAV_PAGES: NavPage[] = [
 
 const DEFAULT_RESTAURANTE: RestauranteConfig = {
   logo: "",
+  nomeProprietario: "",
+  nif: "",
   morada: "Rua da Taberna 12, Lisboa",
   telefone: "+351 210 000 000",
   email: "geral@manjardoramos.pt",
@@ -169,6 +171,21 @@ export function useSiteMenu() {
   }, []);
 
   return menu;
+}
+
+export function useMenuPrices() {
+  const [prices, setPrices] = useState<{ takeawayBox: string; bag: string }>({
+    takeawayBox: "0,50€",
+    bag: "0,20€",
+  });
+
+  useEffect(() => {
+    fetchSetting<{ takeawayBox: string; bag: string }>("menuPrices").then((data) => {
+      if (data) setPrices(data);
+    });
+  }, []);
+
+  return prices;
 }
 
 export function useSiteWines() {

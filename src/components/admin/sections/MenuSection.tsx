@@ -133,6 +133,35 @@ export function MenuSection() {
       </header>
 
       <div className="flex flex-wrap items-end gap-3 rounded-xl border border-border bg-card p-4">
+        <div className="min-w-[120px]">
+          <label className="text-xs font-medium text-muted-foreground">Caixa take-away</label>
+          <Input
+            value={state.menuPrices?.takeawayBox ?? ""}
+            onChange={(e) =>
+              setState((s) => ({
+                ...s,
+                menuPrices: { ...s.menuPrices, takeawayBox: e.target.value },
+              }))
+            }
+            placeholder="0,50€"
+          />
+        </div>
+        <div className="min-w-[120px]">
+          <label className="text-xs font-medium text-muted-foreground">Saco</label>
+          <Input
+            value={state.menuPrices?.bag ?? ""}
+            onChange={(e) =>
+              setState((s) => ({
+                ...s,
+                menuPrices: { ...s.menuPrices, bag: e.target.value },
+              }))
+            }
+            placeholder="0,20€"
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-end gap-3 rounded-xl border border-border bg-card p-4">
         <div className="flex-1 min-w-[200px]">
           <label className="text-xs font-medium text-muted-foreground">Nova categoria</label>
           <Input
