@@ -46,11 +46,11 @@ export function Testimonials() {
   const { backgroundColor } = useBlockContent("testimonials");
 
   return (
-    <section id="testemunhos" className="bg-wine py-24 md:py-32" style={backgroundColor ? { backgroundColor } : undefined}>
+    <section id="testemunhos" className="bg-gold py-24 md:py-32" style={backgroundColor ? { backgroundColor } : undefined}>
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <span className="eyebrow text-gold">Quem Já Se Sentou À Mesa</span>
-          <h2 className="mt-5 font-serif text-4xl font-medium leading-tight text-cream md:text-5xl">
+          <span className="eyebrow text-charcoal">Quem Já Se Sentou À Mesa</span>
+          <h2 className="mt-5 font-serif text-4xl font-medium leading-tight text-charcoal md:text-5xl">
             Histórias que se contam ao jantar
           </h2>
         </Reveal>
@@ -58,14 +58,14 @@ export function Testimonials() {
         <div className="mt-16 grid gap-6 md:grid-cols-3">
           {reviews.map((r, i) => (
             <Reveal key={r.id ?? r.name} delay={i * 0.12}>
-              <figure className="flex h-full flex-col rounded-2xl bg-cream/8 p-8 ring-1 ring-cream/15 backdrop-blur-sm">
+              <figure className="flex h-full flex-col rounded-2xl bg-charcoal/8 p-8 ring-1 ring-charcoal/15 backdrop-blur-sm">
                 <Stars />
-                <blockquote className="mt-5 flex-1 font-serif text-xl italic leading-relaxed text-cream">
+                <blockquote className="mt-5 flex-1 font-serif text-xl italic leading-relaxed text-charcoal">
                   "{r.quote}"
                 </blockquote>
-                <figcaption className="mt-6 border-t border-cream/15 pt-4">
-                  <p className="font-semibold text-cream">{r.name}</p>
-                  <p className="text-sm text-gold">{r.context}</p>
+                <figcaption className="mt-6 border-t border-charcoal/15 pt-4">
+                  <p className="font-semibold text-charcoal">{r.name}</p>
+                  <p className="text-sm text-charcoal">{r.context}</p>
                 </figcaption>
               </figure>
             </Reveal>

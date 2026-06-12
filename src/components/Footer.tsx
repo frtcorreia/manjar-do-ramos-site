@@ -93,8 +93,20 @@ export function Footer() {
             <ul className="mt-4 space-y-3 text-sm">
               <li className="flex items-start gap-3">
                 <Clock className="mt-0.5 h-4 w-4 text-gold" />
-                <span>{r.horario}</span>
+                <div>
+                  <p className="font-medium text-cream">Restaurante</p>
+                  <span>{r.horarioRestaurante || r.horario}</span>
+                </div>
               </li>
+              {r.horarioPatio && (
+                <li className="flex items-start gap-3">
+                  <Clock className="mt-0.5 h-4 w-4 text-gold" />
+                  <div>
+                    <p className="font-medium text-cream">Pátio</p>
+                    <span>{r.horarioPatio}</span>
+                  </div>
+                </li>
+              )}
             </ul>
           </div>
 

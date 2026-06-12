@@ -78,6 +78,8 @@ const DEFAULT_RESTAURANTE: RestauranteConfig = {
   telefone: "+351 210 000 000",
   email: "geral@manjardoramos.pt",
   horario: "Terça a Domingo · 12h00–15h00 · 19h00–23h30",
+  horarioRestaurante: "Terça a Domingo · 12h00–15h00 · 19h00–23h30",
+  horarioPatio: "",
   googleMapsUrl: "#",
   googleMapsEmbed: "",
   social: {
