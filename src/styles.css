@@ -228,3 +228,13 @@
 .animate-kenburns {
   animation: kenburns 22s ease-out forwards;
 }
+
+@keyframes loaderPop {
+  0% { opacity: 0; transform: scale(0.88); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes loaderPulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}

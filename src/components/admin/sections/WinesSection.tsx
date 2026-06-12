@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { uploadImage } from "@/lib/upload-image";
 import { useAdmin, WINE_REGIONS, type WineItem } from "@/lib/admin-store";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
@@ -402,9 +403,19 @@ function WineImageUpload({
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const onFile = (file: File | undefined) => {
+  const [uploading, setUploading] = useState(false);
+
+  const onFile = async (file: File | undefined) => {
     if (!file) return;
-    onChange(URL.createObjectURL(file));
+    setUploading(true);
+    try {
+      const url = await uploadImage(file, "wines");
+      onChange(url);
+    } catch {
+      alert("Erro ao carregar imagem. Verifique que o bucket 'site-assets' existe e é público.");
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
