@@ -38,6 +38,12 @@ export function RestauranteSection() {
         </p>
       </header>
 
+      {/* Logo */}
+      <section className="space-y-4 rounded-xl border border-border bg-card p-6">
+        <h2 className="font-semibold text-charcoal">Logo do Restaurante</h2>
+        <LogoUpload url={r.logo} onChange={(v) => set({ logo: v })} />
+      </section>
+
       {/* Proprietário */}
       <section className="space-y-4 rounded-xl border border-border bg-card p-6">
         <h2 className="font-semibold text-charcoal">Proprietário</h2>
