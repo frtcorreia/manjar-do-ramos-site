@@ -4,7 +4,10 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Reveal } from "@/components/Reveal";
 import { usePageContent, useSiteMenu, useMenuPrices, useRestaurante } from "@/hooks/useSiteConfig";
+import { supabase } from "@/integrations/supabase/client";
 import type { Allergen } from "@/lib/admin-store";
+
+const EMENTA_SESSION_KEY = "ementa_read_recorded";
 
 function AllergenIcon({ id, size = 24 }: { id: string; size?: number }) {
   const icons: Record<string, React.ReactNode> = {
@@ -228,8 +231,7 @@ function EmentaPage() {
   useEffect(() => {
     if (sessionStorage.getItem(EMENTA_SESSION_KEY)) return;
     sessionStorage.setItem(EMENTA_SESSION_KEY, "1");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (supabase.rpc as any)("record_ementa_read").catch(() => {});
+    try { supabase.rpc("record_ementa_read"); } catch { /* best-effort */ }
   }, []);
 
   const visibleCategories = (menu ?? [])
