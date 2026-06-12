@@ -16,6 +16,7 @@ import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/sonner";
 import { useMaintenance } from "@/hooks/useSiteConfig";
 import { MaintenancePage } from "@/components/MaintenancePage";
+import { PageLoader } from "@/components/PageLoader";
 
 function NotFoundComponent() {
   return (
@@ -177,6 +178,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <PageLoader />
       <AuthProvider>
         <MaintenanceGate />
       </AuthProvider>
