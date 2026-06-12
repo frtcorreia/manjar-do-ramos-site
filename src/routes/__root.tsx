@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useLocation,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -156,7 +157,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function MaintenanceGate() {
   const maintenance = useMaintenance();
   const { isAdmin, loading } = useAuth();
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
+  const { pathname } = useLocation();
   const isAdminRoute = pathname.startsWith("/admin");
 
   if (!loading && maintenance.enabled && !isAdmin && !isAdminRoute) {
