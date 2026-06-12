@@ -62,7 +62,7 @@ export function Hero() {
         >
           <a
             href="#reservar"
-            className="rounded-full bg-wine px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-cream shadow-soft transition-transform hover:scale-[1.03]"
+            className="rounded-full bg-gold px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-charcoal shadow-soft transition-transform hover:scale-[1.03]"
           >
             {field("Botão principal", "Reservar Mesa")}
           </a>

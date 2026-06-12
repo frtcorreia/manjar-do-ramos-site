@@ -165,6 +165,8 @@ export type RestauranteConfig = {
   telefone: string;
   email: string;
   horario: string;
+  horarioRestaurante: string;
+  horarioPatio: string;
   googleMapsUrl: string;
   googleMapsEmbed: string;
   social: {
@@ -821,6 +823,8 @@ const initialState: AdminState = {
     telefone: "+351 210 000 000",
     email: "geral@manjardoramos.pt",
     horario: "Terça a Domingo · 12h00–15h00 · 19h00–23h30",
+    horarioRestaurante: "Terça a Domingo · 12h00–15h00 · 19h00–23h30",
+    horarioPatio: "",
     googleMapsUrl: "#",
     googleMapsEmbed: "",
     social: {
