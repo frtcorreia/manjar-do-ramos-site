@@ -1,3 +1,4 @@
+import { useRef, useState, useCallback, useEffect } from "react";
 import { Reveal } from "./Reveal";
 import { useSiteTestimonials, useSiteGoogleReviews, useBlockContent } from "@/hooks/useSiteConfig";
 
@@ -94,6 +95,38 @@ export function Testimonials() {
 
   const allReviews = [...googleItems, ...manualReviews];
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const updateIndex = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el || !el.children.length) return;
+    const center = el.scrollLeft + el.offsetWidth / 2;
+    let closest = 0;
+    let minDist = Infinity;
+    for (let i = 0; i < el.children.length; i++) {
+      const child = el.children[i] as HTMLElement;
+      const childCenter = child.offsetLeft + child.offsetWidth / 2;
+      const dist = Math.abs(center - childCenter);
+      if (dist < minDist) { minDist = dist; closest = i; }
+    }
+    setActiveIndex(closest);
+  }, []);
+
+  const scrollTo = useCallback((index: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const child = el.children[index] as HTMLElement | undefined;
+    if (!child) return;
+    el.scrollTo({ left: child.offsetLeft - (el.offsetWidth - child.offsetWidth) / 2, behavior: "smooth" });
+  }, []);
+
+  const scroll = useCallback((dir: "left" | "right") => {
+    scrollTo(activeIndex + (dir === "left" ? -1 : 1));
+  }, [activeIndex, scrollTo]);
+
+  useEffect(() => { updateIndex(); }, [allReviews.length, updateIndex]);
+
   return (
     <section id="testemunhos" className="bg-gold py-24 md:py-32" style={backgroundColor ? { backgroundColor } : undefined}>
       <div className="mx-auto max-w-7xl px-5 md:px-10">
@@ -104,24 +137,70 @@ export function Testimonials() {
           </h2>
         </Reveal>
 
-        <div className="mt-16 grid gap-6 md:grid-cols-3">
-          {allReviews.map((r, i) => (
-            <Reveal key={r.id} delay={i * 0.12}>
-              <figure className="flex h-full flex-col rounded-2xl bg-charcoal/8 p-8 ring-1 ring-charcoal/15 backdrop-blur-sm">
-                <div className="flex items-center justify-between">
-                  <Stars count={r.rating} />
-                  {r.isGoogle && <GoogleBadge />}
-                </div>
-                <blockquote className="mt-5 flex-1 font-serif text-xl italic leading-relaxed text-charcoal">
-                  "{r.quote}"
-                </blockquote>
-                <figcaption className="mt-6 border-t border-charcoal/15 pt-4">
-                  <p className="font-semibold text-charcoal">{r.name}</p>
-                  <p className="text-sm text-charcoal">{r.context}</p>
-                </figcaption>
-              </figure>
-            </Reveal>
-          ))}
+        <div className="relative mt-16">
+          <div
+            ref={scrollRef}
+            onScroll={updateIndex}
+            className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {allReviews.map((r, i) => (
+              <Reveal
+                key={r.id}
+                delay={i * 0.12}
+                className="w-[85%] flex-shrink-0 snap-center sm:w-[45%] lg:w-[calc(33.333%-1rem)]"
+              >
+                <figure className="flex h-full flex-col rounded-2xl bg-charcoal/8 p-8 ring-1 ring-charcoal/15 backdrop-blur-sm">
+                  <div className="flex items-center justify-between">
+                    <Stars count={r.rating} />
+                    {r.isGoogle && <GoogleBadge />}
+                  </div>
+                  <blockquote className="mt-5 flex-1 font-serif text-xl italic leading-relaxed text-charcoal">
+                    "{r.quote}"
+                  </blockquote>
+                  <figcaption className="mt-6 border-t border-charcoal/15 pt-4">
+                    <p className="font-semibold text-charcoal">{r.name}</p>
+                    <p className="text-sm text-charcoal">{r.context}</p>
+                  </figcaption>
+                </figure>
+              </Reveal>
+            ))}
+          </div>
+
+          {allReviews.length > 1 && (
+            <>
+              <button
+                onClick={() => scroll("left")}
+                disabled={activeIndex === 0}
+                className="absolute -left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-charcoal text-cream shadow-lg transition hover:bg-charcoal/90 disabled:opacity-0 md:-left-5"
+                aria-label="Anterior"
+              >
+                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+              </button>
+              <button
+                onClick={() => scroll("right")}
+                disabled={activeIndex >= allReviews.length - 1}
+                className="absolute -right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-charcoal text-cream shadow-lg transition hover:bg-charcoal/90 disabled:opacity-0 md:-right-5"
+                aria-label="Próximo"
+              >
+                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </button>
+
+              <div className="mt-6 flex justify-center gap-2">
+                {allReviews.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => scrollTo(i)}
+                    className={`h-2 rounded-full transition-all ${i === activeIndex ? "w-6 bg-charcoal" : "w-2 bg-charcoal/30"}`}
+                    aria-label={`Ir para testemunho ${i + 1}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </section>
