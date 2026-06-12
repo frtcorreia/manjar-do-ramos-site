@@ -703,6 +703,24 @@ const initialState: AdminState = {
           value: "Sabores tradicionais reinterpretados, num ambiente rústico e acolhedor.",
           multiline: true,
         },
+        { id: uid(), label: "Etiqueta 2", value: "Abundância" },
+        {
+          id: uid(),
+          label: "Título 2",
+          value: "Pratos generosos, pensados para partilhar",
+          multiline: true,
+        },
+        {
+          id: uid(),
+          label: "Parágrafo 3",
+          value:
+            "Produtos honestos, fogo lento e receitas que atravessam gerações. Das carnes maturadas ao bacalhau, das tábuas aos petiscos — tudo chega à mesa para ser dividido, provado e celebrado.",
+          multiline: true,
+        },
+        { id: uid(), label: "Stat 1 Valor", value: "+40" },
+        { id: uid(), label: "Stat 1 Label", value: "Petiscos & pratos" },
+        { id: uid(), label: "Stat 2 Valor", value: "120" },
+        { id: uid(), label: "Stat 2 Label", value: "Referências de vinho" },
       ],
       images: [
         { id: uid(), label: "Imagem 1", url: about1 },
