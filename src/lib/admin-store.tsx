@@ -157,6 +157,18 @@ export type SocialNetwork = {
   visible: boolean;
 };
 
+export type GoogleReview = {
+  id: string;
+  author_name: string;
+  rating: number;
+  text: string;
+  relative_time_description: string;
+  profile_photo_url: string;
+  publish_time: string | null;
+  visible: boolean;
+  fetched_at: string;
+};
+
 export type RestauranteConfig = {
   logo: string;
   nomeProprietario: string;
@@ -169,6 +181,7 @@ export type RestauranteConfig = {
   horarioPatio: string;
   googleMapsUrl: string;
   googleMapsEmbed: string;
+  googlePlaceId: string;
   social: {
     instagram: SocialNetwork;
     facebook: SocialNetwork;
@@ -827,6 +840,7 @@ const initialState: AdminState = {
     horarioPatio: "",
     googleMapsUrl: "#",
     googleMapsEmbed: "",
+    googlePlaceId: "",
     social: {
       instagram: { url: "https://instagram.com/manjardoramos", visible: true },
       facebook: { url: "https://facebook.com/manjardoramos", visible: true },

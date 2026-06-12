@@ -4,6 +4,7 @@ import type {
   Block,
   BlockContent,
   BlockKey,
+  GoogleReview,
   MaintenanceConfig,
   MenuCategory,
   NavPage,
@@ -200,6 +201,22 @@ export function useSiteWines() {
   }, []);
 
   return wines;
+}
+
+export function useSiteGoogleReviews() {
+  const [reviews, setReviews] = useState<GoogleReview[]>([]);
+
+  useEffect(() => {
+    db("google_reviews")
+      .select("*")
+      .eq("visible", true)
+      .order("publish_time", { ascending: false })
+      .then(({ data }: { data: GoogleReview[] | null }) => {
+        if (data) setReviews(data);
+      });
+  }, []);
+
+  return reviews;
 }
 
 export function useSiteTestimonials() {
