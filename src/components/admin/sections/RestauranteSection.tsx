@@ -1,8 +1,11 @@
+import { useRef, useState } from "react";
 import { useAdmin } from "@/lib/admin-store";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Instagram, Facebook, Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Instagram, Facebook, Star, ImagePlus, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export function RestauranteSection() {
   const { state, setState } = useAdmin();
@@ -112,6 +115,80 @@ export function RestauranteSection() {
           />
         </div>
       </section>
+    </div>
+  );
+}
+
+function LogoUpload({ url, onChange }: { url: string; onChange: (url: string) => void }) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+
+  const onFile = async (file: File | undefined) => {
+    if (!file) return;
+    setUploading(true);
+    try {
+      const ext = file.name.split(".").pop() ?? "png";
+      const path = `logo/restaurant-logo.${ext}`;
+      const { error } = await (supabase.storage as any)
+        .from("site-assets")
+        .upload(path, file, { upsert: true, contentType: file.type });
+      if (error) throw error;
+      const { data: urlData } = (supabase.storage as any)
+        .from("site-assets")
+        .getPublicUrl(path);
+      onChange(urlData.publicUrl);
+    } catch (err) {
+      console.error("Logo upload failed:", err);
+      alert("Erro ao carregar logo. Verifique que o bucket 'site-assets' existe e é público.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+      <button
+        type="button"
+        onClick={() => fileRef.current?.click()}
+        disabled={uploading}
+        className="group relative flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-md border border-dashed border-border bg-charcoal"
+      >
+        {uploading ? (
+          <Loader2 className="h-6 w-6 animate-spin text-cream/60" />
+        ) : url ? (
+          <img src={url} alt="Logo" className="h-full w-full object-contain p-2" />
+        ) : (
+          <ImagePlus className="h-6 w-6 text-cream/60" />
+        )}
+        {!uploading && (
+          <span className="absolute inset-0 flex items-center justify-center gap-2 bg-charcoal/0 text-xs font-medium text-cream opacity-0 transition-all group-hover:bg-charcoal/55 group-hover:opacity-100">
+            <ImagePlus className="h-4 w-4" /> Substituir
+          </span>
+        )}
+      </button>
+      <div className="flex flex-col gap-2">
+        <Button type="button" variant="outline" size="sm" onClick={() => fileRef.current?.click()} disabled={uploading}>
+          {uploading ? "A carregar…" : "Carregar logo"}
+        </Button>
+        {url && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => onChange("")}
+            className="text-muted-foreground"
+          >
+            Remover
+          </Button>
+        )}
+      </div>
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => onFile(e.target.files?.[0])}
+      />
     </div>
   );
 }

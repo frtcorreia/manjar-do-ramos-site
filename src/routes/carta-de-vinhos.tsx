@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -6,7 +6,6 @@ import { Reveal } from "@/components/Reveal";
 import { useSiteWines } from "@/hooks/useSiteConfig";
 import { supabase } from "@/integrations/supabase/client";
 import { QrCode } from "lucide-react";
-import heroImg from "@/assets/dish-cocktails.jpg";
 
 const TOKEN_KEY = "qr_carta_token";
 
@@ -113,40 +112,127 @@ function LockedScreen() {
   );
 }
 
+function slugify(name: string) {
+  return name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "");
+}
+
+function CategoryNav({
+  categories,
+  activeId,
+}: {
+  categories: { id: string; name: string }[];
+  activeId: string | null;
+}) {
+  const navRef = useRef<HTMLDivElement>(null);
+  const activeRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    if (activeRef.current && navRef.current) {
+      activeRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    }
+  }, [activeId]);
+
+  function scrollTo(id: string) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const offset = 140;
+    const top = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: "smooth" });
+  }
+
+  return (
+    <div className="fixed inset-x-0 z-40 bg-charcoal/95 backdrop-blur-md shadow-soft top-[88px] md:top-[96px]">
+      <div
+        ref={navRef}
+        className="flex gap-1 overflow-x-auto px-5 py-3 md:px-10 scrollbar-none"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {categories.map((cat) => {
+          const isActive = activeId === cat.id;
+          return (
+            <button
+              key={cat.id}
+              ref={isActive ? (el) => { activeRef.current = el; } : undefined}
+              onClick={() => scrollTo(cat.id)}
+              className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200 ${
+                isActive
+                  ? "bg-gold text-charcoal"
+                  : "text-cream/70 hover:text-cream hover:bg-white/10"
+              }`}
+            >
+              {cat.name}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function WinesContent() {
   const wines = useSiteWines();
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  const visibleCategories = (wines?.categories ?? [])
+    .filter((cat) => cat.items.some((i) => i.visible))
+    .map((cat) => ({ ...cat, slug: slugify(cat.name) }));
+
+  useEffect(() => {
+    if (visibleCategories.length === 0) return;
+
+    const observers: IntersectionObserver[] = [];
+    const ratios: Record<string, number> = {};
+
+    visibleCategories.forEach((cat) => {
+      const el = document.getElementById(cat.slug);
+      if (!el) return;
+
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          ratios[cat.slug] = entry.intersectionRatio;
+          const best = Object.entries(ratios).sort((a, b) => b[1] - a[1])[0];
+          if (best && best[1] > 0) setActiveId(best[0]);
+        },
+        { threshold: Array.from({ length: 21 }, (_, i) => i / 20), rootMargin: "-120px 0px -40% 0px" },
+      );
+
+      obs.observe(el);
+      observers.push(obs);
+    });
+
+    return () => observers.forEach((o) => o.disconnect());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wines]);
+
+  useEffect(() => {
+    if (!activeId && visibleCategories.length > 0) {
+      setActiveId(visibleCategories[0].slug);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visibleCategories.length]);
 
   return (
     <div className="bg-background">
       <Navbar forceScrolled />
+      <CategoryNav categories={visibleCategories.map((c) => ({ id: c.slug, name: c.name }))} activeId={activeId} />
       <main>
-        <section className="relative flex h-[55svh] min-h-[380px] items-center justify-center overflow-hidden bg-charcoal">
-          <img
-            src={heroImg}
-            alt="Carta de vinhos do Manjar do Ramos"
-            className="absolute inset-0 h-full w-full object-cover opacity-50"
-          />
-          <div className="absolute inset-0 bg-gradient-hero" />
-          <Reveal className="relative z-10 px-5 text-center">
-            <span className="eyebrow text-gold">{wines?.eyebrow ?? "Garrafeira da Casa"}</span>
-            <h1 className="mt-5 font-serif text-5xl font-medium leading-tight text-cream md:text-7xl">
-              {wines?.title ?? "Carta de Vinhos"}
-            </h1>
-            <p className="mx-auto mt-5 max-w-xl text-base text-cream/85 md:text-lg">
-              {wines?.subtitle ?? "Uma seleção rotativa de produtores portugueses."}
-            </p>
-          </Reveal>
-        </section>
-
-        <section className="bg-background py-24 md:py-32">
+        <section className="bg-background pt-32 pb-24 md:pt-40 md:pb-32">
           <div className="mx-auto max-w-4xl px-5 md:px-10">
             <div className="space-y-16">
-              {(wines?.categories ?? []).map((cat) => {
+              {visibleCategories.map((cat) => {
                 const visible = cat.items.filter((i) => i.visible);
-                if (visible.length === 0) return null;
                 return (
                   <Reveal key={cat.id}>
-                    <div className="mb-8 text-center">
+                    <div id={cat.slug} className="mb-8 scroll-mt-36 text-center">
                       <h2 className="font-serif text-3xl text-espresso md:text-4xl">{cat.name}</h2>
                       <span className="mx-auto mt-4 block h-0.5 w-12 bg-gold" />
                     </div>

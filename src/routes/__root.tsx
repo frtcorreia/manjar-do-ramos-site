@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useLocation,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -15,6 +16,7 @@ import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/sonner";
 import { useMaintenance } from "@/hooks/useSiteConfig";
 import { MaintenancePage } from "@/components/MaintenancePage";
+import { PageLoader } from "@/components/PageLoader";
 
 function NotFoundComponent() {
   return (
@@ -156,7 +158,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function MaintenanceGate() {
   const maintenance = useMaintenance();
   const { isAdmin, loading } = useAuth();
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
+  const { pathname } = useLocation();
   const isAdminRoute = pathname.startsWith("/admin");
 
   if (!loading && maintenance.enabled && !isAdmin && !isAdminRoute) {
@@ -176,6 +178,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <PageLoader />
       <AuthProvider>
         <MaintenanceGate />
       </AuthProvider>

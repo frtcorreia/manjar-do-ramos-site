@@ -12,7 +12,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         <div className="grid gap-12 md:grid-cols-4">
           <div className="md:col-span-1">
-            <img src={logoSrc} alt="Manjar do Ramos" className="h-24 w-auto" />
+            <img src={logoSrc} alt="Manjar do Ramos" className="h-24 max-w-[240px] object-contain" />
             <p className="mt-5 text-sm leading-relaxed">
               Sabores portugueses com alma de taberna. Feitos para partilhar, saborear e voltar.
             </p>

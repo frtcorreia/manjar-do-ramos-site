@@ -25,7 +25,6 @@ import {
 import logo from "@/assets/logo-cream.png";
 import { AdminProvider, useAdmin } from "@/lib/admin-store";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { OverviewSection } from "@/components/admin/sections/OverviewSection";
 import { PagesSection } from "@/components/admin/sections/PagesSection";
 import { MenuSection } from "@/components/admin/sections/MenuSection";
 import { TestimonialsSection } from "@/components/admin/sections/TestimonialsSection";
@@ -47,7 +46,6 @@ export const Route = createFileRoute("/admin")({
 });
 
 type SectionId =
-  | "overview"
   | "pages"
   | "menu"
   | "wines"
@@ -59,7 +57,6 @@ type SectionId =
   | "qr-readings";
 
 const nav: { id: SectionId; label: string; icon: typeof LayoutDashboard }[] = [
-  { id: "overview", label: "Visão Geral", icon: LayoutDashboard },
   { id: "restaurante", label: "Restaurante", icon: Store },
   { id: "navegacao", label: "Navegação & Site", icon: Navigation },
   { id: "pages", label: "Páginas", icon: FileText },
@@ -163,11 +160,12 @@ function AdminPage() {
 }
 
 function NavMenu({ active, onSelect }: { active: SectionId; onSelect: (id: SectionId) => void }) {
-  const { reset } = useAdmin();
+  const { reset, state } = useAdmin();
+  const logoSrc = state.restaurante.logo || logo;
   return (
     <div className="flex h-full flex-col px-4 py-6">
       <Link to="/" className="px-2">
-        <img src={logo} alt="Manjar do Ramos" className="h-12 w-auto" />
+        <img src={logoSrc} alt="Manjar do Ramos" className="h-12 max-w-[140px] object-contain" />
       </Link>
       <p className="mt-1 px-2 text-xs uppercase tracking-[0.3em] text-cream/40">Backoffice</p>
 
@@ -209,7 +207,7 @@ function NavMenu({ active, onSelect }: { active: SectionId; onSelect: (id: Secti
 }
 
 function AdminShell() {
-  const [active, setActive] = useState<SectionId>("overview");
+  const [active, setActive] = useState<SectionId>("restaurante");
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const select = (id: SectionId) => {
@@ -246,7 +244,6 @@ function AdminShell() {
         </div>
 
         <main className="mx-auto w-full max-w-5xl flex-1 px-5 py-8 md:px-10">
-          {active === "overview" && <OverviewSection />}
           {active === "restaurante" && <RestauranteSection />}
           {active === "navegacao" && <NavegacaoSection />}
           {active === "pages" && <PagesSection />}

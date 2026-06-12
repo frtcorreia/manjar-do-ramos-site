@@ -16,44 +16,73 @@ import {
 } from "@/components/ui/alert-dialog";
 import { QrCode, Copy, Download, RefreshCw, Eye, EyeOff } from "lucide-react";
 
-type Stats = { today: number; this_week: number; this_month: number; total: number };
+type Tab = "ementa" | "carta-de-vinhos";
+type Location = "restaurante" | "esplanada";
+type StatsRow = {
+  location: Location;
+  today: number;
+  this_week: number;
+  this_month: number;
+  total: number;
+};
+type SettingsRow = { location: Location; secret_key: string; duration_minutes: number };
+type EmentaStats = { today: number; this_week: number; this_month: number; total: number } | null;
+
+const LOCATIONS: { id: Location; label: string }[] = [
+  { id: "restaurante", label: "Restaurante" },
+  { id: "esplanada", label: "Esplanada" },
+];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const rpc = (name: string, args?: Record<string, unknown>) =>
   (supabase.rpc as any)(name, args ?? {});
 
 export function QrReadingsSection() {
-  const [stats, setStats] = useState<Stats | null>(null);
-  const [secretKey, setSecretKey] = useState<string>("");
-  const [duration, setDuration] = useState<number>(120);
-  const [showKey, setShowKey] = useState(false);
-  const [savingDuration, setSavingDuration] = useState(false);
-  const [regenOpen, setRegenOpen] = useState(false);
-  const [qrDataUrl, setQrDataUrl] = useState<string>("");
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  const qrUrl =
-    typeof window !== "undefined" && secretKey
-      ? `${window.location.origin}/carta-de-vinhos?key=${secretKey}`
-      : "";
+  const [activeTab, setActiveTab] = useState<Tab>("ementa");
+  const [ementaStats, setEmentaStats] = useState<EmentaStats>(null);
+  const [stats, setStats] = useState<Record<Location, StatsRow | null>>({
+    restaurante: null,
+    esplanada: null,
+  });
+  const [settings, setSettings] = useState<Record<Location, SettingsRow | null>>({
+    restaurante: null,
+    esplanada: null,
+  });
 
   const load = useCallback(async () => {
-    const [statsRes, settingsRes] = await Promise.all([
+    const [ementaRes, statsRes, settingsRes] = await Promise.all([
+      rpc("ementa_stats"),
       rpc("qr_stats"),
       rpc("qr_admin_settings"),
     ]);
-    if (statsRes.data?.[0]) {
-      const row = statsRes.data[0];
-      setStats({
-        today: Number(row.today),
-        this_week: Number(row.this_week),
-        this_month: Number(row.this_month),
-        total: Number(row.total),
+    const eRow = Array.isArray(ementaRes.data) ? ementaRes.data[0] : ementaRes.data;
+    if (eRow) {
+      setEmentaStats({
+        today: Number(eRow.today),
+        this_week: Number(eRow.this_week),
+        this_month: Number(eRow.this_month),
+        total: Number(eRow.total),
       });
     }
-    if (settingsRes.data?.[0]) {
-      setSecretKey(settingsRes.data[0].secret_key);
-      setDuration(settingsRes.data[0].duration_minutes);
+    if (Array.isArray(statsRes.data)) {
+      const next: Record<Location, StatsRow | null> = { restaurante: null, esplanada: null };
+      for (const row of statsRes.data as StatsRow[]) {
+        next[row.location] = {
+          location: row.location,
+          today: Number(row.today),
+          this_week: Number(row.this_week),
+          this_month: Number(row.this_month),
+          total: Number(row.total),
+        };
+      }
+      setStats(next);
+    }
+    if (Array.isArray(settingsRes.data)) {
+      const next: Record<Location, SettingsRow | null> = { restaurante: null, esplanada: null };
+      for (const row of settingsRes.data as SettingsRow[]) {
+        next[row.location] = row;
+      }
+      setSettings(next);
     }
   }, []);
 
@@ -61,16 +90,78 @@ export function QrReadingsSection() {
     load();
   }, [load]);
 
+  return (
+    <div className="space-y-8">
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="font-serif text-3xl text-charcoal">Leituras QR</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Gestão de QR codes e estatísticas de acesso.
+          </p>
+        </div>
+        <Button variant="outline" size="sm" onClick={load} className="gap-2">
+          <RefreshCw className="h-4 w-4" /> Atualizar
+        </Button>
+      </header>
+
+      {/* Tab selector */}
+      <div className="flex gap-1 rounded-lg border border-border bg-muted p-1 w-fit">
+        <button
+          onClick={() => setActiveTab("ementa")}
+          className={`rounded-md px-4 py-2 text-sm font-medium transition-all ${
+            activeTab === "ementa"
+              ? "bg-background text-charcoal shadow-sm"
+              : "text-muted-foreground hover:text-charcoal"
+          }`}
+        >
+          Ementa
+        </button>
+        <button
+          onClick={() => setActiveTab("carta-de-vinhos")}
+          className={`rounded-md px-4 py-2 text-sm font-medium transition-all ${
+            activeTab === "carta-de-vinhos"
+              ? "bg-background text-charcoal shadow-sm"
+              : "text-muted-foreground hover:text-charcoal"
+          }`}
+        >
+          Carta de Vinhos
+        </button>
+      </div>
+
+      {activeTab === "ementa" && <EmentaBlock stats={ementaStats} />}
+
+      {activeTab === "carta-de-vinhos" &&
+        LOCATIONS.map((loc) => (
+          <LocationBlock
+            key={loc.id}
+            location={loc.id}
+            label={loc.label}
+            stats={stats[loc.id]}
+            settings={settings[loc.id]}
+            onReload={load}
+          />
+        ))}
+    </div>
+  );
+}
+
+function EmentaBlock({ stats }: { stats: EmentaStats }) {
+  const [qrDataUrl, setQrDataUrl] = useState<string>("");
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const ementaUrl =
+    typeof window !== "undefined" ? `${window.location.origin}/ementa` : "";
+
   useEffect(() => {
-    if (!qrUrl) return;
-    QRCode.toDataURL(qrUrl, { width: 512, margin: 2 }).then(setQrDataUrl).catch(() => {});
+    if (!ementaUrl) return;
+    QRCode.toDataURL(ementaUrl, { width: 512, margin: 2 }).then(setQrDataUrl).catch(() => {});
     if (canvasRef.current) {
-      QRCode.toCanvas(canvasRef.current, qrUrl, { width: 240, margin: 2 }).catch(() => {});
+      QRCode.toCanvas(canvasRef.current, ementaUrl, { width: 240, margin: 2 }).catch(() => {});
     }
-  }, [qrUrl]);
+  }, [ementaUrl]);
 
   const copyUrl = async () => {
-    await navigator.clipboard.writeText(qrUrl);
+    await navigator.clipboard.writeText(ementaUrl);
     toast.success("URL copiado");
   };
 
@@ -78,26 +169,8 @@ export function QrReadingsSection() {
     if (!qrDataUrl) return;
     const a = document.createElement("a");
     a.href = qrDataUrl;
-    a.download = "qr-carta-vinhos.png";
+    a.download = "qr-ementa.png";
     a.click();
-  };
-
-  const saveDuration = async () => {
-    setSavingDuration(true);
-    const { error } = await rpc("set_qr_duration", { p_minutes: duration });
-    setSavingDuration(false);
-    if (error) toast.error("Erro a guardar duração");
-    else toast.success("Duração guardada");
-  };
-
-  const regenerate = async () => {
-    const { data, error } = await rpc("regenerate_qr_key");
-    if (error || !data) {
-      toast.error("Erro a regenerar chave");
-      return;
-    }
-    setSecretKey(String(data));
-    toast.success("Nova chave gerada. QRs antigos deixaram de funcionar.");
   };
 
   const cards = [
@@ -108,18 +181,11 @@ export function QrReadingsSection() {
   ];
 
   return (
-    <div className="space-y-6">
-      <header className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="font-serif text-3xl text-charcoal">Leituras QR</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Estatísticas de acesso à carta de vinhos via QR code da mesa.
-          </p>
-        </div>
-        <Button variant="outline" size="sm" onClick={load} className="gap-2">
-          <RefreshCw className="h-4 w-4" /> Atualizar
-        </Button>
-      </header>
+    <section className="space-y-4">
+      <p className="text-sm text-muted-foreground">
+        A ementa está sempre acessível a qualquer pessoa com este URL. Não é necessário token
+        nem autenticação.
+      </p>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((c) => (
@@ -140,8 +206,138 @@ export function QrReadingsSection() {
 
       <div className="grid gap-6 rounded-xl border border-border bg-card p-5 lg:grid-cols-[1fr_auto]">
         <div className="space-y-4">
-          <h2 className="font-serif text-lg text-charcoal">QR Code do restaurante</h2>
+          <div>
+            <label className="text-xs font-medium text-muted-foreground">URL da Ementa</label>
+            <div className="mt-1 flex items-center gap-2">
+              <Input value={ementaUrl} readOnly className="font-mono text-xs" />
+              <Button variant="outline" size="icon" onClick={copyUrl} title="Copiar URL">
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
 
+          <div>
+            <Button onClick={downloadQr} className="gap-2" disabled={!qrDataUrl}>
+              <Download className="h-4 w-4" /> Descarregar PNG
+            </Button>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-center">
+          <div className="rounded-lg border border-border bg-white p-3">
+            <canvas ref={canvasRef} />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function LocationBlock({
+  location,
+  label,
+  stats,
+  settings,
+  onReload,
+}: {
+  location: Location;
+  label: string;
+  stats: StatsRow | null;
+  settings: SettingsRow | null;
+  onReload: () => void | Promise<void>;
+}) {
+  const [duration, setDuration] = useState<number>(settings?.duration_minutes ?? 120);
+  const [showKey, setShowKey] = useState(false);
+  const [savingDuration, setSavingDuration] = useState(false);
+  const [regenOpen, setRegenOpen] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState<string>("");
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    if (settings?.duration_minutes) setDuration(settings.duration_minutes);
+  }, [settings?.duration_minutes]);
+
+  const secretKey = settings?.secret_key ?? "";
+  const qrUrl =
+    typeof window !== "undefined" && secretKey
+      ? `${window.location.origin}/carta-de-vinhos?key=${secretKey}`
+      : "";
+
+  useEffect(() => {
+    if (!qrUrl) return;
+    QRCode.toDataURL(qrUrl, { width: 512, margin: 2 }).then(setQrDataUrl).catch(() => {});
+    if (canvasRef.current) {
+      QRCode.toCanvas(canvasRef.current, qrUrl, { width: 240, margin: 2 }).catch(() => {});
+    }
+  }, [qrUrl]);
+
+  const copyUrl = async () => {
+    await navigator.clipboard.writeText(qrUrl);
+    toast.success("URL copiado");
+  };
+
+  const downloadQr = () => {
+    if (!qrDataUrl) return;
+    const a = document.createElement("a");
+    a.href = qrDataUrl;
+    a.download = `qr-carta-vinhos-${location}.png`;
+    a.click();
+  };
+
+  const saveDuration = async () => {
+    setSavingDuration(true);
+    const { error } = await rpc("set_qr_duration", {
+      p_location: location,
+      p_minutes: duration,
+    });
+    setSavingDuration(false);
+    if (error) toast.error("Erro a guardar duração");
+    else {
+      toast.success("Duração guardada");
+      onReload();
+    }
+  };
+
+  const regenerate = async () => {
+    const { data, error } = await rpc("regenerate_qr_key", { p_location: location });
+    if (error || !data) {
+      toast.error("Erro a regenerar chave");
+      return;
+    }
+    toast.success("Nova chave gerada. QRs antigos deixaram de funcionar.");
+    onReload();
+  };
+
+  const cards = [
+    { label: "Hoje", value: stats?.today ?? 0 },
+    { label: "Esta semana", value: stats?.this_week ?? 0 },
+    { label: "Este mês", value: stats?.this_month ?? 0 },
+    { label: "Total", value: stats?.total ?? 0 },
+  ];
+
+  return (
+    <section className="space-y-4">
+      <h2 className="font-serif text-2xl text-charcoal">{label}</h2>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {cards.map((c) => (
+          <div
+            key={c.label}
+            className="flex items-center gap-4 rounded-xl border border-border bg-card p-5"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gold/15 text-gold">
+              <QrCode className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="font-serif text-2xl text-charcoal">{c.value}</p>
+              <p className="text-sm text-muted-foreground">{c.label}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid gap-6 rounded-xl border border-border bg-card p-5 lg:grid-cols-[1fr_auto]">
+        <div className="space-y-4">
           <div>
             <label className="text-xs font-medium text-muted-foreground">
               Duração do token (minutos)
@@ -160,7 +356,7 @@ export function QrReadingsSection() {
               </Button>
             </div>
             <p className="mt-1 text-xs text-muted-foreground">
-              Tempo durante o qual a carta fica acessível após ler o QR.
+              Tempo durante o qual a carta fica acessível após ler este QR.
             </p>
           </div>
 
@@ -210,10 +406,10 @@ export function QrReadingsSection() {
       <AlertDialog open={regenOpen} onOpenChange={setRegenOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Regenerar chave secreta?</AlertDialogTitle>
+            <AlertDialogTitle>Regenerar chave do {label}?</AlertDialogTitle>
             <AlertDialogDescription>
-              Todos os QR codes impressos deixarão de funcionar. Vai precisar de imprimir e colar
-              os novos nas mesas. Esta acção não pode ser revertida.
+              Todos os QR codes impressos deste local deixarão de funcionar. Vai precisar de
+              imprimir e colar os novos nas mesas. Esta acção não pode ser revertida.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -227,6 +423,6 @@ export function QrReadingsSection() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+    </section>
   );
 }

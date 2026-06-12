@@ -225,6 +225,13 @@ function EmentaPage() {
   const restaurante = useRestaurante();
   const [activeId, setActiveId] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (sessionStorage.getItem(EMENTA_SESSION_KEY)) return;
+    sessionStorage.setItem(EMENTA_SESSION_KEY, "1");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (supabase.rpc as any)("record_ementa_read").catch(() => {});
+  }, []);
+
   const visibleCategories = (menu ?? [])
     .filter((cat) => cat.items.some((i) => i.visible))
     .map((cat) => ({ ...cat, slug: slugify(cat.name) }));
