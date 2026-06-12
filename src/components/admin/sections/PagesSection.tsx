@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { uploadImage } from "@/lib/upload-image";
 import {
   useAdmin,
   type PageContent,
@@ -158,9 +159,19 @@ function ImageEditor({
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const onFile = (file: File | undefined) => {
+  const [uploading, setUploading] = useState(false);
+
+  const onFile = async (file: File | undefined) => {
     if (!file) return;
-    onImage(pageKey, image.id, URL.createObjectURL(file));
+    setUploading(true);
+    try {
+      const url = await uploadImage(file, "pages");
+      onImage(pageKey, image.id, url);
+    } catch {
+      alert("Erro ao carregar imagem. Verifique que o bucket 'site-assets' existe e é público.");
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
