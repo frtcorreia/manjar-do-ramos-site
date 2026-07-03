@@ -276,13 +276,33 @@ function EmentaPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visibleCategories.length]);
 
+  const isLoading = menu === null;
+
+  if (isLoading) {
+    return (
+      <div className="bg-background">
+        <Navbar forceScrolled />
+        <main className="pt-[140px] md:pt-[148px]">
+          <section className="bg-background py-16 md:py-24">
+            <div className="mx-auto max-w-4xl px-5 md:px-10">
+              <div className="flex flex-col items-center justify-center py-32">
+                <div className="h-10 w-10 animate-spin rounded-full border-4 border-gold/30 border-t-gold" />
+                <p className="mt-4 text-sm text-muted-foreground">A carregar ementa…</p>
+              </div>
+            </div>
+          </section>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="bg-background">
       <Navbar forceScrolled />
       <CategoryNav categories={visibleCategories.map((c) => ({ id: c.slug, name: c.name }))} activeId={activeId} />
 
       <main className="pt-[140px] md:pt-[148px]">
-        {/* Menu */}
         <section className="bg-background py-16 md:py-24">
           <div className="mx-auto max-w-4xl px-5 md:px-10">
             <div className="space-y-20">
