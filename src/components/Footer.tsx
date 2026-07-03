@@ -1,10 +1,14 @@
 import { MapPin, Clock, Phone, Instagram, Facebook, Star } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo-cream.png";
-import { useRestaurante } from "@/hooks/useSiteConfig";
+import { useRestaurante, useNavPages } from "@/hooks/useSiteConfig";
 
 export function Footer() {
   const r = useRestaurante();
+  const navPages = useNavPages();
+  const footerLinks = navPages.filter(
+    (p) => p.visible && p.key !== "a-minha-conta" && p.key !== "auth",
+  );
   const logoSrc = r.logo || logo;
 
   return (
@@ -52,21 +56,19 @@ export function Footer() {
               )}
             </div>
             <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm">
-              <li>
-                <Link to="/ementa" className="transition-colors hover:text-gold">
-                  Ementa
-                </Link>
-              </li>
-              <li>
-                <Link to="/catering" className="transition-colors hover:text-gold">
-                  Catering
-                </Link>
-              </li>
-              <li>
-                <a href="/#reservar" className="transition-colors hover:text-gold">
-                  Reservar
-                </a>
-              </li>
+              {footerLinks.map((l) => (
+                <li key={l.key}>
+                  {l.route ? (
+                    <Link to={l.href} className="transition-colors hover:text-gold">
+                      {l.label}
+                    </Link>
+                  ) : (
+                    <a href={l.href} className="transition-colors hover:text-gold">
+                      {l.label}
+                    </a>
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
 
