@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { PageLoader } from "@/components/PageLoader";
 import { Reveal } from "@/components/Reveal";
 import { PageLoader } from "@/components/PageLoader";
 import { usePageContent, useSiteMenu, useMenuPrices, useRestaurante } from "@/hooks/useSiteConfig";
@@ -281,7 +282,7 @@ function EmentaPage() {
 
   return (
     <div className="bg-background">
-      <PageLoader ready={!isLoading} />
+      <PageLoader isLoading={menu === null} />
       <Navbar forceScrolled />
       {!isLoading && (
         <CategoryNav categories={visibleCategories.map((c) => ({ id: c.slug, name: c.name }))} activeId={activeId} />
