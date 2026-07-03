@@ -1,21 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import logo from "@/assets/logo-cream.png";
 
-export function PageLoader() {
+export function PageLoader({ ready }: { ready?: boolean }) {
   const [visible, setVisible] = useState(true);
   const [fading, setFading] = useState(false);
+  const startRef = useRef(Date.now());
 
   useEffect(() => {
-    const minDelay = new Promise<void>((resolve) => setTimeout(resolve, 1400));
-    const pageReady = new Promise<void>((resolve) => {
-      if (document.readyState === "complete") resolve();
-      else window.addEventListener("load", () => resolve(), { once: true });
-    });
-    Promise.all([minDelay, pageReady]).then(() => {
-      setFading(true);
-      setTimeout(() => setVisible(false), 800);
-    });
-  }, []);
+    const minDelay = 1400;
+
+    if (ready === undefined) {
+      const waitMin = new Promise<void>((resolve) => setTimeout(resolve, minDelay));
+      const pageReady = new Promise<void>((resolve) => {
+        if (document.readyState === "complete") resolve();
+        else window.addEventListener("load", () => resolve(), { once: true });
+      });
+      Promise.all([waitMin, pageReady]).then(() => {
+        setFading(true);
+        setTimeout(() => setVisible(false), 800);
+      });
+    } else if (ready) {
+      const elapsed = Date.now() - startRef.current;
+      const remaining = Math.max(0, minDelay - elapsed);
+      setTimeout(() => {
+        setFading(true);
+        setTimeout(() => setVisible(false), 800);
+      }, remaining);
+    }
+  }, [ready]);
 
   if (!visible) return null;
 
