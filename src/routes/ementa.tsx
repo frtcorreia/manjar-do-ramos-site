@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Reveal } from "@/components/Reveal";
+import { PageLoader } from "@/components/PageLoader";
 import { usePageContent, useSiteMenu, useMenuPrices, useRestaurante } from "@/hooks/useSiteConfig";
 import { supabase } from "@/integrations/supabase/client";
 import type { Allergen } from "@/lib/admin-store";
@@ -276,13 +277,17 @@ function EmentaPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visibleCategories.length]);
 
+  const isLoading = menu === null;
+
   return (
     <div className="bg-background">
+      <PageLoader ready={!isLoading} />
       <Navbar forceScrolled />
-      <CategoryNav categories={visibleCategories.map((c) => ({ id: c.slug, name: c.name }))} activeId={activeId} />
+      {!isLoading && (
+        <CategoryNav categories={visibleCategories.map((c) => ({ id: c.slug, name: c.name }))} activeId={activeId} />
+      )}
 
       <main className="pt-[140px] md:pt-[148px]">
-        {/* Menu */}
         <section className="bg-background py-16 md:py-24">
           <div className="mx-auto max-w-4xl px-5 md:px-10">
             <div className="space-y-20">
