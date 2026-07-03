@@ -60,7 +60,8 @@ export function RestauranteSection() {
           <Field label="Morada" value={r.morada} onChange={(v) => set({ morada: v })} />
           <Field label="Telefone" value={r.telefone} onChange={(v) => set({ telefone: v })} />
           <Field label="Email" value={r.email} onChange={(v) => set({ email: v })} />
-          <Field label="Horário" value={r.horario} onChange={(v) => set({ horario: v })} />
+          <Field label="Horário Restaurante" value={r.horarioRestaurante} onChange={(v) => set({ horarioRestaurante: v })} />
+          <Field label="Horário Pátio" value={r.horarioPatio} onChange={(v) => set({ horarioPatio: v })} />
         </div>
       </section>
 

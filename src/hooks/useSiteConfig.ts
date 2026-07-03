@@ -4,6 +4,7 @@ import type {
   Block,
   BlockContent,
   BlockKey,
+  GoogleReview,
   MaintenanceConfig,
   MenuCategory,
   NavPage,
@@ -78,6 +79,8 @@ const DEFAULT_RESTAURANTE: RestauranteConfig = {
   telefone: "+351 210 000 000",
   email: "geral@manjardoramos.pt",
   horario: "Terça a Domingo · 12h00–15h00 · 19h00–23h30",
+  horarioRestaurante: "Terça a Domingo · 12h00–15h00 · 19h00–23h30",
+  horarioPatio: "",
   googleMapsUrl: "#",
   googleMapsEmbed: "",
   social: {
@@ -198,6 +201,22 @@ export function useSiteWines() {
   }, []);
 
   return wines;
+}
+
+export function useSiteGoogleReviews() {
+  const [reviews, setReviews] = useState<GoogleReview[]>([]);
+
+  useEffect(() => {
+    db("google_reviews")
+      .select("*")
+      .eq("visible", true)
+      .order("publish_time", { ascending: false })
+      .then(({ data }: { data: GoogleReview[] | null }) => {
+        if (data) setReviews(data);
+      });
+  }, []);
+
+  return reviews;
 }
 
 export function useSiteTestimonials() {

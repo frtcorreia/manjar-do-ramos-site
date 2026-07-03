@@ -157,6 +157,18 @@ export type SocialNetwork = {
   visible: boolean;
 };
 
+export type GoogleReview = {
+  id: string;
+  author_name: string;
+  rating: number;
+  text: string;
+  relative_time_description: string;
+  profile_photo_url: string;
+  publish_time: string | null;
+  visible: boolean;
+  fetched_at: string;
+};
+
 export type RestauranteConfig = {
   logo: string;
   nomeProprietario: string;
@@ -165,8 +177,11 @@ export type RestauranteConfig = {
   telefone: string;
   email: string;
   horario: string;
+  horarioRestaurante: string;
+  horarioPatio: string;
   googleMapsUrl: string;
   googleMapsEmbed: string;
+  googlePlaceId: string;
   social: {
     instagram: SocialNetwork;
     facebook: SocialNetwork;
@@ -703,6 +718,24 @@ const initialState: AdminState = {
           value: "Sabores tradicionais reinterpretados, num ambiente rústico e acolhedor.",
           multiline: true,
         },
+        { id: uid(), label: "Etiqueta 2", value: "Abundância" },
+        {
+          id: uid(),
+          label: "Título 2",
+          value: "Pratos generosos, pensados para partilhar",
+          multiline: true,
+        },
+        {
+          id: uid(),
+          label: "Parágrafo 3",
+          value:
+            "Produtos honestos, fogo lento e receitas que atravessam gerações. Das carnes maturadas ao bacalhau, das tábuas aos petiscos — tudo chega à mesa para ser dividido, provado e celebrado.",
+          multiline: true,
+        },
+        { id: uid(), label: "Stat 1 Valor", value: "+40" },
+        { id: uid(), label: "Stat 1 Label", value: "Petiscos & pratos" },
+        { id: uid(), label: "Stat 2 Valor", value: "120" },
+        { id: uid(), label: "Stat 2 Label", value: "Referências de vinho" },
       ],
       images: [
         { id: uid(), label: "Imagem 1", url: about1 },
@@ -821,8 +854,11 @@ const initialState: AdminState = {
     telefone: "+351 210 000 000",
     email: "geral@manjardoramos.pt",
     horario: "Terça a Domingo · 12h00–15h00 · 19h00–23h30",
+    horarioRestaurante: "Terça a Domingo · 12h00–15h00 · 19h00–23h30",
+    horarioPatio: "",
     googleMapsUrl: "#",
     googleMapsEmbed: "",
+    googlePlaceId: "",
     social: {
       instagram: { url: "https://instagram.com/manjardoramos", visible: true },
       facebook: { url: "https://facebook.com/manjardoramos", visible: true },

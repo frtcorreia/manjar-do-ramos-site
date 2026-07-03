@@ -1,10 +1,14 @@
 import { MapPin, Clock, Phone, Instagram, Facebook, Star } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo-cream.png";
-import { useRestaurante } from "@/hooks/useSiteConfig";
+import { useRestaurante, useNavPages } from "@/hooks/useSiteConfig";
 
 export function Footer() {
   const r = useRestaurante();
+  const navPages = useNavPages();
+  const footerLinks = navPages.filter(
+    (p) => p.visible && p.key !== "a-minha-conta" && p.key !== "auth",
+  );
   const logoSrc = r.logo || logo;
 
   return (
@@ -52,21 +56,19 @@ export function Footer() {
               )}
             </div>
             <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm">
-              <li>
-                <Link to="/ementa" className="transition-colors hover:text-gold">
-                  Ementa
-                </Link>
-              </li>
-              <li>
-                <Link to="/catering" className="transition-colors hover:text-gold">
-                  Catering
-                </Link>
-              </li>
-              <li>
-                <a href="/#reservar" className="transition-colors hover:text-gold">
-                  Reservar
-                </a>
-              </li>
+              {footerLinks.map((l) => (
+                <li key={l.key}>
+                  {l.route ? (
+                    <Link to={l.href} className="transition-colors hover:text-gold">
+                      {l.label}
+                    </Link>
+                  ) : (
+                    <a href={l.href} className="transition-colors hover:text-gold">
+                      {l.label}
+                    </a>
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -93,8 +95,20 @@ export function Footer() {
             <ul className="mt-4 space-y-3 text-sm">
               <li className="flex items-start gap-3">
                 <Clock className="mt-0.5 h-4 w-4 text-gold" />
-                <span>{r.horario}</span>
+                <div>
+                  <p className="font-medium text-cream">Restaurante</p>
+                  <span>{r.horarioRestaurante || r.horario}</span>
+                </div>
               </li>
+              {r.horarioPatio && (
+                <li className="flex items-start gap-3">
+                  <Clock className="mt-0.5 h-4 w-4 text-gold" />
+                  <div>
+                    <p className="font-medium text-cream">Pátio</p>
+                    <span>{r.horarioPatio}</span>
+                  </div>
+                </li>
+              )}
             </ul>
           </div>
 

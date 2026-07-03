@@ -21,6 +21,7 @@ import {
   Store,
   Navigation,
   QrCode,
+  Star,
 } from "lucide-react";
 import logo from "@/assets/logo-cream.png";
 import { AdminProvider, useAdmin } from "@/lib/admin-store";
@@ -34,6 +35,7 @@ import { OrdersSection } from "@/components/admin/sections/OrdersSection";
 import { RestauranteSection } from "@/components/admin/sections/RestauranteSection";
 import { NavegacaoSection } from "@/components/admin/sections/NavegacaoSection";
 import { QrReadingsSection } from "@/components/admin/sections/QrReadingsSection";
+import { GoogleReviewsSection } from "@/components/admin/sections/GoogleReviewsSection";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -51,6 +53,7 @@ type SectionId =
   | "wines"
   | "orders"
   | "testimonials"
+  | "google-reviews"
   | "content"
   | "restaurante"
   | "navegacao"
@@ -65,6 +68,7 @@ const nav: { id: SectionId; label: string; icon: typeof LayoutDashboard }[] = [
   { id: "qr-readings", label: "Leituras QR", icon: QrCode },
   { id: "orders", label: "Encomendas", icon: ShoppingBag },
   { id: "testimonials", label: "Testemunhos", icon: MessageSquareQuote },
+  { id: "google-reviews", label: "Google Reviews", icon: Star },
   { id: "content", label: "Conteúdo & Imagens", icon: Images },
 ];
 
@@ -252,6 +256,7 @@ function AdminShell() {
           {active === "qr-readings" && <QrReadingsSection />}
           {active === "orders" && <OrdersSection />}
           {active === "testimonials" && <TestimonialsSection />}
+          {active === "google-reviews" && <GoogleReviewsSection />}
           {active === "content" && <ContentSection />}
         </main>
       </div>

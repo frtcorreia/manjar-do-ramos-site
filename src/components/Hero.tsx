@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "@tanstack/react-router";
 import heroImgDefault from "@/assets/hero.jpg";
 import { useBlockContent } from "@/hooks/useSiteConfig";
 
@@ -62,16 +63,16 @@ export function Hero() {
         >
           <a
             href="#reservar"
-            className="rounded-full bg-wine px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-cream shadow-soft transition-transform hover:scale-[1.03]"
+            className="rounded-full bg-gold px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-charcoal shadow-soft transition-transform hover:scale-[1.03]"
           >
             {field("Botão principal", "Reservar Mesa")}
           </a>
-          <a
-            href="#especialidades"
+          <Link
+            to="/ementa"
             className="rounded-full border border-cream/40 bg-cream/5 px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-cream backdrop-blur-sm transition-colors hover:border-gold hover:text-gold"
           >
             {field("Botão secundário", "Ver Menu")}
-          </a>
+          </Link>
         </motion.div>
       </div>
 
