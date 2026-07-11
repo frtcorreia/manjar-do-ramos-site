@@ -232,7 +232,10 @@ function EmentaPage() {
   useEffect(() => {
     if (sessionStorage.getItem(EMENTA_SESSION_KEY)) return;
     sessionStorage.setItem(EMENTA_SESSION_KEY, "1");
-    try { supabase.rpc("record_ementa_read"); } catch { /* best-effort */ }
+    supabase.rpc("record_ementa_read").then(
+      () => {},
+      () => { /* best-effort */ },
+    );
   }, []);
 
   const visibleCategories = (menu ?? [])
