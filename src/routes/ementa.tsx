@@ -4,7 +4,6 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageLoader } from "@/components/PageLoader";
 import { Reveal } from "@/components/Reveal";
-import { PageLoader } from "@/components/PageLoader";
 import { usePageContent, useSiteMenu, useMenuPrices, useRestaurante } from "@/hooks/useSiteConfig";
 import { supabase } from "@/integrations/supabase/client";
 import type { Allergen } from "@/lib/admin-store";
