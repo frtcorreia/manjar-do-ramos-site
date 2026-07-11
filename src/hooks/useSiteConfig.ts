@@ -4,6 +4,7 @@ import type {
   Block,
   BlockContent,
   BlockKey,
+  GoogleReview,
   MaintenanceConfig,
   MenuCategory,
   NavPage,
@@ -78,6 +79,8 @@ const DEFAULT_RESTAURANTE: RestauranteConfig = {
   telefone: "+351 210 000 000",
   email: "geral@manjardoramos.pt",
   horario: "Terça a Domingo · 12h00–15h00 · 19h00–23h30",
+  horarioRestaurante: "Terça a Domingo · 12h00–15h00 · 19h00–23h30",
+  horarioPatio: "",
   googleMapsUrl: "#",
   googleMapsEmbed: "",
   social: {
@@ -200,6 +203,22 @@ export function useSiteWines() {
   return wines;
 }
 
+export function useSiteGoogleReviews() {
+  const [reviews, setReviews] = useState<GoogleReview[]>([]);
+
+  useEffect(() => {
+    db("google_reviews")
+      .select("*")
+      .eq("visible", true)
+      .order("publish_time", { ascending: false })
+      .then(({ data }: { data: GoogleReview[] | null }) => {
+        if (data) setReviews(data);
+      });
+  }, []);
+
+  return reviews;
+}
+
 export function useSiteTestimonials() {
   const [testimonials, setTestimonials] = useState<Testimonial[] | null>(null);
 
@@ -234,12 +253,31 @@ export function useBlockContent(blockKey: BlockKey) {
   return { field, image, images, backgroundColor };
 }
 
+const RESTAURANTE_CACHE_KEY = "restaurante_cache";
+
+function readRestauranteCache(): RestauranteConfig {
+  try {
+    const cached = localStorage.getItem(RESTAURANTE_CACHE_KEY);
+    if (cached) return { ...DEFAULT_RESTAURANTE, ...JSON.parse(cached) };
+  } catch {
+    // ignore corrupted cache
+  }
+  return DEFAULT_RESTAURANTE;
+}
+
 export function useRestaurante() {
-  const [restaurante, setRestaurante] = useState<RestauranteConfig>(DEFAULT_RESTAURANTE);
+  const [restaurante, setRestaurante] = useState<RestauranteConfig>(readRestauranteCache);
 
   useEffect(() => {
     fetchSetting<RestauranteConfig>("restaurante").then((data) => {
-      if (data) setRestaurante(data);
+      if (data) {
+        setRestaurante(data);
+        try {
+          localStorage.setItem(RESTAURANTE_CACHE_KEY, JSON.stringify(data));
+        } catch {
+          // ignore storage errors (e.g. private mode quota)
+        }
+      }
     });
   }, []);
 
