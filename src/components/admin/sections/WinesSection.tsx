@@ -144,14 +144,24 @@ export function WinesSection() {
             Página oculta do menu — acessível apenas via URL direta.
           </p>
         </div>
-        <a
-          href="/carta-de-vinhos"
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm text-charcoal hover:bg-secondary"
-        >
-          <ExternalLink className="h-4 w-4" /> Ver página
-        </a>
+        <div className="flex gap-2">
+          <a
+            href="/carta-de-vinhos"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm text-charcoal hover:bg-secondary"
+          >
+            <ExternalLink className="h-4 w-4" /> Ver página
+          </a>
+          <a
+            href="/carta-de-vinhos-tablet"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm text-charcoal hover:bg-secondary"
+          >
+            <ExternalLink className="h-4 w-4" /> Ver versão tablet
+          </a>
+        </div>
       </header>
 
       <div className="space-y-3 rounded-xl border border-border bg-card p-5">

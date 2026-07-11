@@ -15,6 +15,7 @@ import { Route as EncomendasRouteImport } from './routes/encomendas'
 import { Route as EmentaRouteImport } from './routes/ementa'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CateringRouteImport } from './routes/catering'
+import { Route as CartaDeVinhosTabletRouteImport } from './routes/carta-de-vinhos-tablet'
 import { Route as CartaDeVinhosRouteImport } from './routes/carta-de-vinhos'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -50,6 +51,11 @@ const CateringRoute = CateringRouteImport.update({
   path: '/catering',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CartaDeVinhosTabletRoute = CartaDeVinhosTabletRouteImport.update({
+  id: '/carta-de-vinhos-tablet',
+  path: '/carta-de-vinhos-tablet',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CartaDeVinhosRoute = CartaDeVinhosRouteImport.update({
   id: '/carta-de-vinhos',
   path: '/carta-de-vinhos',
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/carta-de-vinhos': typeof CartaDeVinhosRoute
+  '/carta-de-vinhos-tablet': typeof CartaDeVinhosTabletRoute
   '/catering': typeof CateringRoute
   '/checkout': typeof CheckoutRoute
   '/ementa': typeof EmentaRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/carta-de-vinhos': typeof CartaDeVinhosRoute
+  '/carta-de-vinhos-tablet': typeof CartaDeVinhosTabletRoute
   '/catering': typeof CateringRoute
   '/checkout': typeof CheckoutRoute
   '/ementa': typeof EmentaRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/carta-de-vinhos': typeof CartaDeVinhosRoute
+  '/carta-de-vinhos-tablet': typeof CartaDeVinhosTabletRoute
   '/catering': typeof CateringRoute
   '/checkout': typeof CheckoutRoute
   '/ementa': typeof EmentaRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/carta-de-vinhos'
+    | '/carta-de-vinhos-tablet'
     | '/catering'
     | '/checkout'
     | '/ementa'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/carta-de-vinhos'
+    | '/carta-de-vinhos-tablet'
     | '/catering'
     | '/checkout'
     | '/ementa'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/carta-de-vinhos'
+    | '/carta-de-vinhos-tablet'
     | '/catering'
     | '/checkout'
     | '/ementa'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   CartaDeVinhosRoute: typeof CartaDeVinhosRoute
+  CartaDeVinhosTabletRoute: typeof CartaDeVinhosTabletRoute
   CateringRoute: typeof CateringRoute
   CheckoutRoute: typeof CheckoutRoute
   EmentaRoute: typeof EmentaRoute
@@ -204,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CateringRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/carta-de-vinhos-tablet': {
+      id: '/carta-de-vinhos-tablet'
+      path: '/carta-de-vinhos-tablet'
+      fullPath: '/carta-de-vinhos-tablet'
+      preLoaderRoute: typeof CartaDeVinhosTabletRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/carta-de-vinhos': {
       id: '/carta-de-vinhos'
       path: '/carta-de-vinhos'
@@ -240,6 +260,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   CartaDeVinhosRoute: CartaDeVinhosRoute,
+  CartaDeVinhosTabletRoute: CartaDeVinhosTabletRoute,
   CateringRoute: CateringRoute,
   CheckoutRoute: CheckoutRoute,
   EmentaRoute: EmentaRoute,
