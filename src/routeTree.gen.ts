@@ -20,6 +20,7 @@ import { Route as CartaDeVinhosRouteImport } from './routes/carta-de-vinhos'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StorageSplatRouteImport } from './routes/storage/$'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -76,6 +77,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StorageSplatRoute = StorageSplatRouteImport.update({
+  id: '/storage/$',
+  path: '/storage/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/encomendas': typeof EncomendasRoute
   '/minhas-encomendas': typeof MinhasEncomendasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/storage/$': typeof StorageSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByTo {
   '/encomendas': typeof EncomendasRoute
   '/minhas-encomendas': typeof MinhasEncomendasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/storage/$': typeof StorageSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/encomendas': typeof EncomendasRoute
   '/minhas-encomendas': typeof MinhasEncomendasRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/storage/$': typeof StorageSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
     | '/encomendas'
     | '/minhas-encomendas'
     | '/sitemap.xml'
+    | '/storage/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
     | '/encomendas'
     | '/minhas-encomendas'
     | '/sitemap.xml'
+    | '/storage/$'
   id:
     | '__root__'
     | '/'
@@ -157,6 +168,7 @@ export interface FileRouteTypes {
     | '/encomendas'
     | '/minhas-encomendas'
     | '/sitemap.xml'
+    | '/storage/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -171,6 +183,7 @@ export interface RootRouteChildren {
   EncomendasRoute: typeof EncomendasRoute
   MinhasEncomendasRoute: typeof MinhasEncomendasRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  StorageSplatRoute: typeof StorageSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -252,6 +265,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/storage/$': {
+      id: '/storage/$'
+      path: '/storage/$'
+      fullPath: '/storage/$'
+      preLoaderRoute: typeof StorageSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -267,6 +287,7 @@ const rootRouteChildren: RootRouteChildren = {
   EncomendasRoute: EncomendasRoute,
   MinhasEncomendasRoute: MinhasEncomendasRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  StorageSplatRoute: StorageSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
