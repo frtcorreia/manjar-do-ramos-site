@@ -4,7 +4,6 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PageLoader } from "@/components/PageLoader";
 import { Reveal } from "@/components/Reveal";
-import { PageLoader } from "@/components/PageLoader";
 import { usePageContent, useSiteMenu, useMenuPrices, useRestaurante } from "@/hooks/useSiteConfig";
 import { supabase } from "@/integrations/supabase/client";
 import type { Allergen } from "@/lib/admin-store";
@@ -233,7 +232,10 @@ function EmentaPage() {
   useEffect(() => {
     if (sessionStorage.getItem(EMENTA_SESSION_KEY)) return;
     sessionStorage.setItem(EMENTA_SESSION_KEY, "1");
-    try { supabase.rpc("record_ementa_read"); } catch { /* best-effort */ }
+    supabase.rpc("record_ementa_read").then(
+      () => {},
+      () => { /* best-effort */ },
+    );
   }, []);
 
   const visibleCategories = (menu ?? [])
