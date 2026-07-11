@@ -13,7 +13,6 @@ import {
   UtensilsCrossed,
   MessageSquareQuote,
   Images,
-  RotateCcw,
   ExternalLink,
   Menu,
   Wine,
@@ -21,6 +20,7 @@ import {
   Store,
   Navigation,
   QrCode,
+  LogOut,
 } from "lucide-react";
 import logo from "@/assets/logo-cream.png";
 import { AdminProvider, useAdmin } from "@/lib/admin-store";
@@ -160,7 +160,8 @@ function AdminPage() {
 }
 
 function NavMenu({ active, onSelect }: { active: SectionId; onSelect: (id: SectionId) => void }) {
-  const { reset, state } = useAdmin();
+  const { state } = useAdmin();
+  const { signOut } = useAuth();
   const logoSrc = state.restaurante.logo || logo;
   return (
     <div className="flex h-full flex-col px-4 py-6">
@@ -196,10 +197,10 @@ function NavMenu({ active, onSelect }: { active: SectionId; onSelect: (id: Secti
           <ExternalLink className="h-4 w-4" /> Ver site
         </a>
         <button
-          onClick={reset}
+          onClick={() => signOut()}
           className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-cream/75 transition-colors hover:bg-cream/10 hover:text-cream"
         >
-          <RotateCcw className="h-4 w-4" /> Repor dados
+          <LogOut className="h-4 w-4" /> Sair
         </button>
       </div>
     </div>

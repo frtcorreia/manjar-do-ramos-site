@@ -30,7 +30,6 @@ type EmentaStats = { today: number; this_week: number; this_month: number; total
 
 const LOCATIONS: { id: Location; label: string }[] = [
   { id: "restaurante", label: "Restaurante" },
-  { id: "esplanada", label: "Esplanada" },
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -250,6 +249,7 @@ function LocationBlock({
   const [showKey, setShowKey] = useState(false);
   const [savingDuration, setSavingDuration] = useState(false);
   const [regenOpen, setRegenOpen] = useState(false);
+  const [regenConfirmText, setRegenConfirmText] = useState("");
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -305,6 +305,7 @@ function LocationBlock({
       return;
     }
     toast.success("Nova chave gerada. QRs antigos deixaram de funcionar.");
+    setRegenConfirmText("");
     onReload();
   };
 
@@ -403,7 +404,13 @@ function LocationBlock({
         </div>
       </div>
 
-      <AlertDialog open={regenOpen} onOpenChange={setRegenOpen}>
+      <AlertDialog
+        open={regenOpen}
+        onOpenChange={(open) => {
+          setRegenOpen(open);
+          if (!open) setRegenConfirmText("");
+        }}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Regenerar chave do {label}?</AlertDialogTitle>
@@ -412,10 +419,23 @@ function LocationBlock({
               imprimir e colar os novos nas mesas. Esta acção não pode ser revertida.
             </AlertDialogDescription>
           </AlertDialogHeader>
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-muted-foreground">
+              Escreva <span className="font-semibold text-charcoal">Sim confirmo</span> para
+              continuar
+            </label>
+            <Input
+              value={regenConfirmText}
+              onChange={(e) => setRegenConfirmText(e.target.value)}
+              placeholder="Sim confirmo"
+              autoComplete="off"
+            />
+          </div>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction
               onClick={regenerate}
+              disabled={regenConfirmText !== "Sim confirmo"}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               Regenerar
