@@ -15,10 +15,18 @@ export function PageLoader({ isLoading }: PageLoaderProps = {}) {
 
   useEffect(() => {
     if (controlled) return;
+    // Capped at minDelay + a short grace period so a slow, unrelated
+    // subresource (fonts, analytics, an admin-uploaded image) can never hold
+    // this overlay — and the real content behind it — hostage. Waiting on the
+    // full `window.load` event here used to push LCP out by many seconds.
     const minDelay = new Promise<void>((resolve) => setTimeout(resolve, 1400));
     const pageReady = new Promise<void>((resolve) => {
-      if (document.readyState === "complete") resolve();
-      else window.addEventListener("load", () => resolve(), { once: true });
+      if (document.readyState === "complete") {
+        resolve();
+        return;
+      }
+      window.addEventListener("load", () => resolve(), { once: true });
+      setTimeout(resolve, 600);
     });
     Promise.all([minDelay, pageReady]).then(() => {
       setFading(true);
