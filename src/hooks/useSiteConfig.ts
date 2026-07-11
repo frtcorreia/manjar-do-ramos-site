@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { hideSupabaseUrls } from "@/lib/asset-url";
 import type {
   Block,
   BlockContent,
@@ -105,27 +106,27 @@ const db = (table: string) => supabase.from(table as any) as any;
 
 async function fetchMenu(): Promise<MenuCategory[] | null> {
   const { data } = await db("site_menu").select("data").maybeSingle();
-  return (data?.data as MenuCategory[]) ?? null;
+  return hideSupabaseUrls((data?.data as MenuCategory[]) ?? null);
 }
 
 async function fetchWines(): Promise<WinesData | null> {
   const { data } = await db("site_wines").select("data").maybeSingle();
-  return (data?.data as WinesData) ?? null;
+  return hideSupabaseUrls((data?.data as WinesData) ?? null);
 }
 
 async function fetchTestimonials(): Promise<Testimonial[] | null> {
   const { data } = await db("site_testimonials").select("data").maybeSingle();
-  return (data?.data as Testimonial[]) ?? null;
+  return hideSupabaseUrls((data?.data as Testimonial[]) ?? null);
 }
 
 async function fetchContent(key: string): Promise<BlockContent | PageContent | null> {
   const { data } = await db("site_content").select("value").eq("key", key).maybeSingle();
-  return (data?.value as BlockContent | PageContent) ?? null;
+  return hideSupabaseUrls((data?.value as BlockContent | PageContent) ?? null);
 }
 
 async function fetchSetting<T>(key: string): Promise<T | null> {
   const { data } = await db("site_settings").select("value").eq("key", key).maybeSingle();
-  return (data?.value as T) ?? null;
+  return hideSupabaseUrls((data?.value as T) ?? null);
 }
 
 /* ------------------------------------------------------------------ */
