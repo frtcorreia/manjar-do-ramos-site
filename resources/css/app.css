@@ -1,0 +1,192 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+@source '../../app/Livewire/**/*.php';
+
+/* Fontes self-hosted */
+@import '@fontsource/cormorant-garamond/400.css';
+@import '@fontsource/cormorant-garamond/500.css';
+@import '@fontsource/cormorant-garamond/600.css';
+@import '@fontsource/cormorant-garamond/700.css';
+@import '@fontsource/cormorant-garamond/400-italic.css';
+@import '@fontsource/cormorant-garamond/500-italic.css';
+@import '@fontsource/manrope/400.css';
+@import '@fontsource/manrope/500.css';
+@import '@fontsource/manrope/600.css';
+@import '@fontsource/manrope/700.css';
+
+/*
+ * Design system — paleta da taberna.
+ * As variáveis em :root são mapeadas para utilitários Tailwind no @theme.
+ */
+@theme {
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+
+    --radius-lg: 0.5rem;
+
+    --color-cream: oklch(0.965 0.018 84);
+    --color-beige: oklch(0.915 0.028 80);
+    --color-wood: oklch(0.34 0.045 52);
+    --color-charcoal: oklch(0.19 0.012 60);
+    --color-espresso: oklch(0.255 0.03 50);
+    --color-gold: oklch(0.76 0.105 80);
+    --color-wine: oklch(0.4 0.125 18);
+
+    --color-background: oklch(0.965 0.018 84);
+    --color-foreground: oklch(0.225 0.025 50);
+    --color-card: oklch(0.985 0.01 85);
+    --color-card-foreground: oklch(0.225 0.025 50);
+    --color-primary: oklch(0.4 0.125 18);
+    --color-primary-foreground: oklch(0.965 0.018 84);
+    --color-secondary: oklch(0.915 0.028 80);
+    --color-secondary-foreground: oklch(0.34 0.045 52);
+    --color-muted: oklch(0.925 0.022 80);
+    --color-muted-foreground: oklch(0.46 0.03 55);
+    --color-accent: oklch(0.76 0.105 80);
+    --color-accent-foreground: oklch(0.19 0.012 60);
+    --color-destructive: oklch(0.577 0.245 27.325);
+    --color-destructive-foreground: oklch(0.984 0.003 247.858);
+    --color-border: oklch(0.88 0.025 78);
+    --color-input: oklch(0.88 0.025 78);
+    --color-ring: oklch(0.4 0.125 18);
+}
+
+:root {
+    --gradient-hero: linear-gradient(
+        180deg,
+        oklch(0.16 0.012 60 / 0.25) 0%,
+        oklch(0.16 0.012 60 / 0.55) 55%,
+        oklch(0.14 0.012 60 / 0.92) 100%
+    );
+    --gradient-gold: linear-gradient(100deg, oklch(0.72 0.1 78), oklch(0.84 0.09 88));
+    --shadow-soft: 0 10px 40px -12px oklch(0.19 0.012 60 / 0.35);
+    --shadow-card: 0 20px 50px -20px oklch(0.19 0.012 60 / 0.45);
+    --shadow-gold: 0 8px 30px -8px oklch(0.76 0.105 80 / 0.5);
+}
+
+@layer base {
+    * {
+        border-color: var(--color-border);
+    }
+
+    body {
+        background-color: var(--color-background);
+        color: var(--color-foreground);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    .font-display {
+        font-family: var(--font-serif);
+        font-weight: 500;
+    }
+}
+
+@layer utilities {
+    .font-serif {
+        font-family: var(--font-serif);
+    }
+    .bg-gradient-hero {
+        background-image: var(--gradient-hero);
+    }
+    .text-gradient-gold {
+        background-image: var(--gradient-gold);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    .shadow-soft {
+        box-shadow: var(--shadow-soft);
+    }
+    .shadow-card {
+        box-shadow: var(--shadow-card);
+    }
+    .shadow-gold {
+        box-shadow: var(--shadow-gold);
+    }
+    .eyebrow {
+        font-family: var(--font-sans);
+        text-transform: uppercase;
+        letter-spacing: 0.32em;
+        font-size: 0.72rem;
+        font-weight: 600;
+    }
+    .scrollbar-none {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .scrollbar-none::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+@keyframes kenburns {
+    0% {
+        transform: scale(1.05) translateY(0);
+    }
+    100% {
+        transform: scale(1.18) translateY(-2%);
+    }
+}
+.animate-kenburns {
+    animation: kenburns 22s ease-out forwards;
+}
+
+@keyframes shake {
+    10%,
+    90% {
+        transform: translateX(-1px);
+    }
+    20%,
+    80% {
+        transform: translateX(2px);
+    }
+    30%,
+    50%,
+    70% {
+        transform: translateX(-4px);
+    }
+    40%,
+    60% {
+        transform: translateX(4px);
+    }
+}
+.animate-shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Reveal-on-scroll (substitui o framer-motion do site antigo) */
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+        opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0s);
+}
+.reveal.is-visible {
+    opacity: 1;
+    transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+    .animate-kenburns {
+        animation: none;
+    }
+}
+
+[x-cloak] {
+    display: none !important;
+}
