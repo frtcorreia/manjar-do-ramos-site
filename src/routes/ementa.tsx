@@ -7,6 +7,7 @@ import { Reveal } from "@/components/Reveal";
 import { usePageContent, useSiteMenu, useMenuPrices, useRestaurante } from "@/hooks/useSiteConfig";
 import { supabase } from "@/integrations/supabase/client";
 import type { Allergen } from "@/lib/admin-store";
+import { getPageSeo } from "@/lib/seo";
 
 const EMENTA_SESSION_KEY = "ementa_read_recorded";
 
@@ -134,24 +135,29 @@ const ALLERGENS: { id: Allergen; label: string }[] = [
   { id: "sesame", label: "Sésamo" },
 ];
 
+const FALLBACK_SEO = {
+  title: "Ementa · Manjar do Ramos · Taberna Moderna Portuguesa",
+  description:
+    "Descubra a ementa do Manjar do Ramos: petiscos, carnes maturadas, bacalhau, tábuas de partilha, sobremesas e cocktails. Sabores portugueses para partilhar.",
+  ogTitle: "Ementa · Manjar do Ramos",
+  ogDescription:
+    "Petiscos, carnes maturadas, bacalhau e tábuas de partilha numa taberna portuguesa contemporânea.",
+};
+
 export const Route = createFileRoute("/ementa")({
-  head: () => ({
-    meta: [
-      { title: "Ementa · Manjar do Ramos · Taberna Moderna Portuguesa" },
-      {
-        name: "description",
-        content:
-          "Descubra a ementa do Manjar do Ramos: petiscos, carnes maturadas, bacalhau, tábuas de partilha, sobremesas e cocktails. Sabores portugueses para partilhar.",
-      },
-      { property: "og:title", content: "Ementa · Manjar do Ramos" },
-      {
-        property: "og:description",
-        content:
-          "Petiscos, carnes maturadas, bacalhau e tábuas de partilha numa taberna portuguesa contemporânea.",
-      },
-      { property: "og:type", content: "website" },
-    ],
-  }),
+  loader: () => getPageSeo("ementa", FALLBACK_SEO),
+  head: ({ loaderData }) => {
+    const seo = loaderData ?? FALLBACK_SEO;
+    return {
+      meta: [
+        { title: seo.title },
+        { name: "description", content: seo.description },
+        { property: "og:title", content: seo.ogTitle },
+        { property: "og:description", content: seo.ogDescription },
+        { property: "og:type", content: "website" },
+      ],
+    };
+  },
   component: EmentaPage,
 });
 

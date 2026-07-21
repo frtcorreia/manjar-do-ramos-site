@@ -72,7 +72,7 @@ const DEFAULT_NAV_PAGES: NavPage[] = [
   },
 ];
 
-const DEFAULT_RESTAURANTE: RestauranteConfig = {
+export const DEFAULT_RESTAURANTE: RestauranteConfig = {
   logo: "",
   nomeProprietario: "",
   nif: "",
@@ -119,12 +119,12 @@ async function fetchTestimonials(): Promise<Testimonial[] | null> {
   return hideSupabaseUrls((data?.data as Testimonial[]) ?? null);
 }
 
-async function fetchContent(key: string): Promise<BlockContent | PageContent | null> {
+export async function fetchContent(key: string): Promise<BlockContent | PageContent | null> {
   const { data } = await db("site_content").select("value").eq("key", key).maybeSingle();
   return hideSupabaseUrls((data?.value as BlockContent | PageContent) ?? null);
 }
 
-async function fetchSetting<T>(key: string): Promise<T | null> {
+export async function fetchSetting<T>(key: string): Promise<T | null> {
   const { data } = await db("site_settings").select("value").eq("key", key).maybeSingle();
   return hideSupabaseUrls((data?.value as T) ?? null);
 }

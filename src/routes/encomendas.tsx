@@ -8,23 +8,29 @@ import { AdminProvider, useAdmin, type MenuItem } from "@/lib/admin-store";
 import { Minus, Plus, ShoppingBag, Truck } from "lucide-react";
 import heroImg from "@/assets/dish-petiscos.jpg";
 import { cartStorage, formatEUR, parsePrice } from "@/lib/cart";
+import { getPageSeo } from "@/lib/seo";
+
+const FALLBACK_SEO = {
+  title: "Encomendas · Manjar do Ramos · Delivery",
+  description:
+    "Encomende os pratos do Manjar do Ramos para delivery. Petiscos, carnes na brasa e tábuas de partilha entregues em sua casa.",
+  ogTitle: "Encomendas · Manjar do Ramos",
+  ogDescription: "Os sabores da taberna entregues em sua casa. Encomende online.",
+};
 
 export const Route = createFileRoute("/encomendas")({
-  head: () => ({
-    meta: [
-      { title: "Encomendas · Manjar do Ramos · Delivery" },
-      {
-        name: "description",
-        content:
-          "Encomende os pratos do Manjar do Ramos para delivery. Petiscos, carnes na brasa e tábuas de partilha entregues em sua casa.",
-      },
-      { property: "og:title", content: "Encomendas · Manjar do Ramos" },
-      {
-        property: "og:description",
-        content: "Os sabores da taberna entregues em sua casa. Encomende online.",
-      },
-    ],
-  }),
+  loader: () => getPageSeo("encomendas", FALLBACK_SEO),
+  head: ({ loaderData }) => {
+    const seo = loaderData ?? FALLBACK_SEO;
+    return {
+      meta: [
+        { title: seo.title },
+        { name: "description", content: seo.description },
+        { property: "og:title", content: seo.ogTitle },
+        { property: "og:description", content: seo.ogDescription },
+      ],
+    };
+  },
   component: EncomendasPage,
 });
 
