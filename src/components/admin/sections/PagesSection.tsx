@@ -41,7 +41,8 @@ export function PagesSection() {
       <header>
         <h1 className="font-serif text-3xl text-charcoal">Páginas</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Edite os conteúdos e imagens das páginas existentes do site.
+          Edite os conteúdos e imagens das páginas existentes do site. Para título, descrição e
+          partilha nas redes sociais, veja a secção "SEO".
         </p>
       </header>
 
@@ -76,26 +77,13 @@ function PageEditor({
   onField: (pageKey: PageContent["key"], fieldId: string, value: string) => void;
   onImage: (pageKey: PageContent["key"], imageId: string, url: string) => void;
 }) {
-  // Separar SEO, textos e imagens para organização visual
-  const seoFields = page.fields.filter((f) => f.label.includes("SEO") || f.label.includes("OG"));
+  // Os campos de SEO/OG têm secção própria em "SEO" — aqui só se editam os restantes textos.
   const otherFields = page.fields.filter(
     (f) => !f.label.includes("SEO") && !f.label.includes("OG"),
   );
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
-      {/* SEO */}
-      {seoFields.length > 0 && (
-        <section className="space-y-4 rounded-xl border border-border bg-card p-5 lg:col-span-2">
-          <h2 className="font-serif text-lg text-charcoal">SEO & Redes Sociais</h2>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {seoFields.map((f) => (
-              <FieldEditor key={f.id} field={f} pageKey={page.key} onField={onField} />
-            ))}
-          </div>
-        </section>
-      )}
-
       {/* Textos */}
       {otherFields.length > 0 && (
         <section className="space-y-4 rounded-xl border border-border bg-card p-5">

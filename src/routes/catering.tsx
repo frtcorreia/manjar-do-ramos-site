@@ -6,25 +6,31 @@ import { UtensilsCrossed, Users, PartyPopper, Truck, ChefHat, Wine } from "lucid
 import heroImgDefault from "@/assets/dish-tabua.jpg";
 import about1Default from "@/assets/about-2.jpg";
 import { usePageContent } from "@/hooks/useSiteConfig";
+import { getPageSeo } from "@/lib/seo";
+
+const FALLBACK_SEO = {
+  title: "Catering · Manjar do Ramos · Eventos & Celebrações",
+  description:
+    "Serviço de catering do Manjar do Ramos para casamentos, eventos de empresa e festas privadas. Sabores portugueses de taberna levados até si.",
+  ogTitle: "Catering · Manjar do Ramos",
+  ogDescription:
+    "Leve a alma da taberna ao seu evento: petiscos, tábuas, carnes na brasa e doçaria portuguesa.",
+};
 
 export const Route = createFileRoute("/catering")({
-  head: () => ({
-    meta: [
-      { title: "Catering · Manjar do Ramos · Eventos & Celebrações" },
-      {
-        name: "description",
-        content:
-          "Serviço de catering do Manjar do Ramos para casamentos, eventos de empresa e festas privadas. Sabores portugueses de taberna levados até si.",
-      },
-      { property: "og:title", content: "Catering · Manjar do Ramos" },
-      {
-        property: "og:description",
-        content:
-          "Leve a alma da taberna ao seu evento: petiscos, tábuas, carnes na brasa e doçaria portuguesa.",
-      },
-      { property: "og:type", content: "website" },
-    ],
-  }),
+  loader: () => getPageSeo("catering", FALLBACK_SEO),
+  head: ({ loaderData }) => {
+    const seo = loaderData ?? FALLBACK_SEO;
+    return {
+      meta: [
+        { title: seo.title },
+        { name: "description", content: seo.description },
+        { property: "og:title", content: seo.ogTitle },
+        { property: "og:description", content: seo.ogDescription },
+        { property: "og:type", content: "website" },
+      ],
+    };
+  },
   component: CateringPage,
 });
 

@@ -43,7 +43,7 @@ export type Block = {
   visible: boolean;
 };
 
-export type PageKey = "index" | "ementa" | "catering";
+export type PageKey = "index" | "ementa" | "encomendas" | "catering";
 
 export type PageContent = {
   key: PageKey;
@@ -330,6 +330,21 @@ const initialState: AdminState = {
         f("Hero — Subtítulo", "Sabores portugueses pensados para partilhar à volta da mesa.", true),
       ],
       images: [img("Hero — Imagem de fundo", dishCarne)],
+    },
+    {
+      key: "encomendas",
+      label: "Encomendas",
+      fields: [
+        f("Título (SEO)", "Encomendas · Manjar do Ramos · Delivery"),
+        f(
+          "Descrição (SEO)",
+          "Encomende os pratos do Manjar do Ramos para delivery. Petiscos, carnes na brasa e tábuas de partilha entregues em sua casa.",
+          true,
+        ),
+        f("OG Título", "Encomendas · Manjar do Ramos"),
+        f("OG Descrição", "Os sabores da taberna entregues em sua casa. Encomende online.", true),
+      ],
+      images: [],
     },
     {
       key: "catering",

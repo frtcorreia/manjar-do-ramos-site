@@ -22,6 +22,7 @@ import {
   QrCode,
   LogOut,
   Star,
+  Search,
 } from "lucide-react";
 import logo from "@/assets/logo-cream.png";
 import { AdminProvider, useAdmin } from "@/lib/admin-store";
@@ -36,6 +37,7 @@ import { RestauranteSection } from "@/components/admin/sections/RestauranteSecti
 import { NavegacaoSection } from "@/components/admin/sections/NavegacaoSection";
 import { QrReadingsSection } from "@/components/admin/sections/QrReadingsSection";
 import { GoogleReviewsSection } from "@/components/admin/sections/GoogleReviewsSection";
+import { SEOSection } from "@/components/admin/sections/SEOSection";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -57,12 +59,14 @@ type SectionId =
   | "content"
   | "restaurante"
   | "navegacao"
-  | "qr-readings";
+  | "qr-readings"
+  | "seo";
 
 const nav: { id: SectionId; label: string; icon: typeof LayoutDashboard }[] = [
   { id: "restaurante", label: "Restaurante", icon: Store },
   { id: "navegacao", label: "Navegação & Site", icon: Navigation },
   { id: "pages", label: "Páginas", icon: FileText },
+  { id: "seo", label: "SEO", icon: Search },
   { id: "menu", label: "Ementa", icon: UtensilsCrossed },
   { id: "wines", label: "Carta de Vinhos", icon: Wine },
   { id: "qr-readings", label: "Leituras QR", icon: QrCode },
@@ -252,6 +256,7 @@ function AdminShell() {
           {active === "restaurante" && <RestauranteSection />}
           {active === "navegacao" && <NavegacaoSection />}
           {active === "pages" && <PagesSection />}
+          {active === "seo" && <SEOSection />}
           {active === "menu" && <MenuSection />}
           {active === "wines" && <WinesSection />}
           {active === "qr-readings" && <QrReadingsSection />}
